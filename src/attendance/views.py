@@ -38,16 +38,12 @@ def add_attendance2(request):
 	s = Student.objects.all().values()
 	#s = Student.objects.values('id')
 	#s = [d['first_name'] for d in s]
-	#num_fields = len(s)
+
 	AttendanceFormSet = formset_factory(AttendanceForm, extra=0)
 	formset = AttendanceFormSet(request.POST or None, initial=s)
 	#form = AttendanceForm(request.POST or None, request.FILES or None)
-	#Formset = formset_factory(SomeForm, extra=len(some_objects)
+
 	#some_formset = FormSet(initial=[{'id': 'x.id'} for x in some_objects])
-    #formset = AttendanceFormSet(request.POST or None, initial=s)
-	
-	# formset = AttendanceFormSet(request.POST or None, 
-		# initial=[{'full_name': 'x.full_name'} for x in s])
 	
 	if formset.is_valid():
 		try:
