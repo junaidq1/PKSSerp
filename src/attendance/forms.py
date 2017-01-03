@@ -10,7 +10,6 @@ from .models import Attendance
 class AttendanceForm(forms.ModelForm):
 	class Meta:
 		model = Attendance
-		fields = ["student","attendance_date", "status", "notes"] 
-
+		fields = ("student","attendance_date", "status", "notes")
 
 

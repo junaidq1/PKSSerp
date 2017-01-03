@@ -25,7 +25,7 @@ SECRET_KEY = 'iyc#6bqaedf#sdiku^hvk#neum@3gilx8w%wfq8#09j%n9nvo%'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -139,3 +139,4 @@ STATICFILES_DIRS = [
 STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static_cdn")
 MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "media_cdn") #where users upload files
 
+LOGIN_URL = '/'
