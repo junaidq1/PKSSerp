@@ -35,8 +35,8 @@
       <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/attendance/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="481">
-              <caret line="105" column="105" selection-start-line="105" selection-start-column="105" selection-end-line="105" selection-end-column="105" />
+            <state relative-caret-position="16">
+              <caret line="74" column="73" selection-start-line="74" selection-start-column="73" selection-end-line="74" selection-end-column="73" />
               <folding>
                 <element signature="e#0#43#0" expanded="true" />
               </folding>
@@ -44,10 +44,22 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="group_attendance.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="forms.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/attendance/forms.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="210">
+              <caret line="14" column="30" selection-start-line="14" selection-start-column="30" selection-end-line="14" selection-end-column="30" />
+              <folding>
+                <element signature="e#0#24#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="group_attendance.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templates/group_attendance.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="270">
+            <state relative-caret-position="225">
               <caret line="18" column="14" selection-start-line="18" selection-start-column="14" selection-end-line="18" selection-end-column="14" />
               <folding>
                 <element signature="n#style#0;n#tr#0;n#thead#0;n#table#0;n#form#0;n#div#0;n#!!top" expanded="true" />
@@ -78,11 +90,11 @@
         <option value="$PROJECT_DIR$/templates/affiliated_schools.html" />
         <option value="$PROJECT_DIR$/templates/attendance_dates.html" />
         <option value="$PROJECT_DIR$/PKSSerp/urls.py" />
-        <option value="$PROJECT_DIR$/attendance/forms.py" />
         <option value="$PROJECT_DIR$/PKSSerp/settings.py" />
         <option value="$PROJECT_DIR$/templates/base.html" />
         <option value="$PROJECT_DIR$/attendance/views.py" />
         <option value="$PROJECT_DIR$/templates/group_attendance.html" />
+        <option value="$PROJECT_DIR$/attendance/forms.py" />
       </list>
     </option>
   </component>
@@ -495,17 +507,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/attendance/forms.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="11" column="20" selection-start-line="11" selection-start-column="20" selection-end-line="11" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/.virtualenvs/django_school/local/lib/python2.7/site-packages/django/forms/formsets.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="213">
           <caret line="431" column="4" selection-start-line="431" selection-start-column="4" selection-end-line="431" selection-end-column="4" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -513,6 +519,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="476">
           <caret line="854" column="25" selection-start-line="854" selection-start-column="25" selection-end-line="854" selection-end-column="25" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -527,6 +534,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
           <caret line="6" column="6" selection-start-line="6" selection-start-column="6" selection-end-line="6" selection-end-column="6" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -566,23 +574,41 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/templates/group_attendance.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="18" column="14" selection-start-line="18" selection-start-column="14" selection-end-line="18" selection-end-column="14" />
+          <folding>
+            <element signature="n#style#0;n#tr#0;n#thead#0;n#table#0;n#form#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#tr#1;n#thead#0;n#table#0;n#form#0;n#div#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/attendance/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="481">
-          <caret line="105" column="105" selection-start-line="105" selection-start-column="105" selection-end-line="105" selection-end-column="105" />
+        <state relative-caret-position="16">
+          <caret line="74" column="73" selection-start-line="74" selection-start-column="73" selection-end-line="74" selection-end-column="73" />
           <folding>
             <element signature="e#0#43#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/group_attendance.html">
+    <entry file="file://$USER_HOME$/.virtualenvs/django_school/local/lib/python2.7/site-packages/django/forms/fields.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="18" column="14" selection-start-line="18" selection-start-column="14" selection-end-line="18" selection-end-column="14" />
+        <state relative-caret-position="258">
+          <caret line="763" column="25" selection-start-line="763" selection-start-column="25" selection-end-line="763" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/attendance/forms.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="14" column="30" selection-start-line="14" selection-start-column="30" selection-end-line="14" selection-end-column="30" />
           <folding>
-            <element signature="n#style#0;n#tr#0;n#thead#0;n#table#0;n#form#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#tr#1;n#thead#0;n#table#0;n#form#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="e#0#24#0" expanded="true" />
           </folding>
         </state>
       </provider>
