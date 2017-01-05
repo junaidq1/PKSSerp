@@ -16,30 +16,32 @@
 
 <div class='col-sm-8 col-sm-offset-1'>
 
-<h3> Attendance </h3>
+<h3> {{ school|title }} - {{ date }} </h3>
 <br>
 
 
-<!-- <form method='POST' action=''> {% csrf_token %}
-    <table>
-      {% crispy formset %}      
-    </table>
-  <input class='btn-lg btn-primary' type='submit' value='Add'/>
-</form>
- -->
+<form method='POST' action="{% url 'add_attendance2' school.pk date %}"> {% csrf_token %}
+     <table id="formset" class="form">
 
- <table id="formset" class="form">
- {{ formset.management_form }}
 
-{% for form in formset.forms %}
+{% for clas, formset in formsets.iteritems %}
+
+         {{ formset.management_form }}
+
+{% for form in formset %}
   {% if forloop.first %}
-  <thead><tr>
+  <thead>
+  <tr style="height: 30px">
+      <th>{{ clas }}</th>
+  </tr>
+  <tr style="height: 30px;">
     {% for field in form.visible_fields %}
     <th>{{ field.label|capfirst }}</th>
     {% endfor %}
   </tr></thead>
   {% endif %}
   <tr>
+
   {% for field in form.visible_fields %}
     <td>
     {# Include the hidden fields in the form #}
@@ -54,11 +56,30 @@
   {% endfor %}
   </tr>
 {% endfor %}
+
+{% endfor %}
 </table>
+
 
 <br>
 <input class='btn btn-primary' type='submit' value='Enter'/>
+</form>
+
 
 </div>
 
 {% endblock %}
+
+
+{% block extra_script %}
+
+    <script type="text/javascript">
+
+    $(document).ready(function(){
+        $('form').bind('submit', function () {
+            $(this).find('select.attendance_student').prop('disabled', false);
+      });
+    });
+
+    </script>
+{% endblock extra_script %}

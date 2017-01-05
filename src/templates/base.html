@@ -48,7 +48,7 @@
 
     <script>
     $(function() {
-        $( "#id_myDate" ).datepicker();
+        <!--$( "#id_myDate" ).datepicker();-->
     });
     </script>
 
@@ -83,6 +83,15 @@
     <!-- <br>
     <br>
  -->
+
+    {% if messages %}
+<ul class="messages" style="margin-top: 30px;">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
     {% block content %}
 
     {% endblock %}
@@ -104,8 +113,9 @@
 
     
   
-    
+    {% block extra_script %}
 
+    {% endblock extra_script %}
 
 
   </body>

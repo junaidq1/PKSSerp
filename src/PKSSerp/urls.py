@@ -16,11 +16,17 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 
-from attendance import views as att 
+from attendance import views as att
+from teachers.views import *
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', att.go_home, name='user_homepage'),
     # url(r'^attendance/$', att.add_attendance, name='add_attendance'),
-    url(r'^attendance2/$', att.add_attendance2, name='add_attendance2'),
+    url(r'^affiliated_schools/$', att.affiliated_schools, name='affiliated_schools'),
+    url(r'^attendance_dates/(?P<school_id>\d+)/$', att.attendance_dates, name='attendance_dates'),
+
+    url(r'^attendance2/(?P<school_id>\d+)/(?P<date>.+)/$', att.add_attendance2, name='add_attendance2'),
+    url(r'^login/', LoginView.as_view(), name='login'),
+    url(r'^logout/$', LogoutView.as_view(), name='logout')
 ]
