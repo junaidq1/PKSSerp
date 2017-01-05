@@ -69,3 +69,17 @@
 </div>
 
 {% endblock %}
+
+
+{% block extra_script %}
+
+    <script type="text/javascript">
+
+    $(document).ready(function(){
+        $('form').bind('submit', function () {
+            $(this).find('select.attendance_student').prop('disabled', false);
+      });
+    });
+
+    </script>
+{% endblock extra_script %}

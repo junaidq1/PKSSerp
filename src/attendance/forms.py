@@ -12,5 +12,6 @@ class AttendanceForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(AttendanceForm, self).__init__(*args, **kwargs)
-        self.fields['student'].widget.attrs['disabled'] = 'true'
+        self.fields['student'].widget.attrs['class'] = 'attendance_student'
+        self.fields['student'].widget.attrs['disabled'] = True
 
