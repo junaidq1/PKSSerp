@@ -4,6 +4,10 @@
 		"selected_items":
 		[
 			[
+				"Attn",
+				"AttendanceFormSet"
+			],
+			[
 				"Atte",
 				"AttendanceFormSet"
 			],
@@ -510,79 +514,11 @@
 			[
 				"email",
 				"email2"
-			],
-			[
-				"e",
-				"email2"
 			]
 		]
 	},
 	"buffers":
 	[
-		{
-			"file": "src/PKSSerp/settings.py",
-			"settings":
-			{
-				"buffer_size": 3537,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/attendance/models.py",
-			"settings":
-			{
-				"buffer_size": 835,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/attendance/forms.py",
-			"settings":
-			{
-				"buffer_size": 306,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/attendance/views.py",
-			"settings":
-			{
-				"buffer_size": 1654,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/templates/group_attendance.html",
-			"settings":
-			{
-				"buffer_size": 1003,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/templates/home.html",
-			"settings":
-			{
-				"buffer_size": 1341,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/PKSSerp/urls.py",
-			"settings":
-			{
-				"buffer_size": 996,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/templates/add_attendance.html",
-			"settings":
-			{
-				"buffer_size": 355,
-				"line_ending": "Unix"
-			}
-		}
 	],
 	"build_system": "",
 	"build_system_choices":
@@ -644,22 +580,45 @@
 	},
 	"expanded_folders":
 	[
-		"/Users/Junaid/Desktop/PKSSerp",
-		"/Users/Junaid/Desktop/PKSSerp/src",
-		"/Users/Junaid/Desktop/PKSSerp/src/classes",
-		"/Users/Junaid/Desktop/PKSSerp/src/PKSSerp",
-		"/Users/Junaid/Desktop/PKSSerp/src/templates"
+		"/Users/Junaid/Desktop/PKSSerp2_lal/PKSSerp",
+		"/Users/Junaid/Desktop/PKSSerp2_lal/PKSSerp/src",
+		"/Users/Junaid/Desktop/PKSSerp2_lal/PKSSerp/src/attendance",
+		"/Users/Junaid/Desktop/PKSSerp2_lal/PKSSerp/src/classes",
+		"/Users/Junaid/Desktop/PKSSerp2_lal/PKSSerp/src/PKSSerp",
+		"/Users/Junaid/Desktop/PKSSerp2_lal/PKSSerp/src/schools",
+		"/Users/Junaid/Desktop/PKSSerp2_lal/PKSSerp/src/students",
+		"/Users/Junaid/Desktop/PKSSerp2_lal/PKSSerp/src/teachers",
+		"/Users/Junaid/Desktop/PKSSerp2_lal/PKSSerp/src/templates"
 	],
 	"file_history":
 	[
+		"/Users/Junaid/Desktop/PKSSerp2_lal/PKSSerp/src/templates/group_attendance.html",
+		"/Users/Junaid/Desktop/PKSSerp2_lal/PKSSerp/src/templates/base.html",
+		"/Users/Junaid/Desktop/PKSSerp2_lal/PKSSerp/src/attendance/forms.py",
+		"/Users/Junaid/Desktop/PKSSerp2_lal/PKSSerp/src/teachers/models.py",
+		"/Users/Junaid/Desktop/PKSSerp2_lal/PKSSerp/src/attendance/models.py",
+		"/Users/Junaid/Desktop/PKSSerp2_lal/PKSSerp/src/classes/models.py",
+		"/Users/Junaid/Desktop/PKSSerp2_lal/PKSSerp/src/attendance/admin.py",
+		"/Users/Junaid/Desktop/PKSSerp2_lal/PKSSerp/src/attendance/views.py",
+		"/Users/Junaid/Desktop/PKSSerp2_lal/PKSSerp/src/students/models.py",
+		"/Users/Junaid/Desktop/PKSSerp2_lal/PKSSerp/src/templates/affiliated_schools.html",
+		"/Users/Junaid/Desktop/PKSSerp2_lal/PKSSerp/src/teachers/admin.py",
+		"/Users/Junaid/Desktop/PKSSerp2_lal/PKSSerp/src/schools/models.py",
+		"/Users/Junaid/Desktop/PKSSerp2_lal/PKSSerp/src/schools/admin.py",
+		"/Users/Junaid/Desktop/PKSSerp/src/teachers/models.py",
+		"/Users/Junaid/Desktop/PKSSerp/src/PKSSerp/settings.py",
+		"/Users/Junaid/Desktop/PKSSerp/src/attendance/models.py",
+		"/Users/Junaid/Desktop/PKSSerp/src/attendance/forms.py",
+		"/Users/Junaid/Desktop/PKSSerp/src/attendance/views.py",
+		"/Users/Junaid/Desktop/PKSSerp/src/PKSSerp/urls.py",
+		"/Users/Junaid/Desktop/PKSSerp/src/templates/group_attendance.html",
+		"/Users/Junaid/Desktop/PKSSerp/src/classes/models.py",
+		"/Users/Junaid/Desktop/PKSSerp/src/students/models.py",
+		"/Users/Junaid/Desktop/PKSSerp/src/templates/add_attendance.html",
+		"/Users/Junaid/Desktop/PKSSerp/src/templates/home.html",
 		"/Users/Junaid/Desktop/PKSSerp/src/templates/navbar.html",
 		"/Users/Junaid/Desktop/PKSSerp/src/attendance/admin.py",
-		"/Users/Junaid/Desktop/PKSSerp/src/PKSSerp/urls.py",
-		"/Users/Junaid/Desktop/PKSSerp/src/attendance/views.py",
-		"/Users/Junaid/Desktop/PKSSerp/src/teachers/models.py",
-		"/Users/Junaid/Desktop/PKSSerp/src/classes/models.py",
 		"/Users/Junaid/Desktop/PKSSerp/src/classes/admin.py",
-		"/Users/Junaid/Desktop/PKSSerp/src/students/models.py",
 		"/Users/Junaid/Desktop/PKSSerp/src/students/admin.py",
 		"/Users/Junaid/Desktop/PKSSerp/src/schools/models.py",
 		"/Users/Junaid/Desktop/PKSSerp/src/teachers/admin.py",
@@ -760,26 +719,7 @@
 		"/Users/Junaid/Desktop/greendotp/.gitignore",
 		"/Users/Junaid/Desktop/greendotp/src/templates/about.html",
 		"/Users/Junaid/Desktop/greendotp/src/templates/cant_vote_twice.html",
-		"/Users/Junaid/Desktop/greendotp/src/templates/partner_with_us.html",
-		"/Users/Junaid/Desktop/greendotp/src/templates/base.html",
-		"/Users/Junaid/Desktop/greendotp/src/templates/create_username_prestep.html",
-		"/Users/Junaid/Desktop/greendotp/src/db.sqlite3",
-		"/Users/Junaid/Desktop/greendotp/src/greendotp/old_settings.py",
-		"/Users/Junaid/Desktop/greendotp/src/reviews/management/commands/import_csv.py",
-		"/Users/Junaid/Desktop/greendotp/src/static/css/base.css",
-		"/Users/Junaid/Desktop/greendotp/static_cdn/css/bootstrap.min.css",
-		"/Users/Junaid/Desktop/greendotp/src/greendotp/regbackend.py",
-		"/Users/Junaid/Desktop/greendotp/src/reviews/management/commands/__init__.py",
-		"/Users/Junaid/Desktop/greendotp/src/reviews/management/__init__.py",
-		"/Users/Junaid/Desktop/greendotp/src/reviews/load_data.py",
-		"/Users/Junaid/Desktop/greendotp/src/templates/spiderchart.html",
-		"/Users/Junaid/Desktop/greendotp/src/templates/registration/registration_complete.html",
-		"/Users/Junaid/Desktop/greendotp/src/templates/registration/activation_email.html",
-		"/Users/Junaid/Desktop/greendotp/src/templates/please_signup.html",
-		"/Users/Junaid/Desktop/greendotp/src/greendotp/settings/backu/base.py",
-		"/Users/Junaid/Desktop/greendotp/src/templates/create_review2.html",
-		"/Users/Junaid/Desktop/greendotp/src/static/css/navbar.css",
-		"/Users/Junaid/Desktop/greendotp/src/act_emp.json"
+		"/Users/Junaid/Desktop/greendotp/src/templates/partner_with_us.html"
 	],
 	"find":
 	{
@@ -807,6 +747,7 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"present",
 			"logout",
 			"masterjust",
 			"add",
@@ -933,8 +874,7 @@
 			"detail",
 			"EMAIL_HOST_USER",
 			"EMAIL_HOST_USER ",
-			"link",
-			"data"
+			"link"
 		],
 		"highlight": false,
 		"in_selection": false,
@@ -969,242 +909,8 @@
 	"groups":
 	[
 		{
-			"selected": 4,
 			"sheets":
 			[
-				{
-					"buffer": 0,
-					"file": "src/PKSSerp/settings.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 3537,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								3069,
-								3069
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Python/Python.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 1785.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 4,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "src/attendance/models.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 835,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								611,
-								611
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Python/Python.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 3,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "src/attendance/forms.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 306,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								175,
-								189
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Python/Python.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "src/attendance/views.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1654,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1587,
-								1587
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Python/Python.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "src/templates/group_attendance.html",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1003,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								78,
-								78
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/HTML/HTML.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "src/templates/home.html",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1341,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								51,
-								51
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/HTML/HTML.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 6,
-					"type": "text"
-				},
-				{
-					"buffer": 6,
-					"file": "src/PKSSerp/urls.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 996,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								975,
-								990
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Python/Python.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 5,
-					"type": "text"
-				},
-				{
-					"buffer": 7,
-					"file": "src/templates/add_attendance.html",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 355,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								355,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/HTML/HTML.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 7,
-					"type": "text"
-				}
 			]
 		}
 	],
@@ -1244,7 +950,7 @@
 		"height": 27.0
 	},
 	"pinned_build_system": "",
-	"project": "PKSSerp.sublime-project",
+	"project": "PKSSerp2_lalversion.sublime-project",
 	"replace":
 	{
 		"height": 46.0
@@ -1275,7 +981,7 @@
 		[
 			[
 				"",
-				"~/Desktop/mycrm/mycrm.sublime-project"
+				"~/Desktop/pkss/1.sublime-project"
 			]
 		],
 		"width": 380.0
