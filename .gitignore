@@ -3,6 +3,8 @@ Marketing/
 data backup/
 data management/
 
+*.pyc
+
 PKSSerp.sublime-project
 PKSSerp.sublime-workspace
 
