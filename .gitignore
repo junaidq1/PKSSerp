@@ -8,8 +8,8 @@ data management/
 PKSSerp.sublime-project
 PKSSerp.sublime-workspace
 
-db.sqlite3
-settings.py
+
+
 base.py
 local.py
 production.py

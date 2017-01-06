@@ -26,6 +26,8 @@ class Student(models.Model):
 	enrollment_notes = models.TextField(max_length=2500, null=True, blank=True)
 	fee_concession = models.IntegerField(null=True, blank=True)
 	actual_fee_paid = models.IntegerField(null=True, blank=True)
+	is_active = models.BooleanField(default=True)
+
 
 	@property
 	def full_name(self):

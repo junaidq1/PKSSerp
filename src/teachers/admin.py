@@ -6,10 +6,12 @@ from .models import Teacher
 
 
 class TeacherModelAdmin(admin.ModelAdmin):
-	list_display = ['pk', 'first_name','last_name','level','gender','pkss_school','date_joined']
-	list_display_links = ['first_name','last_name','level','gender','pkss_school','date_joined']
-	search_fields = ['first_name','last_name','level','gender','pkss_school','date_joined']
-	list_filter = ['first_name','last_name','level','gender','pkss_school','date_joined']
+
+	list_display = ['pk', 'first_name','last_name','level','gender','date_joined']
+	list_display_links = ['first_name','last_name','level','gender','date_joined']
+	search_fields = ['first_name','last_name','level','gender','date_joined']
+	list_filter = ['first_name','last_name','level','gender','date_joined']
+	
 	class Meta:
 		model = Teacher
 

@@ -15,6 +15,7 @@ class Class(models.Model):
 		('Class 3', 'Class 3'),
 		('Class 4', 'Class 4'),
 		('Class 5', 'Class 5'),
+		('Class 6', 'Class 6'),
 	)
 	class_name = models.CharField(max_length=255, choices=CLASS_CHOICES)
 	SECTION_CHOICES = (

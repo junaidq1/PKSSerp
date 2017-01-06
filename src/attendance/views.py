@@ -59,7 +59,9 @@ def attendance_dates(request, school_id):
 @login_required()
 def add_attendance2(request, school_id, date):
     school = School.objects.get(pk=school_id)
-    classes_list = Class.objects.filter(teacher=request.user.teacher, school__id=school.pk)
+    ## classes_list = Class.objects.filter(teacher=request.user.teacher, school__id=school.pk)
+    s = School.objects.filter(teacher__id = request.user.teacher.id) #JQ: added
+    classes_list = Class.objects.filter(school__id=school.pk).filter(school_id__in = s) #JQ: added
 
     formsets = {}
 
@@ -82,8 +84,10 @@ def add_attendance2(request, school_id, date):
                                             prefix=clas)
 
     if request.method == 'POST':
-        classes_list = Class.objects.filter(teacher=request.user.teacher, school__id=school.pk)
-
+        #classes_list = Class.objects.filter(teacher=request.user.teacher, school__id=school.pk)
+        s = School.objects.filter(teacher__id = request.user.teacher.id) #JQ: added
+        classes_list = Class.objects.filter(school__id=school.pk).filter(school_id__in = s) #JQ: added
+        
         formsets = {}
         formsets_valid = True
         for clas in classes_list:

@@ -11,7 +11,8 @@ class Attendance(models.Model):
 		('present', 'present'),
 		('absent', 'absent'),
 	)
-	status =  models.CharField(max_length=12, choices=STATUS_CHOICES, null=False, blank=False)
+
+	status =  models.CharField(max_length=10, choices=STATUS_CHOICES, null=False, blank=False)
 	notes = models.CharField(max_length=300, null=True, blank=True)
 
 	class Meta: 
