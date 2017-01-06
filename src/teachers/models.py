@@ -31,7 +31,11 @@ class Teacher(models.Model):
         date_joined = models.DateField(auto_now=False, auto_now_add=False)
         starting_salary = models.IntegerField(null=True, blank=True)
         current_salary = models.IntegerField(null=True, blank=True)
-        address =  models.CharField(max_length=12, null=False, blank=False)
+        phone_number = models.CharField(max_length=15, null=False, blank=False) 
+        address =  models.CharField(max_length=200, null=False, blank=False)
+        starting_qualifications =  models.CharField(max_length=200, null=False, blank=False)
+        current_qualifications =  models.CharField(max_length=200, null=False, blank=False)
+        starting_years_experience =  models.IntegerField(null=True, blank=True)
 
         @property
         def full_name(self):

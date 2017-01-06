@@ -66,7 +66,7 @@ def add_attendance2(request, school_id, date):
     formsets = {}
 
     for clas in classes_list:
-        students_list = Student.objects.filter(pkss_school__id=school.pk, pkss_class=clas)
+        students_list = Student.objects.filter(pkss_school__id=school.pk, pkss_class=clas).filter(currently_enrolled=True)
         students_list_initial = [{
                              'student': student,
                              'attendance_date': date,
@@ -91,7 +91,7 @@ def add_attendance2(request, school_id, date):
         formsets = {}
         formsets_valid = True
         for clas in classes_list:
-            students_list = Student.objects.filter(pkss_school__id=school.pk, pkss_class=clas)
+            students_list = Student.objects.filter(pkss_school__id=school.pk, pkss_class=clas).filter(currently_enrolled=True)
             attendance_formset = modelformset_factory(Attendance, form=AttendanceForm,
                                                       extra=len(students_list),
                                                       max_num=len(students_list)
