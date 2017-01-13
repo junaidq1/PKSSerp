@@ -13,7 +13,7 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url
+from django.conf.urls import url, include
 from django.contrib import admin
 
 from attendance import views as att
@@ -27,6 +27,19 @@ urlpatterns = [
     url(r'^attendance_dates/(?P<school_id>\d+)/$', att.attendance_dates, name='attendance_dates'),
 
     url(r'^attendance2/(?P<school_id>\d+)/(?P<date>.+)/$', att.add_attendance2, name='add_attendance2'),
+
+    url(r'^attendance_report/$', att.attendance_report, name='attendance_report'),
+    url(r'^attendance_summary/$', att.attendance_summary, name='attendance_summary'),
+    url(r'^school_attendance_details/(?P<school_id>\d+)/(?P<date>.+)/$', att.school_attendance_details, name='school_attendance_details'),
+
+    url(r'^attendance_by_month/$', att.attendance_by_month, name='attendance_by_school'),
+
     url(r'^login/', LoginView.as_view(), name='login'),
     url(r'^logout/$', LogoutView.as_view(), name='logout')
 ]
+
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns += [
+        url(r'^__debug__/', include(debug_toolbar.urls)),
+    ]

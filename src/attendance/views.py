@@ -1,3 +1,4 @@
+from __future__ import division
 from attendance.forms import AttendanceForm
 from django.shortcuts import render, redirect, reverse
 from django.contrib.auth.decorators import login_required
@@ -5,9 +6,13 @@ from students.models import Student
 from schools.models import School
 from datetime import date, timedelta
 from django.forms import modelformset_factory
-from attendance.models import Attendance
+from attendance.models import Attendance, AttendanceCalendar
 from classes.models import Class
 from django.contrib import messages
+from django.db import connection
+from django.db.models import *
+import datetime
+from collections import OrderedDict
 
 
 def go_home(request):	
@@ -113,3 +118,178 @@ def add_attendance2(request, school_id, date):
 def go_home(request):
     return render(request, "home.html", {})
 
+
+def attendance_report(request):
+    return render(request, 'attendance_report.html', {})
+
+
+def get_attendance_months():
+    truncate_month = connection.ops.date_trunc_sql('month', 'attendance_date')
+
+    attendance = Attendance.objects.extra({'month': truncate_month}).values('month') \
+        .annotate(
+        attendace_days=Count('student')
+    ).order_by('-attendance_date')
+
+    # get months from attendance records
+    attendance_months = [datetime.datetime.strptime(dt['month'], "%Y-%m-%d").date() for dt in attendance]
+    return attendance_months
+
+
+def attendance_summary(request):
+    """
+    Get last 12 months attendance records
+    Group attendance by Month
+    Calculate %ages for each School in each of the 12 months
+    """
+
+    attendance_months = get_attendance_months()
+
+    if request.GET.get('date'):
+        attendance_months = [datetime.datetime.strptime(request.GET.get('date'), "%Y-%m-%d").date()]
+    else:
+        # attendance last 12 months
+        attendance_months = attendance_months[:12]
+
+    last_12_months_attendance = {}
+
+    # iterate over each month
+    # filter schools who has attendance in each iterated month
+    # get students attendance from each school
+    for date in attendance_months:
+
+        schools_in_month = School.objects \
+            .filter(
+                student__attendance__attendance_date__year=date.year,
+                student__attendance__attendance_date__month=date.month
+        )\
+            .annotate(
+            days_attendance_entered=Count('student__attendance__attendance_date', distinct=True),
+            overall_present=Count(Case(When(student__attendance__status='present', then=1))),
+            overall_absent=Count(Case(When(student__attendance__status='absent', then=1))),
+            boys_present=Count(Case(When(student__attendance__status='present', student__gender='male', then=1))),
+            boys_absent=Count(Case(When(student__attendance__status='absent', student__gender='male', then=1))),
+            girls_present=Count(Case(When(student__attendance__status='present', student__gender='female', then=1))),
+            girls_absent=Count(Case(When(student__attendance__status='absent', student__gender='female', then=1))),
+            end_of_month=Max(Case(When(
+                student__attendance__student__pkss_school__id=F('id'), then=F('student__attendance__attendance_date')
+            ))),
+            # end_of_month_enrolled=Count(Case(When(student__attendance__attendance_date=F('end_of_month'), then=1)))
+        )
+
+        for school in schools_in_month:
+            school.boys_attendance = round(school.boys_present / (school.boys_present + school.boys_absent), 2) * 100
+            school.girls_attendance = round(school.girls_present / (school.girls_present + school.girls_absent), 2) * 100
+            school.overall_attendance = round(school.overall_present / (school.overall_present + school.overall_absent), 2) * 100
+            school_end_of_month_enrollment = Attendance.objects.filter(attendance_date=school.end_of_month)
+            school.end_of_month_enrollment = school_end_of_month_enrollment.count()
+            school.end_of_month_enrollment_boys = school_end_of_month_enrollment.filter(student__gender='male').count()
+            school.end_of_month_enrollment_girls = school_end_of_month_enrollment.filter(student__gender='female').count()
+
+        # append schools monthly attendance to dict
+        last_12_months_attendance.update({date: schools_in_month})
+
+    # sort attendance by month desc
+    last_12_months_attendance = OrderedDict(sorted(last_12_months_attendance.items(), key=lambda t: t[0], reverse=True))
+
+    return render(request, 'attendance_summary.html', {'last_12_months_attendance': last_12_months_attendance})
+
+
+def school_attendance_details(request, school_id, date):
+    date = datetime.datetime.strptime(date, "%Y-%m-%d").date()
+    school = School.objects.get(pk=school_id)
+
+    school_attendance = Attendance.objects\
+    .filter(
+        attendance_date__year=date.year,
+        attendance_date__month=date.month,
+        student__pkss_school=school
+    )
+
+    monthly_attendance = school_attendance\
+    .values('student__pkss_school')\
+    .annotate(
+        days_attendance_entered=Count('attendance_date', distinct=True),
+        overall_present=Count(Case(When(status='present', then=1))),
+        overall_absent=Count(Case(When(status='absent', then=1))),
+        boys_present=Count(Case(When(status='present', student__gender='male', then=1))),
+        boys_absent=Count(Case(When(status='absent', student__gender='male', then=1))),
+        girls_present=Count(Case(When(status='present', student__gender='female', then=1))),
+        girls_absent=Count(Case(When(status='absent', student__gender='female', then=1))),
+    )[0]
+
+    monthly_attendance['overall_attendance'] = round(monthly_attendance.get('overall_present') / (monthly_attendance.get('overall_present') + monthly_attendance.get('overall_absent')), 2) * 100
+    monthly_attendance['boys_attendance'] = round(monthly_attendance.get('boys_present') / (monthly_attendance.get('boys_present') + monthly_attendance.get('boys_absent')), 2) * 100
+    monthly_attendance['girls_attendance'] = round(monthly_attendance.get('girls_present') / (monthly_attendance.get('girls_present') + monthly_attendance.get('girls_absent')), 2) * 100
+
+    current_month_working_days = AttendanceCalendar.objects\
+        .get(
+            school=school,
+            first_day_of_month__year=date.year,
+            first_day_of_month__month=date.month
+            )\
+        .workdays_in_month
+
+    monthly_attendance['school'] = school
+    monthly_attendance['days_attendance_missing'] = current_month_working_days - monthly_attendance.get('days_attendance_entered')
+    monthly_attendance['working_days'] = current_month_working_days
+
+    # calculate attendance percentage group by class for school
+    attendance_by_class = school_attendance\
+    .values('student__pkss_school__class__class_name')\
+    .annotate(
+        present=Count(Case(When(status='present', then=1))),
+        absent=Count(Case(When(status='absent', then=1)))
+    )
+
+    for clas in attendance_by_class:
+        clas['attendance'] = round(clas['present'] / (clas['present'] + clas['absent']), 2) * 100
+
+    monthly_attendance['class_attendance'] = attendance_by_class
+    monthly_attendance['date'] = date
+
+    # calculate attendance, absent, present for each date in current school
+    by_date_attendance = school_attendance\
+        .values('attendance_date')\
+        .annotate(
+            present=Count(Case(When(status='present', then=1))),
+            absent=Count(Case(When(status='absent', then=1)))
+    )
+
+    by_date_attendance = {
+                            att['attendance_date']: {
+                                'present': att['present'],
+                                'absent': att['absent'],
+                                'overall_attendance': round(att['present'] / (att['present'] + att['absent']), 2) * 100
+                            }
+                          for att in by_date_attendance}
+
+    # calculate by date attendance for each class in current school in current month's each date
+    school_classes = Class.objects.filter(school=school)
+    for dt in by_date_attendance.keys():
+        class_attendance = school_classes.filter(school__student__attendance__attendance_date=dt)\
+            .values('class_name')\
+            .annotate(
+                present=Count(Case(When(school__student__attendance__status='present', then=1))),
+                absent=Count(Case(When(school__student__attendance__status='absent', then=1)))
+            )
+
+        by_date_class_attendance = {}
+        for clas in class_attendance:
+            by_date_class_attendance[clas['class_name']] = round(clas['present'] / (clas['present'] + clas['absent']), 2) * 100
+
+        by_date_attendance[dt]['class_attendance'] = by_date_class_attendance.values()
+
+    # append by_date_attendance to monthly attendance
+    by_date_attendance = OrderedDict(sorted(by_date_attendance.items(), key=lambda t: t[0], reverse=True))
+
+    monthly_attendance['by_date_attendance'] = by_date_attendance
+
+    return render(request, 'school_attendance_details.html', {'attendance': monthly_attendance})
+
+
+def attendance_by_month(request):
+    """
+    Get all months in which attendance has been entered
+    """
+    return render(request, 'attendance_by_month.html', {'attendance_months': set(get_attendance_months())})

@@ -1,0 +1,128 @@
+
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+
+ 
+{% block content %}
+
+
+
+<br>
+
+<br>
+
+<div class='col-sm-8 col-sm-offset-1'>
+
+<h3> Attendance Details </h3>
+<br>
+
+<h4>{{ attendance.school }} -  Summary for {{ attendance.date|date:"M Y" }}</h4>
+
+    <br/><br/>
+
+    <table class="table">
+
+            <tbody>
+                <tr>
+                    <td>Overall Working days in {{ attendance.date|date:"M Y" }}</td>
+                    <td>{{ attendance.working_days }}</td>
+                </tr>
+
+                <tr>
+                    <td>Days attendance entered in {{ attendance.date|date:"M Y" }}</td>
+                    <td>{{ attendance.days_attendance_entered }}</td>
+                </tr>
+
+                <tr>
+                    <td>Days attendance missed in {{ attendance.date|date:"M Y" }}</td>
+                    <td>{{ attendance.days_attendance_missing }}</td>
+                </tr>
+            </tbody>
+
+    </table>
+
+    <br/><br/>
+
+    <table class="table">
+
+            <tbody>
+                <tr>
+                    <td>Overall attendance rate</td>
+                    <td>{{ attendance.overall_attendance }}%</td>
+                </tr>
+
+                <tr>
+                    <td>Boys attendance rate</td>
+                    <td>{{ attendance.boys_attendance }}%</td>
+                </tr>
+
+                <tr>
+                    <td>Girls attendance rate</td>
+                    <td>{{ attendance.girls_attendance }}%</td>
+                </tr>
+            </tbody>
+
+    </table>
+
+    <br/><br/>
+
+    <table class="table">
+
+        <caption>Attendance by Class</caption>
+
+            <tbody>
+                {% for class in attendance.class_attendance %}
+                <tr>
+                    <td>{{ class.student__pkss_school__class__class_name }}</td>
+                    <td>{{ class.attendance }}%</td>
+                </tr>
+
+                {% endfor %}
+            </tbody>
+
+    </table>
+
+    <br/><br/>
+
+    <table class="table">
+
+        <caption>Attendance by Date</caption>
+
+            <thead>
+                <tr>
+                    <td>Date</td>
+                    <td>Overall Attendance</td>
+                    <td>Present</td>
+                    <td>Absent</td>
+                    <td>Total</td>
+
+                    {% for class in attendance.class_attendance %}
+                        <td>{{ class.student__pkss_school__class__class_name }}</td>
+                    {% endfor %}
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for date, att in attendance.by_date_attendance.items %}
+                <tr>
+                    <td><a href="{% url 'add_attendance2' attendance.school.pk date %}">{{ date }}</a></td>
+                    <td>{{ att.overall_attendance }}%</td>
+                    <td>{{ att.present }}</td>
+                    <td>{{ att.absent }}</td>
+                    <td>{{ att.present|add:att.absent }}</td>
+
+                    {% for class_att in att.class_attendance %}
+                        <td>{{ class_att }}%</td>
+                    {% endfor %}
+                </tr>
+
+                {% endfor %}
+            </tbody>
+
+    </table>
+
+</div>
+
+{% endblock %}

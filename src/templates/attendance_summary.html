@@ -1,0 +1,63 @@
+
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+
+ 
+{% block content %}
+
+ 
+
+
+<br>
+
+<br>
+
+<div class='col-sm-8 col-sm-offset-1'>
+
+<h4> Attendance Summary {% if 'date' not in request.GET %} (Last 12 Months) {% endif %} </h4>
+<br>
+
+{% for date, schools_list in last_12_months_attendance.items %}
+
+    <table class="table">
+        <caption><strong>{{ date|date:"M Y" }}</strong></caption>
+
+        <thead>
+            <tr>
+                <th>School</th>
+                <th>Days Attendance Entered</th>
+                <th>Overall Attendance</th>
+                <th>Boys Attendance</th>
+                <th>Girls Attendance</th>
+                <th>End of Month Enrollment</th>
+                <th>End of Month Enrollment Boys</th>
+                <th>End of Month Enrollment Girls</th>
+            </tr>
+        </thead>
+
+        {% for school in schools_list %}
+
+            <tbody>
+                <tr>
+                    <td><a href="{% url 'school_attendance_details' school.pk date %}">{{ school.school_name }}</a> </td>
+                    <td>{{ school.days_attendance_entered }}</td>
+                    <td>{{ school.overall_attendance }}%</td>
+                    <td>{{ school.boys_attendance }}%</td>
+                    <td>{{ school.girls_attendance }}%</td>
+                    <td>{{ school.end_of_month_enrollment }}</td>
+                    <td>{{ school.end_of_month_enrollment_boys }}</td>
+                    <td>{{ school.end_of_month_enrollment_girls }}</td>
+                </tr>
+            </tbody>
+
+        {% endfor %}
+
+    </table>
+
+{% endfor %}
+
+</div>
+
+{% endblock %}

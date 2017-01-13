@@ -1,0 +1,44 @@
+
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+
+ 
+{% block content %}
+
+ 
+
+
+<br>
+
+<br>
+
+<div class='col-sm-8 col-sm-offset-1'>
+
+<h3> view Attendance by school </h3>
+<br>
+
+    <form method="get" action="{% url 'attendance_summary' %}" class="form-horizontal">
+        <div class="form-group">
+            <label for="attendance_date" class="col-sm-2 control-label">Select Month</label>
+
+            <div class="col-sm-4">
+                <select name="date" id="attendance_date" class="form-control">
+                    {% for date in attendance_months %}
+                        <option value="{{ date|date:'Y-m-d' }}">{{date|date:"M Y"}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+      </div>
+
+        <br/>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+              <button type="submit" class="btn btn-default">Go</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

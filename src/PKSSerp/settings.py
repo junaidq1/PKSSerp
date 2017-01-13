@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'teachers',
     'students',
     'attendance',
+
+    'debug_toolbar'
 ]
 
 MIDDLEWARE = [
@@ -53,6 +55,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware'
 ]
 
 ROOT_URLCONF = 'PKSSerp.urls'
@@ -140,3 +143,5 @@ STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static_cdn")
 MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "media_cdn") #where users upload files
 
 LOGIN_URL = '/'
+
+INTERNAL_IPS = ['127.0.0.1']
