@@ -123,7 +123,7 @@
             <tbody>
                 {% for date, att in attendance.by_date_attendance.items %}
                 <tr>
-                    <td><a href="{% url 'add_attendance2' attendance.school.pk date 'readonly' %}">{{ date }}</a></td>
+                    <td><a href="{% url 'add_attendance2' attendance.school.pk date %}?readonly=1">{{ date }}</a></td>
                     <td>{{ att.overall_attendance }}%</td>
                     <td>{{ att.present }}</td>
                     <td>{{ att.absent }}</td>

@@ -27,7 +27,6 @@ urlpatterns = [
     url(r'^attendance_dates/(?P<school_id>\d+)/$', att.attendance_dates, name='attendance_dates'),
 
     url(r'^attendance2/(?P<school_id>\d+)/(?P<date>\d{4}-\d{2}-\d{2})/$', att.add_attendance2, name='add_attendance2'),
-    url(r'^attendance2/(?P<school_id>\d+)/(?P<date>\d{4}-\d{2}-\d{2})/(?P<readonly>\w+)/$', att.add_attendance2, name='add_attendance2'),
 
     url(r'^attendance_report/$', att.attendance_report, name='attendance_report'),
     url(r'^attendance_summary/$', att.attendance_summary, name='attendance_summary'),
