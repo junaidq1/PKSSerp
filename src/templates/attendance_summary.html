@@ -45,9 +45,9 @@
                     <td><a href="{% url 'school_attendance_details' school.pk date %}">{{ school.school_name }}</a> </td>
                     <td>{{ school.days_attendance_entered }}</td>
                     <td>{{ school.working_days }}</td>
-                    <td>{{ school.overall_attendance }}%</td>
-                    <td>{{ school.boys_attendance }}%</td>
-                    <td>{{ school.girls_attendance }}%</td>
+                    <td>{{ school.overall_attendance|floatformat:"-1" }}%</td>
+                    <td>{{ school.boys_attendance|floatformat:"-1" }}%</td>
+                    <td>{{ school.girls_attendance|floatformat:"-1" }}%</td>
                     <td>{{ school.end_of_month_enrollment }}</td>
                     <td>{{ school.end_of_month_enrollment_boys }}</td>
                     <td>{{ school.end_of_month_enrollment_girls }}</td>

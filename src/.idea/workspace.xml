@@ -33,8 +33,8 @@
       <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/attendance/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="174">
-              <caret line="222" column="21" selection-start-line="222" selection-start-column="21" selection-end-line="222" selection-end-column="21" />
+            <state relative-caret-position="574">
+              <caret line="205" column="76" selection-start-line="205" selection-start-column="76" selection-end-line="205" selection-end-column="76" />
               <folding>
                 <element signature="e#0#31#0" expanded="true" />
                 <element signature="e#697#736#0" expanded="false" />
@@ -46,34 +46,49 @@
                 <element signature="e#4734#4773#0" expanded="false" />
                 <element signature="e#4812#4864#0" expanded="false" />
                 <element signature="e#4900#5333#0" expanded="false" />
-                <element signature="e#5373#8724#0" expanded="false" />
                 <element signature="e#16209#16384#0" expanded="false" />
-                <marker date="1484411358637" expanded="false" signature="2055:4705" ph="..." />
-                <marker date="1484411358637" expanded="false" signature="16427:18267" ph="..." />
+                <marker date="1484415771844" expanded="false" signature="2055:4705" ph="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="group_attendance.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="group_attendance.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templates/group_attendance.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="467">
-              <caret line="93" column="12" selection-start-line="93" selection-start-column="12" selection-end-line="93" selection-end-column="12" />
+              <caret line="93" column="31" selection-start-line="93" selection-start-column="31" selection-end-line="93" selection-end-column="31" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="school_attendance_details.html" pinned="false" current-in-tab="false">
+      <file leaf-file-name="school_attendance_details.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/templates/school_attendance_details.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="397">
-              <caret line="125" column="97" selection-start-line="125" selection-start-column="97" selection-end-line="125" selection-end-column="97" />
-              <folding>
-                <element signature="n#table#0;n#div#0;n#!!top" expanded="false" />
-                <element signature="n#table#1;n#div#0;n#!!top" expanded="false" />
-              </folding>
+            <state relative-caret-position="152">
+              <caret line="83" column="25" selection-start-line="83" selection-start-column="25" selection-end-line="83" selection-end-column="25" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="attendance_by_school_month.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/templates/attendance_by_school_month.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="302">
+              <caret line="42" column="61" selection-start-line="42" selection-start-column="61" selection-end-line="42" selection-end-column="61" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="attendance_summary.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/templates/attendance_summary.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="750">
+              <caret line="50" column="65" selection-start-line="50" selection-start-column="65" selection-end-line="50" selection-end-column="65" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -104,13 +119,13 @@
         <option value="$PROJECT_DIR$/templates/attendance_by_month_details.html" />
         <option value="$PROJECT_DIR$/templates/attendance_by_month.html" />
         <option value="$PROJECT_DIR$/templates/attendance_report.html" />
-        <option value="$PROJECT_DIR$/templates/attendance_by_school_month.html" />
         <option value="$PROJECT_DIR$/attendance/forms.py" />
-        <option value="$PROJECT_DIR$/templates/attendance_summary.html" />
-        <option value="$PROJECT_DIR$/attendance/views.py" />
-        <option value="$PROJECT_DIR$/templates/school_attendance_details.html" />
         <option value="$PROJECT_DIR$/PKSSerp/urls.py" />
         <option value="$PROJECT_DIR$/templates/group_attendance.html" />
+        <option value="$PROJECT_DIR$/attendance/views.py" />
+        <option value="$PROJECT_DIR$/templates/attendance_summary.html" />
+        <option value="$PROJECT_DIR$/templates/school_attendance_details.html" />
+        <option value="$PROJECT_DIR$/templates/attendance_by_school_month.html" />
       </list>
     </option>
   </component>
@@ -417,37 +432,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/PKSSerp/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="28" column="42" selection-start-line="28" selection-start-column="42" selection-end-line="28" selection-end-column="42" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/attendance/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="555">
-          <caret line="46" column="17" selection-start-line="46" selection-start-column="17" selection-end-line="46" selection-end-column="17" />
-          <folding>
-            <element signature="e#0#31#0" expanded="true" />
-            <element signature="e#697#736#0" expanded="false" />
-            <element signature="e#739#769#0" expanded="false" />
-            <element signature="e#1260#1299#0" expanded="false" />
-            <element signature="e#1346#1421#0" expanded="false" />
-            <element signature="e#1479#1627#0" expanded="false" />
-            <element signature="e#1694#1972#0" expanded="false" />
-            <element signature="e#4734#4773#0" expanded="false" />
-            <element signature="e#4812#4864#0" expanded="false" />
-            <element signature="e#4900#5333#0" expanded="false" />
-            <element signature="e#5373#8724#0" expanded="false" />
-            <element signature="e#16209#16384#0" expanded="false" />
-            <marker date="1484411358637" expanded="false" signature="2055:4705" ph="..." />
-            <marker date="1484411358637" expanded="false" signature="16427:18267" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/teachers/models.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="345">
@@ -502,10 +486,8 @@
             <element signature="e#4734#4773#0" expanded="false" />
             <element signature="e#4812#4864#0" expanded="false" />
             <element signature="e#4900#5333#0" expanded="false" />
-            <element signature="e#5373#8724#0" expanded="false" />
             <element signature="e#16209#16384#0" expanded="false" />
-            <marker date="1484411358637" expanded="false" signature="2055:4705" ph="..." />
-            <marker date="1484411358637" expanded="false" signature="16427:18267" ph="..." />
+            <marker date="1484415771844" expanded="false" signature="2055:4705" ph="..." />
           </folding>
         </state>
       </provider>
@@ -785,26 +767,34 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/attendance_summary.html">
+    <entry file="file://$PROJECT_DIR$/PKSSerp/urls.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="206">
-          <caret line="30" column="37" selection-start-line="30" selection-start-column="37" selection-end-line="30" selection-end-column="37" />
+        <state relative-caret-position="297">
+          <caret line="29" column="0" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/attendance_by_school_month.html">
+    <entry file="file://$USER_HOME$/.PyCharm2016.2/system/python_stubs/-1900513934/math.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="424">
-          <caret line="45" column="29" selection-start-line="39" selection-start-column="24" selection-end-line="45" selection-end-column="29" />
+        <state relative-caret-position="213">
+          <caret line="74" column="4" selection-start-line="74" selection-start-column="4" selection-end-line="74" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.PyCharm2016.2/system/python_stubs/-1900513934/__builtin__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="213">
+          <caret line="509" column="4" selection-start-line="509" selection-start-column="4" selection-end-line="509" selection-end-column="4" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/attendance/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="174">
-          <caret line="222" column="21" selection-start-line="222" selection-start-column="21" selection-end-line="222" selection-end-column="21" />
+        <state relative-caret-position="574">
+          <caret line="205" column="76" selection-start-line="205" selection-start-column="76" selection-end-line="205" selection-end-column="76" />
           <folding>
             <element signature="e#0#31#0" expanded="true" />
             <element signature="e#697#736#0" expanded="false" />
@@ -816,37 +806,40 @@
             <element signature="e#4734#4773#0" expanded="false" />
             <element signature="e#4812#4864#0" expanded="false" />
             <element signature="e#4900#5333#0" expanded="false" />
-            <element signature="e#5373#8724#0" expanded="false" />
             <element signature="e#16209#16384#0" expanded="false" />
-            <marker date="1484411358637" expanded="false" signature="2055:4705" ph="..." />
-            <marker date="1484411358637" expanded="false" signature="16427:18267" ph="..." />
+            <marker date="1484415771844" expanded="false" signature="2055:4705" ph="..." />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/school_attendance_details.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="397">
-          <caret line="125" column="97" selection-start-line="125" selection-start-column="97" selection-end-line="125" selection-end-column="97" />
-          <folding>
-            <element signature="n#table#0;n#div#0;n#!!top" expanded="false" />
-            <element signature="n#table#1;n#div#0;n#!!top" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/PKSSerp/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="297">
-          <caret line="29" column="0" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/group_attendance.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="467">
-          <caret line="93" column="12" selection-start-line="93" selection-start-column="12" selection-end-line="93" selection-end-column="12" />
+          <caret line="93" column="31" selection-start-line="93" selection-start-column="31" selection-end-line="93" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/attendance_summary.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="750">
+          <caret line="50" column="65" selection-start-line="50" selection-start-column="65" selection-end-line="50" selection-end-column="65" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/attendance_by_school_month.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="302">
+          <caret line="42" column="61" selection-start-line="42" selection-start-column="61" selection-end-line="42" selection-end-column="61" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/school_attendance_details.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="152">
+          <caret line="83" column="25" selection-start-line="83" selection-start-column="25" selection-end-line="83" selection-end-column="25" />
           <folding />
         </state>
       </provider>

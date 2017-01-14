@@ -40,7 +40,7 @@
                         <td>
                             {% for key, value in school_attendance.items %}
                                 {% ifequal key date %}
-                                    {{ value }}%
+                                    {{ value|floatformat:"-1" }}%
                                 {% endifequal %}
                             {% endfor %}
                         </td>

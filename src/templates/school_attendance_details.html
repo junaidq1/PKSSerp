@@ -53,22 +53,22 @@
                 <tr>
                     <td>Overall attendance rate</td>
                     <td>{{ attendance.overall_present }}</td>
-                    <td>{{ attendance.overall_attendance }}%</td>
-                    <td>Last Month: {{ attendance.previous_overall_attendance }}%</td>
+                    <td>{{ attendance.overall_attendance|floatformat:"-1" }}%</td>
+                    <td>Last Month: {{ attendance.previous_overall_attendance|floatformat:"-1" }}%</td>
                 </tr>
 
                 <tr>
                     <td>Boys attendance rate</td>
                     <td>{{ attendance.boys_present }} </td>
-                    <td>{{ attendance.boys_attendance }}%</td>
-                    <td>Last Month: {{ attendance.previous_boys_attendance }}%</td>
+                    <td>{{ attendance.boys_attendance|floatformat:"-1" }}%</td>
+                    <td>Last Month: {{ attendance.previous_boys_attendance|floatformat:"-1"}}%</td>
                 </tr>
 
                 <tr>
                     <td>Girls attendance rate</td>
                     <td>{{ attendance.girls_present }}</td>
-                    <td>{{ attendance.girls_attendance }}% </td>
-                    <td>Last Month: {{ attendance.previous_girls_attendance }}%</td>
+                    <td>{{ attendance.girls_attendance|floatformat:"-1" }}% </td>
+                    <td>Last Month: {{ attendance.previous_girls_attendance|floatformat:"-1" }}%</td>
                 </tr>
             </tbody>
 
@@ -89,7 +89,7 @@
                     <td>
                         {% for class_previous in attendance.class_attendance_previous %}
                             {% ifequal class_previous.student__pkss_school__class__class_name class.student__pkss_school__class__class_name %}
-                                Last Month: {{ class_previous.attendance }}%
+                                Last Month: {{ class_previous.attendance|floatformat:"-1" }}%
                             {% endifequal %}
                         {% endfor %}
                     </td>
@@ -124,13 +124,13 @@
                 {% for date, att in attendance.by_date_attendance.items %}
                 <tr>
                     <td><a href="{% url 'add_attendance2' attendance.school.pk date %}?readonly=1">{{ date }}</a></td>
-                    <td>{{ att.overall_attendance }}%</td>
+                    <td>{{ att.overall_attendance|floatformat:"-1" }}%</td>
                     <td>{{ att.present }}</td>
                     <td>{{ att.absent }}</td>
                     <td>{{ att.present|add:att.absent }}</td>
 
                     {% for class_att in att.class_attendance %}
-                        <td>{{ class_att }}%</td>
+                        <td>{{ class_att|floatformat:"-1" }}%</td>
                     {% endfor %}
                 </tr>
 

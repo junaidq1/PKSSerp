@@ -89,9 +89,11 @@
             return decodeURIComponent(results[2].replace(/\+/g, " "));
         }
 
-        if(getParameterByName('readonly'))
+        if(getParameterByName('readonly')){
             $(this).find('select').prop('disabled', true);
-            
+            $(this).find('input[type="submit"]').hide();
+        }
+
         $('form').bind('submit', function () {
             $(this).find('select.attendance_student').prop('disabled', false);
       });
