@@ -26,13 +26,15 @@ urlpatterns = [
     url(r'^affiliated_schools/$', att.affiliated_schools, name='affiliated_schools'),
     url(r'^attendance_dates/(?P<school_id>\d+)/$', att.attendance_dates, name='attendance_dates'),
 
-    url(r'^attendance2/(?P<school_id>\d+)/(?P<date>.+)/$', att.add_attendance2, name='add_attendance2'),
+    url(r'^attendance2/(?P<school_id>\d+)/(?P<date>\d{4}-\d{2}-\d{2})/$', att.add_attendance2, name='add_attendance2'),
+    url(r'^attendance2/(?P<school_id>\d+)/(?P<date>\d{4}-\d{2}-\d{2})/(?P<readonly>\w+)/$', att.add_attendance2, name='add_attendance2'),
 
     url(r'^attendance_report/$', att.attendance_report, name='attendance_report'),
     url(r'^attendance_summary/$', att.attendance_summary, name='attendance_summary'),
     url(r'^school_attendance_details/(?P<school_id>\d+)/(?P<date>.+)/$', att.school_attendance_details, name='school_attendance_details'),
 
     url(r'^attendance_by_month/$', att.attendance_by_month, name='attendance_by_school'),
+    url(r'^attendance_by_school_month/$', att.attendance_by_school_month, name='attendance_by_school_month'),
 
     url(r'^login/', LoginView.as_view(), name='login'),
     url(r'^logout/$', LogoutView.as_view(), name='logout')

@@ -14,7 +14,7 @@
 
 <br>
 
-<div class='col-sm-8 col-sm-offset-1'>
+<div class='col-sm-10 col-sm-offset-1'>
 
 <h4> Attendance Summary {% if 'date' not in request.GET %} (Last 12 Months) {% endif %} </h4>
 <br>
@@ -28,6 +28,7 @@
             <tr>
                 <th>School</th>
                 <th>Days Attendance Entered</th>
+                <th>Working Days</th>
                 <th>Overall Attendance</th>
                 <th>Boys Attendance</th>
                 <th>Girls Attendance</th>
@@ -43,6 +44,7 @@
                 <tr>
                     <td><a href="{% url 'school_attendance_details' school.pk date %}">{{ school.school_name }}</a> </td>
                     <td>{{ school.days_attendance_entered }}</td>
+                    <td>{{ school.working_days }}</td>
                     <td>{{ school.overall_attendance }}%</td>
                     <td>{{ school.boys_attendance }}%</td>
                     <td>{{ school.girls_attendance }}%</td>
@@ -55,6 +57,8 @@
         {% endfor %}
 
     </table>
+
+    <br/><br/>
 
 {% endfor %}
 

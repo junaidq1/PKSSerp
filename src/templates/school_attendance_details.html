@@ -18,6 +18,8 @@
 <h3> Attendance Details </h3>
 <br>
 
+{% if attendance %}
+
 <h4>{{ attendance.school }} -  Summary for {{ attendance.date|date:"M Y" }}</h4>
 
     <br/><br/>
@@ -50,17 +52,23 @@
             <tbody>
                 <tr>
                     <td>Overall attendance rate</td>
+                    <td>{{ attendance.overall_present }}</td>
                     <td>{{ attendance.overall_attendance }}%</td>
+                    <td>Last Month: {{ attendance.previous_overall_attendance }}%</td>
                 </tr>
 
                 <tr>
                     <td>Boys attendance rate</td>
+                    <td>{{ attendance.boys_present }} </td>
                     <td>{{ attendance.boys_attendance }}%</td>
+                    <td>Last Month: {{ attendance.previous_boys_attendance }}%</td>
                 </tr>
 
                 <tr>
                     <td>Girls attendance rate</td>
-                    <td>{{ attendance.girls_attendance }}%</td>
+                    <td>{{ attendance.girls_present }}</td>
+                    <td>{{ attendance.girls_attendance }}% </td>
+                    <td>Last Month: {{ attendance.previous_girls_attendance }}%</td>
                 </tr>
             </tbody>
 
@@ -77,6 +85,14 @@
                 <tr>
                     <td>{{ class.student__pkss_school__class__class_name }}</td>
                     <td>{{ class.attendance }}%</td>
+
+                    <td>
+                        {% for class_previous in attendance.class_attendance_previous %}
+                            {% ifequal class_previous.student__pkss_school__class__class_name class.student__pkss_school__class__class_name %}
+                                Last Month: {{ class_previous.attendance }}%
+                            {% endifequal %}
+                        {% endfor %}
+                    </td>
                 </tr>
 
                 {% endfor %}
@@ -107,7 +123,7 @@
             <tbody>
                 {% for date, att in attendance.by_date_attendance.items %}
                 <tr>
-                    <td><a href="{% url 'add_attendance2' attendance.school.pk date %}">{{ date }}</a></td>
+                    <td><a href="{% url 'add_attendance2' attendance.school.pk date 'readonly' %}">{{ date }}</a></td>
                     <td>{{ att.overall_attendance }}%</td>
                     <td>{{ att.present }}</td>
                     <td>{{ att.absent }}</td>
@@ -123,6 +139,11 @@
 
     </table>
 
+{% else %}
+
+    <p>Attendance details not found</p>
+
+{% endif %}
 </div>
 
 {% endblock %}

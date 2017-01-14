@@ -1,0 +1,58 @@
+
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+
+ 
+{% block content %}
+
+
+<br>
+
+<br>
+
+<div class='col-sm-8 col-sm-offset-1'>
+
+<h4> Attendance By School & Month </h4>
+<br>
+
+<h5>Attendance last 12 months</h5>
+
+
+    <table class="table">
+
+        <thead>
+            <tr>
+                    <th></th>
+                {% for date in attendance.months %}
+                    <th>{{ date|date:"M Y" }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for school_name, school_attendance in attendance.schools.items %}
+                <tr>
+                    <td>{{ school_name }}</td>
+
+                    {% for date in attendance.months %}
+                        <td>
+                            {% for key, value in school_attendance.items %}
+                                {% ifequal key date %}
+                                    {{ value }}%
+                                {% endifequal %}
+                            {% endfor %}
+                        </td>
+                    {% endfor %}
+
+                </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
+
+
+</div>
+
+{% endblock %}
