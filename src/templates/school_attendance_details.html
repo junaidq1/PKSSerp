@@ -84,7 +84,7 @@
                 {% for class in attendance.class_attendance %}
                 <tr>
                     <td>{{ class.student__pkss_class__class_name }}</td>
-                    <td>{{ class.attendance }}%</td>
+                    <td>{{ class.attendance|floatformat:"-1" }}%</td>
 
                     <td>
                         {% for class_previous in attendance.class_attendance_previous %}

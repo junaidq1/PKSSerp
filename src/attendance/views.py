@@ -91,6 +91,8 @@ def add_attendance2(request, school_id, date, readonly=False):
                                             queryset=Attendance.objects.filter(attendance_date=date, student__in=students_list),
                                             prefix=clas)
 
+    date = datetime.datetime.strptime(date, "%Y-%m-%d").date()
+
     if request.method == 'POST':
         #classes_list = Class.objects.filter(teacher=request.user.teacher, school__id=school.pk)
         s = School.objects.filter(teacher__id = request.user.teacher.id) #JQ: added
