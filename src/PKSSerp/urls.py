@@ -41,6 +41,9 @@ urlpatterns = [
     
     url(r'^search_students/$', st.search_students, name='search_student'),
     url(r'^student_profile/(?P<pk>\d+)/$', st.student_profile_details, name='std_profile'),
+    url(r'^edit_student_profile/(?P<pk>\d+)/$', st.edit_student_record, name='edit_std_profile'),
+    url(r'^unenroll_student_profile/(?P<pk>\d+)/$', st.unenroll_student, name='unenroll_std_profile'),
+    url(r'^add_student/$', st.add_a_student, name='add_student'),
 
 ]
 

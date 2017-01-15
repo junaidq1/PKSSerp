@@ -14,10 +14,10 @@
 		<h3> Student Details </h3>
 		<hr/>
 
-		<a href=''>
+		<a href='{% url "search_student" %}'>
 		<p class='lead text-align-left'><p class='lead text-align-left'>  <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Student profile & attendance log</p></a>
 
-		<a href=''>
+		<a href='{% url "add_student" %}'>
 		<p class='lead text-align-left'><p class='lead text-align-left'>  <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Enroll new student</p></a>
 		<br>
 
@@ -62,7 +62,7 @@
 		<a href='{% url "attendance_report" %}'>
 		<p class='lead text-align-left'><p class='lead text-align-left'>  <span class="glyphicon glyphicon-stats" aria-hidden="true"></span> Attendance reports </p></a>
 
-		<a href='{% url "attendance_report" %}'>
+		<a href=''>
 		<p class='lead text-align-left'><p class='lead text-align-left'>  <span class="glyphicon glyphicon-stats" aria-hidden="true"></span> Unexpected school holiday report </p></a>
 		<br>
 	</div>
@@ -79,11 +79,9 @@
 		
 		<a href=''>
 		<p class='lead text-align-left'><p class='lead text-align-left'>  <span class="glyphicon glyphicon-usd" aria-hidden="true"></span> View donations in selected period </p></a>		
-		<br>
 
 		<a href=''>
 		<p class='lead text-align-left'><p class='lead text-align-left'>  <span class="glyphicon glyphicon-usd" aria-hidden="true"></span> View multi year donor reports </p></a>		
-		<br>
 
 		<a href=''>
 		<p class='lead text-align-left'><p class='lead text-align-left'>  <span class="glyphicon glyphicon-usd" aria-hidden="true"></span> View donation forecast </p></a>		

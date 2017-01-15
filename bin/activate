@@ -39,7 +39,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="/Users/Junaid/Desktop/PKSSerp"
+VIRTUAL_ENV="/Users/Junaid/Desktop/git_lal_jan14_2"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"
