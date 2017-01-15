@@ -12,12 +12,13 @@ Class-based views
 Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
-"""
+""" 
 from django.conf.urls import url, include
 from django.contrib import admin
 
 from attendance import views as att
 from teachers.views import *
+from students import views as st
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -36,7 +37,11 @@ urlpatterns = [
     url(r'^attendance_by_school_month/$', att.attendance_by_school_month, name='attendance_by_school_month'),
 
     url(r'^login/', LoginView.as_view(), name='login'),
-    url(r'^logout/$', LogoutView.as_view(), name='logout')
+    url(r'^logout/$', LogoutView.as_view(), name='logout'),
+    
+    url(r'^search_students/$', st.search_students, name='search_student'),
+    url(r'^student_profile/(?P<pk>\d+)/$', st.student_profile_details, name='std_profile'),
+
 ]
 
 if settings.DEBUG:

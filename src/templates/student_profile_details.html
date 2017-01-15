@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}
+	Student Profile
+{% endblock %}
+
+
+{% block content %} 
+
+ <div class='container'>
+
+ 	<div class='row'>
+		<div class='col-sm-6'> 
+			<br>
+	 		<h3> Student name: <b style="color:#85BC22"> {{std.first_name}} {{std.last_name}} </b></h3>
+	 	
+	 		<p><b>Active: </b><z style="color:#85BC22"> 
+	 			{% if std.currently_enrolled %} Yes {% endif %} 
+	 			{% if not std.currently_enrolled %} No {% endif %} 
+	 		</z><br></p>
+			<b>PKSS School:</b><z style="color:#85BC22">{{obj.pkss_school}}</z>
+			<b>PKSS Class:</b><z style="color:#85BC22">{{obj.pkss_school}}</z>		
+	 		
+
+	
+
+
+
+{% endblock %}
