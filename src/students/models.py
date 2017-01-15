@@ -37,7 +37,7 @@ class Student(models.Model):
 		('stay_at_home', 'stay_at_home'),
 		('other', 'other'),
 	)
-	reason_left =  models.CharField(max_length=12, choices=REASON_LEFT_CHOICES, null=True, blank=True)
+	reason_left =  models.CharField(max_length=30, choices=REASON_LEFT_CHOICES, null=True, blank=True)
 
 	@property
 	def full_name(self):
@@ -48,3 +48,7 @@ class Student(models.Model):
 
 	def __string__(self):
 		return self.full_name
+
+	def get_absolute_url(self):
+		return reverse("student_profile", kwargs={"pk": self.pk} )
+

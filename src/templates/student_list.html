@@ -48,7 +48,8 @@ Enter the first name OR last name of the student you are looking for
 	{{obj.last_name}} |
 	Reg Number: {{obj.registration_number}} |
 	<!-- {{obj.pkss_school}} | -->
-	{{obj.pkss_class}} 
+	{{obj.pkss_class}} |
+	Active: {% if obj.currently_enrolled is True %} Yes {% endif %} {% if obj.currently_enrolled is False %} No {% endif %}  
 	</a>
 	
 	</ul>

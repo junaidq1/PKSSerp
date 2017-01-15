@@ -32,7 +32,7 @@ end
 # unset irrelevant variables
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV "/Users/Junaid/Desktop/PKSSerp"
+set -gx VIRTUAL_ENV "/Users/Junaid/Desktop/git_lal_jan14_2"
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/bin" $PATH
