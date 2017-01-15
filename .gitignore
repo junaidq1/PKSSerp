@@ -2,6 +2,7 @@
 Marketing/
 data backup/
 data management/
+settings/
 
 *.pyc
 
