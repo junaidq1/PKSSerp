@@ -263,7 +263,7 @@ def school_attendance_details(request, school_id, date):
         monthly_attendance['previous_boys_attendance'] = round(previous_attendance.get('boys_present') / (previous_attendance.get('boys_present') + previous_attendance.get('boys_absent')), 2) * 100
         monthly_attendance['previous_girls_attendance'] = round(previous_attendance.get('girls_present') / (previous_attendance.get('girls_present') + previous_attendance.get('girls_absent')), 2) * 100
 
-    # if 0 attendance for this school, return empty attendance list
+    # if 0 attendance for this school in prev month, return N/A
     except IndexError:
         monthly_attendance['previous_overall_attendance'] = 'N/A'
         monthly_attendance['previous_boys_attendance'] = 'N/A'
@@ -287,7 +287,7 @@ def school_attendance_details(request, school_id, date):
 
     # calculate attendance percentage group by class for school
     attendance_by_class = school_attendance\
-        .values('student__pkss_school__class__class_name')\
+        .values('student__pkss_class__class_name')\
         .annotate(
             present=Count(Case(When(status='present', then=1))),
             absent=Count(Case(When(status='absent', then=1)))
@@ -298,7 +298,7 @@ def school_attendance_details(request, school_id, date):
 
     # calculate attendance percentage group by class for school in previous month
     attendance_by_class_previous = previous_month_attendance\
-        .values('student__pkss_school__class__class_name')\
+        .values('student__pkss_class__class_name')\
         .annotate(
             present=Count(Case(When(status='present', then=1))),
             absent=Count(Case(When(status='absent', then=1)))
@@ -330,16 +330,19 @@ def school_attendance_details(request, school_id, date):
     # calculate by date attendance for each class in current school in current month's each date
     school_classes = Class.objects.filter(school=school)
     for dt in by_date_attendance.keys():
-        class_attendance = school_classes.filter(school__student__attendance__attendance_date=dt)\
-            .values('class_name')\
+        class_attendance = school_attendance\
+            .filter(attendance_date=dt)\
+            .values('student__pkss_class__class_name')\
             .annotate(
-                present=Count(Case(When(school__student__attendance__status='present', then=1))),
-                absent=Count(Case(When(school__student__attendance__status='absent', then=1)))
+                present=Count(Case(When(status='present', then=1))),
+                absent=Count(Case(When(status='absent', then=1)))
             )
+
+        print(class_attendance)
 
         by_date_class_attendance = {}
         for clas in class_attendance:
-            by_date_class_attendance[clas['class_name']] = round(clas['present'] / (clas['present'] + clas['absent']), 2) * 100
+            by_date_class_attendance[clas['student__pkss_class__class_name']] = round(clas['present'] / (clas['present'] + clas['absent']), 2) * 100
 
         by_date_attendance[dt]['class_attendance'] = by_date_class_attendance.values()
 

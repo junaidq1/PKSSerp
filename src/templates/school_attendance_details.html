@@ -83,12 +83,12 @@
             <tbody>
                 {% for class in attendance.class_attendance %}
                 <tr>
-                    <td>{{ class.student__pkss_school__class__class_name }}</td>
+                    <td>{{ class.student__pkss_class__class_name }}</td>
                     <td>{{ class.attendance }}%</td>
 
                     <td>
                         {% for class_previous in attendance.class_attendance_previous %}
-                            {% ifequal class_previous.student__pkss_school__class__class_name class.student__pkss_school__class__class_name %}
+                            {% ifequal class_previous.student__pkss_class__class_name class.student__pkss_class__class_name %}
                                 Last Month: {{ class_previous.attendance|floatformat:"-1" }}%
                             {% endifequal %}
                         {% endfor %}
@@ -115,7 +115,7 @@
                     <td>Total</td>
 
                     {% for class in attendance.class_attendance %}
-                        <td>{{ class.student__pkss_school__class__class_name }}</td>
+                        <td>{{ class.student__pkss_class__class_name }}</td>
                     {% endfor %}
                 </tr>
             </thead>
