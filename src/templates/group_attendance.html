@@ -1,22 +1,17 @@
-
 {% extends "base.html" %}
 {% load staticfiles %}
 {% load crispy_forms_tags %}
-
+{% crispy formset helper %}
 
  
 {% block content %}
 
- 
-
-
-<br>
 
 <br>
 
 <div class='col-sm-8 col-sm-offset-1'>
 
-<h3> {{ school|title }} - {{ date }} </h3>
+<h3> Enter attendance for: {{ school|title }} | {{ date}},  </h3>
 <br>
 
 
@@ -24,11 +19,14 @@
      <table id="formset" class="form">
 
 
+
 {% for clas, formset in formsets.iteritems %}
 
-         {{ formset.management_form }}
+         {{ formset.management_form|crispy }}
 
 {% for form in formset %}
+
+  <!-- {% crispy form %} -->
   {% if forloop.first %}
   <thead>
   <tr style="height: 30px">
@@ -47,11 +45,11 @@
     {# Include the hidden fields in the form #}
     {% if forloop.first %}
       {% for hidden in form.hidden_fields %}
-      {{ hidden }}
+      {{ hidden|as_crispy_field }}
       {% endfor %}
     {% endif %}
       {{ field.errors.as_ul }}
-      {{ field }}
+      {{ field}}
     </td>
   {% endfor %}
   </tr>

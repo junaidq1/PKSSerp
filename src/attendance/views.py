@@ -16,7 +16,7 @@ from collections import OrderedDict
 from django.utils import timezone
 from dateutil.relativedelta import relativedelta
 
-
+ 
 def go_home(request):	
 	return render(request, "home.html", {})
 
@@ -66,6 +66,7 @@ def attendance_dates(request, school_id):
 @login_required()
 def add_attendance2(request, school_id, date, readonly=False):
     school = School.objects.get(pk=school_id)
+    dateobj = date
     ## classes_list = Class.objects.filter(teacher=request.user.teacher, school__id=school.pk)
     s = School.objects.filter(teacher__id = request.user.teacher.id) #JQ: added
     classes_list = Class.objects.filter(school__id=school.pk).filter(school_id__in = s) #JQ: added
@@ -114,7 +115,7 @@ def add_attendance2(request, school_id, date, readonly=False):
             messages.success(request, 'Attendance submitted successfully.')
             return redirect(reverse('attendance_dates', kwargs={'school_id': school.pk}))
 
-    return render(request, 'group_attendance.html', {'formsets': formsets, 'date': date, 'school': school})
+    return render(request, 'group_attendance.html', {'formsets': formsets, 'date': date, 'school': school, 'dateobj':dateobj})
 
 
 def go_home(request):
