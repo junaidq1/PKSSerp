@@ -1,6 +1,7 @@
 from django import forms
-from .models import Attendance, AttendanceCalendar
+from .models import Attendance, AttendanceCalendar, NonScheduledHolidays
 from crispy_forms.helper import FormHelper
+from datetimewidget.widgets import DateWidget
 
 class AttendanceForm(forms.ModelForm):
 
@@ -27,6 +28,15 @@ class AddAttCalDateForm(forms.ModelForm):
 		model = AttendanceCalendar
 		fields = ["school", "first_day_of_month", "workdays_in_month"]
 		
-  		widgets = {
-			#'next_contact_date': DateWidget(usel10n=True, bootstrap_version=3)
+		widgets = {
+			'first_day_of_month': DateWidget(usel10n=True, bootstrap_version=3)
+		} 
+
+class AddUnexpectedHolidayForm(forms.ModelForm):
+	class Meta:
+		model = NonScheduledHolidays
+		fields = ["school", "holiday_date", "reason_for_holiday"]
+		
+		widgets = {
+			'holiday_date': DateWidget(usel10n=True, bootstrap_version=3)
 		} 

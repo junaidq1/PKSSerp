@@ -10,7 +10,7 @@ from django.db import connection  #for custom SQL
 from .models import Student
 from .forms import StudentForm, StudentUnenrollForm
 from attendance.models import AttendanceCalendar
-from attendance.forms import AddAttCalDateForm
+from attendance.forms import AddAttCalDateForm, AddUnexpectedHolidayForm
  
 @login_required 
 def search_students(request):
@@ -166,7 +166,7 @@ def add_a_cal_date(request):
 	return render(request, "add_cal_date.html", context)
 
 
-#edit an existing student record
+#edit an existing calendar record
 @login_required
 def edit_school_caldate(request, pk=None, month=None):
 	try:
@@ -189,3 +189,21 @@ def edit_school_caldate(request, pk=None, month=None):
 		"inst": inst,
 	}
 	return render(request, "edit_cal_date.html", context)
+
+
+#Add an unexpected holiday 
+@login_required
+def add_unexpected_holiday(request): 
+	form = AddUnexpectedHolidayForm(request.POST or None, request.FILES or None)
+	if form.is_valid():
+		try:
+			instance = form.save(commit=False)
+			#instance.master = Master.objects.get(pk=pk)
+			instance.save()
+			return HttpResponseRedirect( reverse('user_homepage'))
+		except:
+			return HttpResponseRedirect('/')
+	context = {
+		"form": form,
+	}
+	return render(request, "add_unexp_holiday.html", context)

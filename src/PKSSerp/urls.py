@@ -48,7 +48,8 @@ urlpatterns = [
     url(r'^attendance_calendar/$', st.view_attendance_calendar, name='attend_calendar'), #attendance cal summ view
     url(r'^add_cal_date/$', st.add_a_cal_date, name='add_cal_date'), #add cal date
     url(r'^edi_a_cal_date/(?P<pk>\d+)/(?P<month>\d+)/$', st.edit_school_caldate, name='edit_cal_date'), #edit cal date
-
+    
+    url(r'^add_unexpected_holiday/$', st.add_unexpected_holiday, name='add_unexp_holiday'), #add unexp holiday
 ]
 
 if settings.DEBUG:

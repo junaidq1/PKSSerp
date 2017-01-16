@@ -1,0 +1,33 @@
+{% extends "base.html" %} 
+{% load crispy_forms_tags %}
+
+
+{% url 'admin:jsi18n' as jsi18nurl %} <script type="text/javascript" src="{{ jsi18nurl }}"></script> 
+
+
+{% block title %}
+	Add a Student
+{% endblock %}
+
+
+ 
+{% block content %}
+
+<div row>
+<div class='col-sm-8 col-sm-offset-1'>
+<br>
+<h3> Add an unexpected holiday </h3>
+
+<br>
+
+
+	<form method='POST' action=''> {% csrf_token %}
+
+	{{form|crispy}}
+	<input class='btn btn-primary' type='submit' value='Add unexpected holiday'/>
+	</form>
+</div>
+</div>
+<!-- <input type='text' name='q' placeholder='Search posts' value='{{ request.GET.q }}'/> -->
+
+{% endblock %}
