@@ -49,6 +49,13 @@
 
     <table class="table">
 
+            <thead>
+                <th></th>
+                <th>Average present</th>
+                <th>% Attendance</th>
+                <th>% Attendance Last Month</th>
+            </thead>
+
             <tbody>
                 <tr>
                     <td>Overall attendance rate</td>
@@ -114,8 +121,8 @@
                     <td>Absent</td>
                     <td>Total</td>
 
-                    {% for class in attendance.class_attendance %}
-                        <td>{{ class.student__pkss_class__class_name }}</td>
+                    {% for class in attendance.by_date_classes %}
+                        <td>{{ class }}</td>
                     {% endfor %}
                 </tr>
             </thead>
@@ -129,7 +136,7 @@
                     <td>{{ att.absent }}</td>
                     <td>{{ att.present|add:att.absent }}</td>
 
-                    {% for class_att in att.class_attendance %}
+                    {% for class_att in att.class_attendance.values %}
                         <td>{{ class_att|floatformat:"-1" }}%</td>
                     {% endfor %}
                 </tr>
