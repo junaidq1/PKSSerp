@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+<!-- DOCTYPE html -->
+
+
+{% block content %}
+
+
+<div class='container'>
+
+	<div class='row'>
+	<br>
+		<h4>Attendance calendar</h4>
+
+		<br>
+
+
+		<form method='GET' action=''>
+			<input type="text" name= 'q1' class="form-control" placeholder="enter calendar year (e.g. 2017)" >
+			<br>
+			<input class='btn btn-primary' type='submit' value='Search'/>
+		</form>
+
+		<div class='col-sm-6'> 
+		 	<br>
+		 	<br>
+		 	Showing scheduled working days for all schools is:  2017 <br>
+		 	<br>
+
+		 		<table class="table">
+			      <THEAD>        
+			        <TR>
+			          <TH style="text-align:center" >School</TH> 
+			          <TH style="text-align:center">Jan</TH> 
+			          <TH style="text-align:center">Feb</TH> 
+			          <TH style="text-align:center">March</TH>
+			          <TH style="text-align:center">April</TH>
+			          <TH style="text-align:center">May</TH>
+			          <TH style="text-align:center">June</TH>
+			          <TH style="text-align:center">July</TH>
+			          <TH style="text-align:center">Aug</TH>
+			          <TH style="text-align:center">Sep</TH>
+			          <TH style="text-align:center">Oct</TH>
+			          <TH style="text-align:center">Nov</TH>
+			          <TH style="text-align:center">Dec</TH>        
+			        </TR>
+			      </THEAD> 
+			      <TBODY>
+			        {% for obj in queryset %}
+			        <TR>
+			          <TD class="vert-hor-align" width="120">{{obj.school_name}}</TD>
+			          <TD class="vert-hor-align"><a href='{% url "edit_cal_date" pk=obj.school_id month=1 %}'>{{obj.jan}}</a></TD>
+			          <TD class="vert-hor-align"><a href='{% url "edit_cal_date" pk=obj.school_id month=2 %}'>{{obj.feb}}</a></TD>
+			          <TD class="vert-hor-align"><a href='{% url "edit_cal_date" pk=obj.school_id month=3 %}'>{{obj.march}}</a></TD>
+			          <TD class="vert-hor-align"><a href='{% url "edit_cal_date" pk=obj.school_id month=4 %}'>{{obj.april}}</a></TD>
+			          <TD class="vert-hor-align"><a href='{% url "edit_cal_date" pk=obj.school_id month=5 %}'>{{obj.may}}</a></TD>
+			          <TD class="vert-hor-align"><a href='{% url "edit_cal_date" pk=obj.school_id month=6 %}'>{{obj.june}}</a></TD>
+			          <TD class="vert-hor-align"><a href='{% url "edit_cal_date" pk=obj.school_id month=7 %}'>{{obj.july}}</a></TD>
+			          <TD class="vert-hor-align"><a href='{% url "edit_cal_date" pk=obj.school_id month=8 %}'>{{obj.aug}}</a></TD>
+			          <TD class="vert-hor-align"><a href='{% url "edit_cal_date" pk=obj.school_id month=9 %}'>{{obj.sep}}</a></TD>
+			          <TD class="vert-hor-align"><a href='{% url "edit_cal_date" pk=obj.school_id month=10 %}'>{{obj.oct}}</a></TD>
+			          <TD class="vert-hor-align"><a href='{% url "edit_cal_date" pk=obj.school_id month=11 %}'>{{obj.nov}}</a></TD>
+			          <TD class="vert-hor-align"><a href='{% url "edit_cal_date" pk=obj.school_id month=12 %}'>{{obj.dec}}</a></TD>
+			        {% endfor %}
+			        </TR>
+			        
+			      </TBODY>
+			    </TABLE>
+				<hr/>
+				<a href='{% url "add_cal_date" %}' class="btn btn-primary" role="button">
+			 	Add a date</a>
+		</div>
+		
+		 	
+	</div>
+
+
+	</div>
+		
+
+
+
+</div>
+
+{% endblock%}
+

@@ -1,5 +1,5 @@
 from django import forms
-from .models import Attendance
+from .models import Attendance, AttendanceCalendar
 from crispy_forms.helper import FormHelper
 
 class AttendanceForm(forms.ModelForm):
@@ -22,3 +22,11 @@ class AttendanceForm(forms.ModelForm):
 		#helper.form_tag = False
 		#self.helper.form_style = 'inline'
 
+class AddAttCalDateForm(forms.ModelForm):
+	class Meta:
+		model = AttendanceCalendar
+		fields = ["school", "first_day_of_month", "workdays_in_month"]
+		
+  		widgets = {
+			#'next_contact_date': DateWidget(usel10n=True, bootstrap_version=3)
+		} 

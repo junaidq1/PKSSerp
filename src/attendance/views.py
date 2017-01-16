@@ -190,7 +190,7 @@ def attendance_summary(request):
             ))),
 
             )
-
+ 
         for school in schools_in_month:
             school.boys_attendance = round(school.boys_present / (school.boys_present + school.boys_absent), 2) * 100
             school.girls_attendance = round(school.girls_present / (school.girls_present + school.girls_absent), 2) * 100

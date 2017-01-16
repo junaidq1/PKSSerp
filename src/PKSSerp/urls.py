@@ -44,6 +44,10 @@ urlpatterns = [
     url(r'^edit_student_profile/(?P<pk>\d+)/$', st.edit_student_record, name='edit_std_profile'),
     url(r'^unenroll_student_profile/(?P<pk>\d+)/$', st.unenroll_student, name='unenroll_std_profile'),
     url(r'^add_student/$', st.add_a_student, name='add_student'),
+    #attendance cal -note: built in student views
+    url(r'^attendance_calendar/$', st.view_attendance_calendar, name='attend_calendar'), #attendance cal summ view
+    url(r'^add_cal_date/$', st.add_a_cal_date, name='add_cal_date'), #add cal date
+    url(r'^edi_a_cal_date/(?P<pk>\d+)/(?P<month>\d+)/$', st.edit_school_caldate, name='edit_cal_date'), #edit cal date
 
 ]
 

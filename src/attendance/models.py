@@ -27,7 +27,7 @@ class Attendance(models.Model):
 		return self.attendance_instance
 
 	def __string__(self):
-		return self.attendance_instance
+		return self.attendance_instance 
 
 
 class AttendanceCalendar(models.Model):
@@ -38,6 +38,15 @@ class AttendanceCalendar(models.Model):
 
 	class Meta:
 		unique_together = ("school", "first_day_of_month")
+
+	def __unicode__(self):
+		return self.school
+
+	def __string__(self):
+		return self.school
+
+	def goto_att_cal(self):
+		return reverse('attend_calendar')
 
 class NonScheduledHolidays(models.Model):
 	school = models.ForeignKey('schools.School')
