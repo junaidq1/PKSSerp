@@ -75,6 +75,13 @@
 
     $(document).ready(function(){
 
+        $('select').each(function(){
+            if($(this).find('option:selected').text() == 'absent')
+                $(this).css({'background-color': '#ff0000'});
+            if($(this).find('option:selected').text() == 'present')
+                $(this).css({'background-color': 'lightgreen'});
+        });
+
         function getParameterByName(name, url) {
             if (!url) {
               url = window.location.href;
@@ -87,10 +94,12 @@
             return decodeURIComponent(results[2].replace(/\+/g, " "));
         }
 
+
         if(getParameterByName('readonly')){
             $(this).find('select').prop('disabled', true);
             $(this).find('input[type="submit"]').hide();
         }
+
 
         $('form').bind('submit', function () {
             $(this).find('select.attendance_student').prop('disabled', false);
