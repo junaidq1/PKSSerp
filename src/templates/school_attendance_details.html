@@ -59,21 +59,21 @@
             <tbody>
                 <tr>
                     <td>Overall attendance rate</td>
-                    <td>{{ attendance.overall_present }}</td>
+                    <td>{{ attendance.avg_overall_present }}</td>
                     <td>{{ attendance.overall_attendance|floatformat:"-1" }}%</td>
                     <td>Last Month: {{ attendance.previous_overall_attendance|floatformat:"-1" }}%</td>
                 </tr>
 
                 <tr>
                     <td>Boys attendance rate</td>
-                    <td>{{ attendance.boys_present }} </td>
+                    <td>{{ attendance.avg_boys_present }} </td>
                     <td>{{ attendance.boys_attendance|floatformat:"-1" }}%</td>
                     <td>Last Month: {{ attendance.previous_boys_attendance|floatformat:"-1"}}%</td>
                 </tr>
 
                 <tr>
                     <td>Girls attendance rate</td>
-                    <td>{{ attendance.girls_present }}</td>
+                    <td>{{ attendance.avg_girls_present }}</td>
                     <td>{{ attendance.girls_attendance|floatformat:"-1" }}% </td>
                     <td>Last Month: {{ attendance.previous_girls_attendance|floatformat:"-1" }}%</td>
                 </tr>

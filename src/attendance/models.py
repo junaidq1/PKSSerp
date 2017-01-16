@@ -40,10 +40,10 @@ class AttendanceCalendar(models.Model):
 		unique_together = ("school", "first_day_of_month")
 
 	def __unicode__(self):
-		return self.school
+		return self.school.school_name
 
-	def __string__(self):
-		return self.school
+	def __str__(self):
+		return self.school.school_name
 
 	def goto_att_cal(self):
 		return reverse('attend_calendar')

@@ -167,6 +167,7 @@ def attendance_summary(request):
 
     last_12_months_attendance = {}
 
+
     # iterate over each month
     # filter schools who has attendance in each iterated month
     # get students attendance from each school
@@ -179,8 +180,6 @@ def attendance_summary(request):
             )\
             .annotate(
                 days_attendance_entered=Count('student__attendance__attendance_date', distinct=True),
-                working_days=F('attendancecalendar__workdays_in_month'),
-                non_weekend_workdays_off=F('attendancecalendar__non_weekend_workdays_off'),
                 overall_present=Count(Case(When(student__attendance__status='present', then=1))),
                 overall_absent=Count(Case(When(student__attendance__status='absent', then=1))),
                 boys_present=Count(Case(When(student__attendance__status='present', student__gender='male', then=1))),
@@ -190,13 +189,18 @@ def attendance_summary(request):
                 end_of_month=Max(Case(When(
                     student__attendance__student__pkss_school__id=F('id'), then=F('student__attendance__attendance_date')
                 ))),
-            )
- 
+            ).prefetch_related('attendancecalendar_set')
+
         for school in schools_in_month:
+            try:
+                school_calendar = school.attendancecalendar_set.get(school=school, first_day_of_month__month=date.month, first_day_of_month__year=date.year)
+                school.working_days = school_calendar.workdays_in_month - (school_calendar.non_weekend_workdays_off if school_calendar.non_weekend_workdays_off else 0)
+            except AttendanceCalendar.DoesNotExist:
+                school.working_days = 'N/A'
+
             school.boys_attendance = round(school.boys_present / (school.boys_present + school.boys_absent), 2) * 100
             school.girls_attendance = round(school.girls_present / (school.girls_present + school.girls_absent), 2) * 100
             school.overall_attendance = round(school.overall_present / (school.overall_present + school.overall_absent), 2) * 100
-            school.working_days = school.working_days - (school.non_weekend_workdays_off if school.non_weekend_workdays_off else 0)
 
             school_end_of_month_enrollment = Attendance.objects.filter(attendance_date=school.end_of_month, student__pkss_school=school)
             school.end_of_month_enrollment = school_end_of_month_enrollment.count()
@@ -240,6 +244,10 @@ def school_attendance_details(request, school_id, date):
     # if 0 attendance for this school, return empty attendance list
     except IndexError:
         return render(request, 'school_attendance_details.html', {'attendance': []})
+
+    monthly_attendance['avg_overall_present'] = monthly_attendance.get('overall_present') / monthly_attendance.get('days_attendance_entered')
+    monthly_attendance['avg_boys_present'] = monthly_attendance.get('boys_present') / monthly_attendance.get('days_attendance_entered')
+    monthly_attendance['avg_girls_present'] = monthly_attendance.get('girls_present') / monthly_attendance.get('days_attendance_entered')
 
     monthly_attendance['overall_attendance'] = round(monthly_attendance.get('overall_present') / (monthly_attendance.get('overall_present') + monthly_attendance.get('overall_absent')), 2) * 100
     monthly_attendance['boys_attendance'] = round(monthly_attendance.get('boys_present') / (monthly_attendance.get('boys_present') + monthly_attendance.get('boys_absent')), 2) * 100

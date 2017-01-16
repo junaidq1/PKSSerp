@@ -20,33 +20,35 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/attendance/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="371">
-              <caret line="113" column="38" selection-start-line="113" selection-start-column="38" selection-end-line="113" selection-end-column="38" />
+            <state relative-caret-position="327">
+              <caret line="249" column="28" selection-start-line="249" selection-start-column="28" selection-end-line="249" selection-end-column="28" />
               <folding>
                 <element signature="e#0#31#0" expanded="true" />
-                <element signature="e#4923#4962#0" expanded="false" />
-                <element signature="e#5001#5053#0" expanded="false" />
-                <element signature="e#5089#5522#0" expanded="false" />
-                <element signature="e#5562#9211#0" expanded="false" />
-                <element signature="e#16731#16906#0" expanded="false" />
-                <marker date="1484573376081" expanded="false" signature="4892:4894" ph="..." />
+                <element signature="e#17557#19391#0" expanded="false" />
+                <marker date="1484588558180" expanded="false" signature="2056:4894" ph="..." />
+                <marker date="1484588558180" expanded="false" signature="4892:4894" ph="..." />
+                <marker date="1484588558180" expanded="false" signature="4918:4962" ph="..." />
+                <marker date="1484588558180" expanded="false" signature="4996:5053" ph="..." />
+                <marker date="1484588558180" expanded="false" signature="5084:5522" ph="..." />
+                <marker date="1484588558180" expanded="false" signature="5557:9396" ph="..." />
+                <marker date="1484588558180" expanded="false" signature="17328:17508" ph="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="school_attendance_details.html" pinned="false" current-in-tab="false">
+      <file leaf-file-name="school_attendance_details.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/templates/school_attendance_details.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="406">
-              <caret line="138" column="67" selection-start-line="138" selection-start-column="67" selection-end-line="138" selection-end-column="67" />
+            <state relative-caret-position="411">
+              <caret line="75" column="42" selection-start-line="75" selection-start-column="42" selection-end-line="75" selection-end-column="42" />
               <folding>
                 <element signature="n#table#0;n#div#0;n#!!top" expanded="false" />
-                <element signature="n#table#1;n#div#0;n#!!top" expanded="false" />
                 <element signature="n#table#2;n#div#0;n#!!top" expanded="false" />
+                <element signature="n#table#3;n#div#0;n#!!top" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -75,9 +77,11 @@
       <file leaf-file-name="models.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/attendance/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="495">
+            <state relative-caret-position="341">
               <caret line="35" column="21" selection-start-line="35" selection-start-column="4" selection-end-line="35" selection-end-column="21" />
-              <folding />
+              <folding>
+                <element signature="e#0#39#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -114,8 +118,9 @@
         <option value="$PROJECT_DIR$/templates/attendance_summary.html" />
         <option value="$PROJECT_DIR$/templates/attendance_by_school_month.html" />
         <option value="$PROJECT_DIR$/../../user_accounts/user_accounts/settings.py" />
-        <option value="$PROJECT_DIR$/templates/school_attendance_details.html" />
+        <option value="$PROJECT_DIR$/attendance/models.py" />
         <option value="$PROJECT_DIR$/attendance/views.py" />
+        <option value="$PROJECT_DIR$/templates/school_attendance_details.html" />
       </list>
     </option>
   </component>
@@ -367,9 +372,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="53" y="24" width="1313" height="744" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2498096" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2498096" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
@@ -442,12 +447,14 @@
           <caret line="46" column="17" selection-start-line="46" selection-start-column="17" selection-end-line="46" selection-end-column="17" />
           <folding>
             <element signature="e#0#31#0" expanded="true" />
-            <element signature="e#4923#4962#0" expanded="false" />
-            <element signature="e#5001#5053#0" expanded="false" />
-            <element signature="e#5089#5522#0" expanded="false" />
-            <element signature="e#5562#9211#0" expanded="false" />
-            <element signature="e#16731#16906#0" expanded="false" />
-            <marker date="1484573376081" expanded="false" signature="4892:4894" ph="..." />
+            <element signature="e#17557#19391#0" expanded="false" />
+            <marker date="1484588558180" expanded="false" signature="2056:4894" ph="..." />
+            <marker date="1484588558180" expanded="false" signature="4892:4894" ph="..." />
+            <marker date="1484588558180" expanded="false" signature="4918:4962" ph="..." />
+            <marker date="1484588558180" expanded="false" signature="4996:5053" ph="..." />
+            <marker date="1484588558180" expanded="false" signature="5084:5522" ph="..." />
+            <marker date="1484588558180" expanded="false" signature="5557:9396" ph="..." />
+            <marker date="1484588558180" expanded="false" signature="17328:17508" ph="..." />
           </folding>
         </state>
       </provider>
@@ -756,14 +763,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/schools/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="16" column="22" selection-start-line="16" selection-start-column="22" selection-end-line="16" selection-end-column="22" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/students/models.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="135">
@@ -780,38 +779,50 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/attendance/models.py">
+    <entry file="file://$PROJECT_DIR$/schools/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="495">
-          <caret line="35" column="21" selection-start-line="35" selection-start-column="4" selection-end-line="35" selection-end-column="21" />
+        <state relative-caret-position="210">
+          <caret line="16" column="22" selection-start-line="16" selection-start-column="22" selection-end-line="16" selection-end-column="22" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/school_attendance_details.html">
+    <entry file="file://$PROJECT_DIR$/attendance/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="406">
-          <caret line="138" column="67" selection-start-line="138" selection-start-column="67" selection-end-line="138" selection-end-column="67" />
+        <state relative-caret-position="341">
+          <caret line="35" column="21" selection-start-line="35" selection-start-column="4" selection-end-line="35" selection-end-column="21" />
           <folding>
-            <element signature="n#table#0;n#div#0;n#!!top" expanded="false" />
-            <element signature="n#table#1;n#div#0;n#!!top" expanded="false" />
-            <element signature="n#table#2;n#div#0;n#!!top" expanded="false" />
+            <element signature="e#0#39#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/attendance/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="371">
-          <caret line="113" column="38" selection-start-line="113" selection-start-column="38" selection-end-line="113" selection-end-column="38" />
+        <state relative-caret-position="327">
+          <caret line="249" column="28" selection-start-line="249" selection-start-column="28" selection-end-line="249" selection-end-column="28" />
           <folding>
             <element signature="e#0#31#0" expanded="true" />
-            <element signature="e#4923#4962#0" expanded="false" />
-            <element signature="e#5001#5053#0" expanded="false" />
-            <element signature="e#5089#5522#0" expanded="false" />
-            <element signature="e#5562#9211#0" expanded="false" />
-            <element signature="e#16731#16906#0" expanded="false" />
-            <marker date="1484573376081" expanded="false" signature="4892:4894" ph="..." />
+            <element signature="e#17557#19391#0" expanded="false" />
+            <marker date="1484588558180" expanded="false" signature="2056:4894" ph="..." />
+            <marker date="1484588558180" expanded="false" signature="4892:4894" ph="..." />
+            <marker date="1484588558180" expanded="false" signature="4918:4962" ph="..." />
+            <marker date="1484588558180" expanded="false" signature="4996:5053" ph="..." />
+            <marker date="1484588558180" expanded="false" signature="5084:5522" ph="..." />
+            <marker date="1484588558180" expanded="false" signature="5557:9396" ph="..." />
+            <marker date="1484588558180" expanded="false" signature="17328:17508" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/school_attendance_details.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="411">
+          <caret line="75" column="42" selection-start-line="75" selection-start-column="42" selection-end-line="75" selection-end-column="42" />
+          <folding>
+            <element signature="n#table#0;n#div#0;n#!!top" expanded="false" />
+            <element signature="n#table#2;n#div#0;n#!!top" expanded="false" />
+            <element signature="n#table#3;n#div#0;n#!!top" expanded="false" />
           </folding>
         </state>
       </provider>
