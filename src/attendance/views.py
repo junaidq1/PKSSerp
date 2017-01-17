@@ -138,7 +138,12 @@ def get_attendance_months():
     ).order_by('-attendance_date')
 
     # get months from attendance records
-    attendance_months = [datetime.datetime.strptime(dt['month'], "%Y-%m-%d").date() for dt in attendance]
+
+    # sqlite database backend
+    # attendance_months = [datetime.datetime.strptime(dt['month'], "%Y-%m-%d").date() for dt in attendance]
+
+    # postgres database backend
+    attendance_months = [dt['month'].date() for dt in attendance]
     return attendance_months
 
 
