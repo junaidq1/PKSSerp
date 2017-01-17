@@ -82,6 +82,13 @@
                 $(this).css({'background-color': 'lightgreen'});
         });
 
+        $('select').on('change', function(){
+            if($(this).find('option:selected').text() == 'absent')
+                $(this).css({'background-color': '#ff0000'});
+            if($(this).find('option:selected').text() == 'present')
+                $(this).css({'background-color': 'lightgreen'});
+        });
+
         function getParameterByName(name, url) {
             if (!url) {
               url = window.location.href;
