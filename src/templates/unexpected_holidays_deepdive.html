@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+<!-- DOCTYPE html -->
+
+
+{% block content %}
+
+
+<div class='container'>
+
+	<div class='row'>
+	<br>
+	<br>
+		<h4>Unexpected holiday history for {{sch}} :</h4>
+
+		<br>
+
+		<div class='col-sm-7'> 
+		 	<br>
+		 	
+		 	<br>
+
+		 		<table class="table">
+			      <THEAD>        
+			        <TR>
+			          <TH style="text-align:center" >School</TH> 
+			          <TH style="text-align:center" >Year</TH> 
+			          <TH style="text-align:center" >Month</TH> 
+			          <TH style="text-align:center" >Date</TH> 
+			          <TH style="text-align:center" >Reason</TH>
+			        </TR>
+			      </THEAD>  
+			      <TBODY>
+			        {% for obj in queryset %}
+			        <TR>
+			          <TD class="vert-hor-align">{{obj.school}}</TD> 
+			          <TD class="vert-hor-align">{{obj.holiday_date|date:"Y"}}</TD>
+			          <TD class="vert-hor-align">{{obj.holiday_date|date:"M"}}</TD>
+			          <TD class="vert-hor-align">{{obj.holiday_date|date:"d - D"}}</TD>
+			          <TD class="vert-align"><z style="color:#85BC22">{{obj.reason_for_holiday}}</z></TD> 
+			        {% endfor %} 
+			        </TR>
+			        
+			      </TBODY>
+			    </TABLE>
+				<hr/>
+				<a href='{% url "unexp_holiday_rept" %}' class="btn btn-default" role="button">
+			 	Go back to holiday summary</a>
+				<a href='{% url "user_homepage" %}' class="btn btn-primary" role="button">
+			 	Go back home</a>
+		</div>
+		
+		 	
+	</div>
+
+
+	</div>
+		
+
+
+
+</div>
+
+{% endblock%}
+

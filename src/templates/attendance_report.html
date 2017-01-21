@@ -5,7 +5,7 @@
 
 
  
-{% block content %}
+{% block content %} 
 
  
 
@@ -16,21 +16,29 @@
 
 <div class='col-sm-8 col-sm-offset-1'>
 
-<h3> Attendance Report </h3>
+<h3> Student Attendance Reports </h3>
+<hr>
+ 
+
+<a href='{% url "attendance_by_school_month" %}'>
+	<p class='lead text-align-left'><p class='lead text-align-left'>
+	Overall Attendance by School / Month - Last 12 Months</p></a>
+	
+
+<a href="{% url 'attendance_summary' %}">
+	<p class='lead text-align-left'><p class='lead text-align-left'>
+	Monthly snapshot of key stats across schools - Last 12 Months</p></a>
+	
+
+<a href="{% url 'attendance_by_school' %}">
+	<p class='lead text-align-left'><p class='lead text-align-left'>
+	Monthly snapshot of key stats across schools - Select Month</p></a> 
+	
 <br>
-
-<a href="{% url 'attendance_summary' %}">Attendace Summary (Last 12 Months)</a>
-
-<br/>
-<br/>
-
-<a href="{% url 'attendance_by_school' %}">View Attendance By Month</a>
-
-<br/>
-<br/>
-
-<a href="{% url 'attendance_by_school_month' %}">Attendance By School & Month</a>
-
+<a href='{% url "user_homepage" %}' class="btn btn-primary btn-lg" role="button">
+            Go Home</a> 
 </div>
 
+<br>
+<br>
 {% endblock %}

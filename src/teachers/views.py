@@ -8,7 +8,7 @@ from django.conf import settings
 class LoginView(FormView):
     template_name = 'affiliated_schools.html'
     form_class = LoginForm
-    success_url = '/affiliated_schools/'
+    success_url = '/'
 
     def form_valid(self, form):
         super(LoginView, self).form_valid(form)

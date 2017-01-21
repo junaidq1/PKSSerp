@@ -17,8 +17,15 @@ from django.utils import timezone
 from dateutil.relativedelta import relativedelta
 
  
-def go_home(request):	
-	return render(request, "home.html", {})
+def go_home(request):
+    if request.user.is_authenticated():
+        return render(request, "home.html", {})
+    else:
+        return render(request, "home_not_loggedin.html", {})
+
+# def go_home_2(request):   
+#     return render(request, "home_not_loggedin.html", {})
+
 
 
 # def add_attendance(request):
@@ -38,8 +45,6 @@ def go_home(request):
 # 	return render(request, "add_attendance.html", context)
 
 
-def go_home(request):
-    return render(request, "home.html", {})
 
 
 def get_dates_range(start, end, delta):
@@ -121,10 +126,8 @@ def add_attendance2(request, school_id, date, readonly=False):
     return render(request, 'group_attendance.html', {'formsets': formsets, 'date': date, 'school': school, 'dateobj':dateobj})
 
 
-def go_home(request):
-    return render(request, "home.html", {})
 
-
+@login_required
 def attendance_report(request):
     return render(request, 'attendance_report.html', {})
 
@@ -146,7 +149,7 @@ def get_attendance_months():
     attendance_months = [dt['month'].date() for dt in attendance]
     return attendance_months
 
-
+@login_required
 def attendance_summary(request):
     """
     Get last 12 months attendance records
@@ -220,7 +223,7 @@ def attendance_summary(request):
 
     return render(request, 'attendance_summary.html', {'last_12_months_attendance': last_12_months_attendance})
 
-
+@login_required
 def school_attendance_details(request, school_id, date):
     date = datetime.datetime.strptime(date, "%Y-%m-%d").date()
     previous_month = date - relativedelta(months=1)
@@ -243,7 +246,7 @@ def school_attendance_details(request, school_id, date):
                 boys_present=Count(Case(When(status='present', student__gender='male', then=1))),
                 boys_absent=Count(Case(When(status='absent', student__gender='male', then=1))),
                 girls_present=Count(Case(When(status='present', student__gender='female', then=1))),
-                girls_absent=Count(Case(When(status='absent', student__gender='female', then=1))),
+                girls_absent=Count(Case(When(status='absent', student__gender='female', then=1))),  
             )[0]
 
     # if 0 attendance for this school, return empty attendance list
@@ -378,7 +381,7 @@ def attendance_by_month(request):
     """
     return render(request, 'attendance_by_month.html', {'attendance_months': set(get_attendance_months())})
 
-
+@login_required
 def attendance_by_school_month(request):
 
     attendance_months = get_attendance_months()
@@ -412,7 +415,7 @@ def attendance_by_school_month(request):
     # iterate over each month
     # filter schools who has attendance in each iterated month
     # get students attendance from each school
-    for date in attendance['months']:
+    for date in attendance['months']: 
 
         schools_in_month = School.objects \
             .filter(
@@ -432,3 +435,5 @@ def attendance_by_school_month(request):
                 attendance['schools'][school.school_name] = {date: school.attendance}
 
     return render(request, 'attendance_by_school_month.html', {'attendance': attendance})
+
+

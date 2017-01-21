@@ -1,5 +1,5 @@
 from __future__ import unicode_literals
-
+import datetime
 from django.db import models
 
 # Create your models here.
@@ -50,8 +50,8 @@ class AttendanceCalendar(models.Model):
 
 class NonScheduledHolidays(models.Model):
 	school = models.ForeignKey('schools.School')
-	holiday_date = models.DateField(auto_now=False, auto_now_add=False)
-	reason_for_holiday = models.CharField(max_length=500, null=False, blank=False) 
+	holiday_date = models.DateField(auto_now=False, auto_now_add=False, default = datetime.date.today)
+	reason_for_holiday = models.TextField(max_length=700, null=False, blank=False) 
 
 	class Meta:
 		unique_together = ("school", "holiday_date")

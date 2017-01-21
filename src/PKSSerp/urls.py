@@ -23,6 +23,7 @@ from students import views as st
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', att.go_home, name='user_homepage'),
+    # url(r'^2$', att.go_home_2, name='user_homepage2'),
     # url(r'^attendance/$', att.add_attendance, name='add_attendance'),
     url(r'^affiliated_schools/$', att.affiliated_schools, name='affiliated_schools'),
     url(r'^attendance_dates/(?P<school_id>\d+)/$', att.attendance_dates, name='attendance_dates'),
@@ -48,8 +49,11 @@ urlpatterns = [
     url(r'^attendance_calendar/$', st.view_attendance_calendar, name='attend_calendar'), #attendance cal summ view
     url(r'^add_cal_date/$', st.add_a_cal_date, name='add_cal_date'), #add cal date
     url(r'^edi_a_cal_date/(?P<pk>\d+)/(?P<month>\d+)/$', st.edit_school_caldate, name='edit_cal_date'), #edit cal date
-    
+    #school holidays
     url(r'^add_unexpected_holiday/$', st.add_unexpected_holiday, name='add_unexp_holiday'), #add unexp holiday
+    url(r'^unexpected_holidays/$', st.view_unexpected_holidays_tot, name='unexp_holiday_rept'), #add unexp holiday
+    url(r'^unexpected_holidays_deepdive/(?P<pk>\d+)/$', st.unexpected_holidays_deepdive, name='unexp_holiday_deepdive'),
+    # url(r'^unexpected_holiday_report/$', st.view_unexpected_holidays_tot, name='unexp_holiday_rept'), #view unexp holiday summary
 ]
 
 if settings.DEBUG:

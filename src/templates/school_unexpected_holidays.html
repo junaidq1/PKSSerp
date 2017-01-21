@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+<!-- DOCTYPE html -->
+
+
+{% block content %}
+
+
+<div class='container'>
+
+	<div class='row'>
+	<br>
+	<br>
+		<h4>Unexpected holidays taken by each school in the past 6 months (by month)</h4>
+
+		<br>
+
+		<div class='col-sm-7'> 
+		 	<br>
+		 	
+		 	<br>
+
+		 		<table class="table">
+			      <THEAD>        
+			        <TR>
+			          <TH style="text-align:center" >School</TH> 
+			          <TH style="text-align:center">Total holidays last 6 months</TH> 
+			          <TH style="text-align:center">{{m|date:"M Y"}}</TH> 
+			          <TH style="text-align:center">{{m_minus1|date:"M Y"}}</TH> 
+			          <TH style="text-align:center">{{m_minus2|date:"M Y"}}</TH>
+			          <TH style="text-align:center">{{m_minus3|date:"M Y"}}</TH>
+			          <TH style="text-align:center">{{m_minus4|date:"M Y"}}</TH>
+			          <TH style="text-align:center">{{m_minus5|date:"M Y"}}</TH>
+			        </TR>
+			      </THEAD>  
+			      <TBODY>
+			        {% for obj in queryset %}
+			        <TR>
+			          <TD class="vert-hor-align" width="120"><a href='{% url "unexp_holiday_deepdive" pk=obj.school_id %}'>{{obj.school_name}}</a></TD> 
+			          <TD class="vert-hor-align">{{obj.total_holidays}}</TD>
+			          <TD class="vert-hor-align">{{obj.present_m}}</TD>
+			          <TD class="vert-hor-align">{{obj.present_minus1m}}</TD>
+			          <TD class="vert-hor-align">{{obj.present_minus2m}}</TD>
+			          <TD class="vert-hor-align">{{obj.present_minus3m}}</TD>
+			          <TD class="vert-hor-align">{{obj.present_minus4m}}</TD>
+			          <TD class="vert-hor-align">{{obj.present_minus5m}}</TD>
+			        {% endfor %}
+			        </TR>
+			        
+			      </TBODY>
+			    </TABLE>
+				<hr/>
+				<a href='{% url "user_homepage" %}' class="btn btn-primary" role="button">
+			 	Go back home</a>
+		</div>
+		
+		 	
+	</div>
+
+
+	</div>
+		
+
+
+
+</div>
+
+{% endblock%}
+
