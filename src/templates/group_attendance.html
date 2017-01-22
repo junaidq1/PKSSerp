@@ -11,7 +11,7 @@
 
 <div class='col-sm-8 col-sm-offset-1'>
 
-<h3> Enter attendance for: {{ school|title }} | {{ date}},  </h3>
+<h3> Enter attendance for: <b style="color:#85BC22"> {{ school|title }} | {{ date}}  </b></h3>
 <br>
 
 
@@ -77,14 +77,14 @@
 
         $('select').each(function(){
             if($(this).find('option:selected').text() == 'absent')
-                $(this).css({'background-color': '#ff0000'});
+                $(this).css({'background-color': '#ff9999'});
             if($(this).find('option:selected').text() == 'present')
                 $(this).css({'background-color': 'lightgreen'});
         });
 
         $('select').on('change', function(){
             if($(this).find('option:selected').text() == 'absent')
-                $(this).css({'background-color': '#ff0000'});
+                $(this).css({'background-color': '#ff9999'});
             if($(this).find('option:selected').text() == 'present')
                 $(this).css({'background-color': 'lightgreen'});
         });

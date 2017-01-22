@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+<!-- DOCTYPE html -->
+
+
+{% block content %}
+
+
+<div class='col-xs-12 col-xs-offset-1 col-md-3 col-md-offset-1'>
+<br>
+<br>
+
+
+<h3>Please select the school you would like to see a profile for </h3>
+
+<br>
+<br>
+<hr/>
+
+	{% for obj in sch_list %}
+	<ul>
+	<p><a href='{% url "school_profile_deets" pk=obj.pk %}'> {{obj}} </a> </p>
+	</ul>
+	<hr/>
+	{% endfor %}
+ 
+<br> 
+
+
+{% endblock %}

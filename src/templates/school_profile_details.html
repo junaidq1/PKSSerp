@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+
+{% block title %}
+	Student Profile
+{% endblock %}
+
+
+{% block content %} 
+
+ <div class='container'>
+<br>
+ 	<div class='row'>
+		<div class='col-sm-5'> 
+			
+			<br>
+	 		<h3> School Profile for:  <b style="color:#85BC22"> {{sch}} </b></h3>
+	 		<br>
+
+			<b>Opened:</b><z style="color:#85BC22"> {{sch.date_opened|date:"M d Y"}} | {{sch.date_opened|timesince}} ago </z><br>
+			<b>Location:</b><z style="color:#85BC22"> {{sch.school_address}}, {{sch.city}} </z>	<br>
+			<b>Principal's name:</b><z style="color:#85BC22"> {{principal}}</z><br>
+			<br>
+			<b>Total teachers:</b><z style="color:#85BC22"> {{num_teachers}}</z><br>
+			<b>Total active students:</b><z style="color:#85BC22"> {{num_students}}
+				<a href='{% url "student_list_school" sch.pk %}'>(Click for list)</z></a><br>
+			<b>Boys:</b><z style="color:#85BC22"> {{num_boys}} </z><br>
+			<b>Girls:</b><z style="color:#85BC22"> {{num_girls}} </z><br>
+			<b>Average tenure of student:</b><z style="color:#85BC22"> TBD  </z><br>
+	 		
+	 		<br>
+	 		
+	 		<hr> 
+
+	 		<TABLE class="table">
+	 		<caption>Total students by class</caption>
+			      <THEAD>        
+			        <TR>
+			          <TH style="text-align:center" width="100">Class</TH> 
+			          <TH style="text-align:center"># of sections</TH> 
+			          <TH style="text-align:center"># of students</TH> 
+			          <TH style="text-align:center"># of boys</TH>
+			          <TH style="text-align:center"># of girls</TH>
+			          <TH style="text-align:center">Avg. student tenure (yrs)</TH>
+			        </TR>
+			      </THEAD> 
+			      <TBODY>
+			        {% for obj in queryset1 %}
+			        <TR>
+			          <TD class="vert-hor-align">{{obj.class_name}} </TD>
+			          <TD class="vert-hor-align">{{obj.sections}} </TD>
+			          <TD class="vert-hor-align">{{obj.num_students}} </TD>
+			          <TD class="vert-hor-align">{{obj.boys}} </TD>
+			          <TD class="vert-hor-align">{{obj.girls}} </TD>
+			          <TD class="vert-hor-align">{{obj.avg_tenure|floatformat:"1"}} </TD>
+			        {% endfor %}
+			        </TR>
+			        
+			      </TBODY>
+			    </TABLE>
+	 		
+ 		</div>
+ 		<div class='col-sm-6 col-xs-offset-1'> 
+ 			<br>
+ 			<br><br>
+
+ 			<a href='{% url "user_homepage" %}' class="btn btn-primary" role="button">
+		 	Go Home</a>
+		 
+	 		<br>
+	 		<hr>
+	 		<br>
+
+
+	 		<TABLE class="table">
+	 		<caption>Attendance calendar</caption>
+
+			      <THEAD>        
+			        <TR>
+			          <TH style="text-align:center" >Year</TH> 
+			          <TH style="text-align:center">Month </TH> 
+			          <TH style="text-align:center">Days att entered</TH> 
+			          <TH style="text-align:center">% Attendance</TH>
+			        </TR>
+			      </THEAD> 
+			      <TBODY>
+			        {% for obj in queryset2 %}
+			        <TR>
+			          <TD class="vert-hor-align">{{obj.year|floatformat:"0"}} </TD>
+			          <TD class="vert-hor-align">{{obj.mth|floatformat:"0"}} </TD>
+			          <TD class="vert-hor-align">{{obj.days_att_entered}} </TD>
+			          <TD class="vert-hor-align">{{obj.att_perc|floatformat:"0"}}% </TD>
+			        {% endfor %}
+			        </TR>
+			        
+			      </TBODY>
+			</TABLE>
+			<hr>
+			<TABLE class="table">
+	 		<caption>Enrollment History</caption>
+
+			      <THEAD>        
+			        <TR>
+			          <TH style="text-align:center" >Year</TH> 
+			          <TH style="text-align:center">Month </TH> 
+			          <TH style="text-align:center">EoM Enrollment</TH> 
+			          <TH style="text-align:center">Enrollment Boys</TH> 
+			          <TH style="text-align:center">Enrollment Girls</TH> 
+			          
+			        </TR>
+			      </THEAD> 
+			      <TBODY>
+			        {% for obj in queryset3 %}
+			        <TR>
+			          <TD class="vert-hor-align">{{obj.yr|floatformat:"0"}} </TD>
+			          <TD class="vert-hor-align">{{obj.mth|floatformat:"0"}} </TD>
+			          <TD class="vert-hor-align">{{obj.enrollment}} </TD>
+			          <TD class="vert-hor-align">{{obj.enr_boys}} </TD>
+			          <TD class="vert-hor-align">{{obj.enr_girls}} </TD>
+			        {% endfor %}
+			        </TR>
+			        
+			      </TBODY>
+			</TABLE>
+			<br>
+			<br>
+
+
+	 		
+ 		</div>
+
+ 		<hr/>
+	</div>
+
+</div>
+
+{% endblock %}

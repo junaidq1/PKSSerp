@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}
+	List of students
+{% endblock %}
+
+
+{% block content %} 
+
+ <div class='container'>
+<br>
+ 	<div class='row'>
+		<div class='col-sm-9'> 
+		<br>
+		<h3> List of students in: <b style="color:#85BC22"> {{sch}} </b></h3>
+		<br>
+		<br>
+	 		<TABLE class="table">
+	 		
+			      <THEAD>        
+			        <TR>
+			          <TH style="text-align:center">#</TH> 
+			          <TH style="text-align:center">School</TH> 
+			          <TH style="text-align:center">Class</TH>
+			          <TH style="text-align:center">Registr. #</TH>
+			          <TH style="text-align:center">First Name</TH>
+			          <TH style="text-align:center">Last Name</TH>
+			          <TH style="text-align:center">Gender</TH> 
+			          <TH style="text-align:center">Date Joined</TH> 
+			        </TR>
+			      </THEAD> 
+			      <TBODY>
+			        {% for obj in students %}
+			        <TR>
+			          
+				          <TD class="vert-align">{{forloop.counter}}. </TD>
+				          <TD class="vert-align">{{obj.pkss_school}} </TD>
+				          <TD class="vert-align">{{obj.pkss_class}} </TD>
+				          <TD class="vert-align">{{obj.registration_number}} </TD>
+				          <TD class="vert-align"><a href='{% url "std_profile" obj.pk %}'>{{obj.first_name}} </a></TD>
+				          <TD class="vert-align"><a href='{% url "std_profile" obj.pk %}'>{{obj.last_name}} </a></TD> 
+				          <TD class="vert-align">{{obj.gender}} </TD>
+				          <TD class="vert-align">{{obj.date_joined}} </TD>
+			        {% endfor %}
+			        </TR>
+			        
+			      </TBODY>
+			    </TABLE>
+	 		
+ 		</div>
+
+ 		<hr/>
+	</div>
+
+</div>
+
+{% endblock %}

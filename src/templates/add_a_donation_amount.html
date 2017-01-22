@@ -1,0 +1,39 @@
+{% extends "base.html" %} 
+{% load crispy_forms_tags %}
+
+
+{% url 'admin:jsi18n' as jsi18nurl %} <script type="text/javascript" src="{{ jsi18nurl }}"></script> 
+
+
+{% block title %}
+	Add donation
+{% endblock %}
+
+
+ 
+{% block content %}
+
+
+
+ 
+<!-- need to have POST to indicate its not a default get method and action says what url to send it to -->
+<!-- <form method='POST' action=''> {% csrf_token %} -->
+
+
+<div class='col-sm-8 col-sm-offset-1'>
+
+<br>
+
+<h3>Add a donation from:  <z style="color:#85BC22"> {{don}} </z></h3>
+<br>
+
+
+	<form method='POST' action=''> {% csrf_token %}
+
+	{{form|crispy}}
+	<input class='btn btn-primary' type='submit' value='Add donation'/>
+	</form>
+</div>
+<!-- <input type='text' name='q' placeholder='Search posts' value='{{ request.GET.q }}'/> -->
+
+{% endblock %}

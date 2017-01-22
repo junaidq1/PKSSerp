@@ -78,8 +78,7 @@ class Donor_log(models.Model):
 	conversion_rate_if_not_PKR = models.IntegerField(null=True, blank=True)
 	amount_pkr = models.IntegerField(null=True, blank=True)
 	donation_notes = models.TextField(max_length=2500, null=True, blank=True)
-	
-	 
+		 
 	# def __unicode__(self):
 	# 	return self.contact_name 
 
@@ -87,5 +86,6 @@ class Donor_log(models.Model):
 		return self.contact_name
 
 	# def get_absolute_url(self):
-	# 	return reverse('', kwargs={"pk": self.contact_name_id})  
+	# 	return reverse('', kwargs={"pk": self.contact_name_id})
+	# 	return reverse("donor_profile", kwargs={"pk": self.pk} )
 	

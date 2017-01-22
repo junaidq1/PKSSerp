@@ -1,0 +1,52 @@
+ {% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+<!-- DOCTYPE html -->
+
+
+{% block content %}
+
+<br>
+<br>
+
+<div class='col-sm-8 col-sm-offset-1'>
+<h3>Search for / Add Donor Profiles</h3>
+
+
+<br>
+<br>
+
+Before adding a new donor, search existing database to see if donor already exists
+
+<br>
+<br> 
+	<form method='GET' action=''>
+
+	<!-- <input type='text' name='q1' placeholder='Lastname'/> -->
+	<input type="text" name= 'q1' class="form-control" placeholder="enter firstname OR lastname" >
+
+	<br>
+	<input class='btn btn-primary' type='submit' value='Search'/>
+	</form>
+<br>
+
+<hr/>
+{% if query %}
+	{% for obj in queryset_list %}
+	<ul>
+	<a href='{% url "donor_profile" pk=obj.pk %}'>
+	{{obj.first_name}}
+	{{obj.last_name}} </a> |
+	<a href='{% url "add_donation" pk=obj.pk %}'> Add new donation </a>
+
+	</ul>
+	<hr/>
+	{% endfor %}
+{% endif %}
+<br>
+
+<h4> If you were unable to find a donor, add a new donor profile by clicking below </h4>
+ <br><a href='{% url "add_donors" %}' class="btn btn-success" role="button">
+		 	Add new donor</a>
+
+{% endblock %}

@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}
+	Donor Profile
+{% endblock %}
+
+
+{% block content %} 
+
+ <div class='container'>
+<br>
+ 	<div class='row'>
+		<div class='col-sm-5'> 
+			
+			<br>
+	 		<h3> Donor name: <b style="color:#85BC22"> {{don.first_name}} {{don.last_name}} </b></h3>
+	 		<br>
+			<b>City:</b><z style="color:#85BC22"> {{don.city}} </z><br>
+			<b>Country:</b><z style="color:#85BC22"> {{don.country}} </z><br>
+			<b>Email:</b><z style="color:#85BC22"> {{don.emai}} </z><br>
+			<b>Address:</b><z style="color:#85BC22"> {{don.address}} </z><br>
+			<b>Phone Number:</b><z style="color:#85BC22"> {{don.phone}} </z><br>
+			<b>Title:</b><z style="color:#85BC22"> {{don.title}} </z><br>
+			<b>Organization:</b><z style="color:#85BC22"> {{don.organization}} </z><br>
+			<b>Tier:</b><z style="color:#85BC22"> {{don.tier}} </z><br>
+			<br>
+			Additional details:<br><br>
+			<b>Flagged?:</b><z style="color:#85BC22"> {{don.flagged}} </z><br>
+			<b>Regular Donor?</b><z style="color:#85BC22">  {{don.regular_donor}}</z><br>
+			<b>Donation Cycle:</b><z style="color:#85BC22">  {{don.cycle}}</z><br>
+			<b>Notes:</b><z style="color:#85BC22">  {{don.notes}} </z><br>
+			<br>
+			<b>Cumulative amount donated:</b><z style="color:#85BC22"> Rs. {{tot_given|floatformat:0|intcomma}}  </z><br>
+			<br>
+	 		<hr>
+	 		
+	 		<a href='{% url "add_donation" pk=don.pk %}' class="btn btn-primary" role="button">
+		 	Add a donation</a>
+		 	<a href='{% url "edit_donor" pk=don.pk %}' class="btn btn-primary" role="button">
+		 	Edit donor profile</a>
+		 	<a href='{% url "user_homepage" %}' class="btn btn-primary" role="button">
+		 	Go Home</a> 
+		 	<br>
+
+ 		</div>
+ 		<div class='col-sm-7'> 
+ 			<br>
+ 			<br>
+ 			<h4>Donation history:</h4>
+ 			<br>
+ 			
+ 			<TABLE class="table"> 
+				
+			      <THEAD>        
+			        <TR>
+			          <TH style="text-align:center">Fiscal Yr</TH>
+			          <TH style="text-align:center" width="120">Donation date</TH>
+			          <TH style="text-align:center" > Currency</TH>
+			          <TH style="text-align:center" width="80" > Amount (Local)</TH>
+			          <TH style="text-align:center" > Amount (PKR)</TH>
+			          <TH style="text-align:center" width="125"> Notes</TH>
+			        </TR>
+			      </THEAD>
+			      <TBODY>
+			        
+			        {% for obj in don_hist %}
+			        <TR>
+			          <TD class="vert-hor-align"> {{obj.fiscal_year}} </TD>
+			          <TD class="vert-hor-align"> {{obj.donation_date}} </TD>
+			          <TD class="vert-hor-align"> {{obj.currency}} </TD> 
+			          <TD class="vert-hor-align"> {{obj.amount_local_currency|intcomma}} </TD>   
+			          <TD class="vert-hor-align">  {{obj.amount_pkr|intcomma}}</TD>  
+			          <TD class="vert-hor-align">  {{obj.donation_notes}}</TD>  
+			        {% endfor %}
+			        
+			        </TR>
+			        
+			      </TBODY>
+			    </TABLE>
+				<!-- </div> -->
+		
+ 		</div>
+
+ 		<hr/>
+	</div>
+
+</div>
+
+{% endblock %}

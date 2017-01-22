@@ -1,0 +1,69 @@
+ {% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load humanize %}
+
+<!-- DOCTYPE html -->
+
+
+{% block content %}
+
+<br>
+
+
+<div class='col-sm-8 col-sm-offset-1'>
+<h3>View donations in period - {{start}} to {{end}} </h3>
+
+
+
+<br>
+<br> 
+	<form method='GET' action=''>
+
+	<!-- <input type='text' name='q1' placeholder='Lastname'/> -->
+	<input type="text" name= 'q1' class="form-control" placeholder="Enter starting date: YYYY-MM-DD" > <br>
+	<input type="text" name= 'q2' class="form-control" placeholder="Enter ending date: YYYY-MM-DD" >
+
+	<br>
+	<input class='btn btn-primary' type='submit' value='Search'/>
+	</form>
+<br>
+
+<hr/>
+
+{% if tot_given > 0 %}
+Total donations in period:  <z style="color:#85BC22">Rs: {{tot_given|intcomma}} </z><br>
+{% endif %}
+
+	 <br>
+ 		<TABLE class="table">	
+	      <THEAD>        
+	        <TR>
+	          <TH style="text-align:left"> Fiscal Yr</TH>
+	          <TH style="text-align:left"> Donor </TH>
+	          <TH style="text-align:center"width="150">Donation date</TH>
+	          <TH style="text-align:left" > Currency</TH>
+	          <TH style="text-align:center" > Amount (Local)</TH>
+	          <TH style="text-align:center" > Amount (PKR)</TH>
+	          <TH style="text-align:left" width="250"> Notes</TH>
+	        </TR>
+	      </THEAD>
+	      <TBODY>
+	        
+	        {% for obj in donations_list %}
+	        <TR>
+	          <TD class="vert-hor-align"> {{obj.fiscal_year}} </TD>
+	          <TD class="vert-align"> {{obj.contact_name}} </TD>
+	          <TD class="vert-hor-align"> {{obj.donation_date}} </TD>
+	          <TD class="vert-hor-align"> {{obj.currency}} </TD> 
+	          <TD class="vert-hor-align"> {{obj.amount_local_currency|intcomma}} </TD>   
+	          <TD class="vert-hor-align">  {{obj.amount_pkr|intcomma}}</TD>  
+	          <TD class="vert-align">  {{obj.donation_notes}}</TD>  
+	        {% endfor %}
+	        </TR>	        
+	      </TBODY>
+	    </TABLE>
+
+<br>
+
+
+{% endblock %}

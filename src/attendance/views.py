@@ -9,7 +9,7 @@ from django.forms import modelformset_factory
 from attendance.models import Attendance, AttendanceCalendar
 from classes.models import Class
 from django.contrib import messages
-from django.db import connection
+from django.db import connection #for custom sql
 from django.db.models import *
 import datetime
 from collections import OrderedDict
@@ -22,11 +22,6 @@ def go_home(request):
         return render(request, "home.html", {})
     else:
         return render(request, "home_not_loggedin.html", {})
-
-# def go_home_2(request):   
-#     return render(request, "home_not_loggedin.html", {})
-
-
 
 # def add_attendance(request):
 # 	form = AttendanceForm(request.POST or None, request.FILES or None)
@@ -46,7 +41,6 @@ def go_home(request):
 
 
 
-
 def get_dates_range(start, end, delta):
     curr = start
     while curr < end:
@@ -59,13 +53,40 @@ def affiliated_schools(request):
     schools = School.objects.filter(teacher=request.user.teacher)
     return render(request, 'affiliated_schools.html', {'affiliated_schools': schools})
 
+# this helper function below is a custom func to convert the cursor object return to a dict
+def dictfetchall(cursor):
+    #Return all rows from a cursor as a dict
+    columns = [col[0] for col in cursor.description]
+    return [
+        dict(zip(columns, row))
+        for row in cursor.fetchall()
+    ]
 
 @login_required()
 def attendance_dates(request, school_id):
     five_days_back = date.today() - timedelta(5)
     next_day = date.today() + timedelta(1)
     dates_range = list(get_dates_range(five_days_back, next_day, timedelta(days=1)))
-    return render(request, 'attendance_dates.html', {'dates_range': dates_range, 'school_id': school_id})
+    
+    cursor = connection.cursor()
+
+    cursor.execute(
+    '''SELECT i,
+    COUNT (*) AS num_att,
+    %s AS school_id
+    FROM
+    (select i::date from generate_series(Date(Now() -  Interval '5 day'), 
+      Date(Now() +  Interval '1 day'), '1 day'::interval) i) AS A
+    LEFT JOIN (SELECT X.*, Y.pkss_school_id
+    FROM attendance_attendance AS X
+    INNER JOIN students_student AS Y ON X.student_id = Y.id
+    WHERE pkss_school_id= %s) AS B ON A.i = B.attendance_date
+    GROUP BY i 
+    ORDER BY i DESC;''', [school_id, school_id])
+
+    l1 = dictfetchall(cursor) #raw sql query for students by class
+    sch = School.objects.get(pk=school_id)
+    return render(request, 'attendance_dates.html', {'dates_range': dates_range, 'school_id': school_id, 'l1': l1, 'sch': sch})
 
 
 @login_required()

@@ -9,9 +9,10 @@
 
 <!-- need to have POST to indicate its not a default get method and action says what url to send it to -->
 <!-- <form method='POST' action=''> {% csrf_token %} -->
+<br>
 
 <div class='col-sm-8 col-sm-offset-1'>
-
+<br>
 	<h3> Affiliated Schools </h3>
 
 	<br>
@@ -19,10 +20,12 @@
 	<br>
 
     {% for school in affiliated_schools %}
-
+    	<ul>
         <a href="{% url 'attendance_dates' school.pk %}">{{ school}}</a><br/>
-
+        </ul>
+        <hr/>
     {% endfor %}
+ 
 
 </div>
 
