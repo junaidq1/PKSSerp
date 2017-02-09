@@ -11,9 +11,10 @@ from django.core.urlresolvers import reverse
 
 
 class Donor(models.Model):
-	first_name = models.CharField(max_length=120)
+	reg = models.IntegerField()
+	first_name = models.CharField(max_length=255)
 	middle_name = models.CharField(max_length=120, null=True, blank=True)
-	last_name = models.CharField(max_length=120)
+	last_name = models.CharField(max_length=255)
 	notes = models.TextField(max_length=2500, null=True, blank=True)
 	city = models.CharField(max_length=120, null=True, blank=True)
 	country = models.CharField(max_length=120, null=True, blank=True)
@@ -75,7 +76,7 @@ class Donor_log(models.Model):
 	)
 	currency =  models.CharField(max_length=10, choices=CURRENCY_CHOICES, default='PKR')
 	amount_local_currency = models.IntegerField()
-	conversion_rate_if_not_PKR = models.IntegerField(null=True, blank=True)
+	conversion_rate_if_not_PKR = models.IntegerField(verbose_name="Enter conversation rate to PKR, enter 1 for PKR")
 	amount_pkr = models.IntegerField(null=True, blank=True)
 	donation_notes = models.TextField(max_length=2500, null=True, blank=True)
 		 
@@ -88,4 +89,13 @@ class Donor_log(models.Model):
 	# def get_absolute_url(self):
 	# 	return reverse('', kwargs={"pk": self.contact_name_id})
 	# 	return reverse("donor_profile", kwargs={"pk": self.pk} )
+
+
+# #signal receiver to update the donation amount in pkr
+# def updated_pkr_donation_value(sender, instance, **kwargs):
+# 	am_pkr = instance.conversion_rate_if_not_PKR * instance.amount_local_currency
+# 	Donor_log.objects.filter(id=instance.id).update(amount_pkr = am_pkr)
+
+# #this is a post save signal to calculate amount in pkr
+# post_save.connect(updated_pkr_donation_value, sender=Donor_log)
 	

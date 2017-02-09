@@ -118,7 +118,7 @@ def dictfetchall(cursor):
 		for row in cursor.fetchall()
 	]
 
-#enter new donation
+#view periodic donations
 @login_required 
 def view_donations_in_period(request): 
 	donations_list = Donor_log.objects.filter(donation_date__lt ='1990-01-01') 

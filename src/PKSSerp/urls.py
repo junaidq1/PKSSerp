@@ -28,13 +28,15 @@ urlpatterns = [
     # url(r'^2$', att.go_home_2, name='user_homepage2'),
     # url(r'^attendance/$', att.add_attendance, name='add_attendance'),
     url(r'^affiliated_schools/$', att.affiliated_schools, name='affiliated_schools'),
-    url(r'^attendance_dates/(?P<school_id>\d+)/$', att.attendance_dates, name='attendance_dates'),
-
-    url(r'^attendance2/(?P<school_id>\d+)/(?P<date>\d{4}-\d{2}-\d{2})/$', att.add_attendance2, name='add_attendance2'),
+    #url(r'^attendance_dates/(?P<school_id>\d+)/$', att.attendance_dates, name='attendance_dates'), old
+    url(r'^attendance_dates/(?P<school_id>\d+)/(?P<shift>\w+)$', att.attendance_dates, name='attendance_dates'),
+    #url(r'^attendance2/(?P<school_id>\d+)/(?P<date>\d{4}-\d{2}-\d{2})/$', att.add_attendance2, name='add_attendance2'), old
+    url(r'^attendance2/(?P<school_id>\d+)/(?P<date>\d{4}-\d{2}-\d{2})/(?P<shift>\w+)$', att.add_attendance2, name='add_attendance2'),
+    url(r'^att/(?P<school_id>\d+)/(?P<date>\d{4}-\d{2}-\d{2})/$', att.view_attendance_deets, name='view_att_deets'), 
 
     url(r'^attendance_report/$', att.attendance_report, name='attendance_report'),
     url(r'^attendance_summary/$', att.attendance_summary, name='attendance_summary'),
-    url(r'^school_attendance_details/(?P<school_id>\d+)/(?P<date>.+)/$', att.school_attendance_details, name='school_attendance_details'),
+    url(r'^school_attendance_details/(?P<school_id>\d+)/(?P<date>.+)/$', att.school_attendance_details, name='school_attendance_det_view'),
 
     url(r'^attendance_by_month/$', att.attendance_by_month, name='attendance_by_school'),
     url(r'^attendance_by_school_month/$', att.attendance_by_school_month, name='attendance_by_school_month'),
@@ -66,7 +68,8 @@ urlpatterns = [
     url(r'^donor_profile/(?P<pk>\d+)/$', don.donor_profile_details, name='donor_profile'), #donor profile deets
     url(r'^add_donation/(?P<pk>\d+)/$', don.add_donation, name='add_donation'), #add donation
     url(r'^donations_in_period/$', don.view_donations_in_period, name='donations_in_period'), #donations in aperiod
-
+    #enrollment report
+    url(r'^net_enrollment_report/$', st.view_student_enrollments_and_leaving, name='net_enrollment'), 
 ]
 
 

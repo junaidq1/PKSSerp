@@ -1,0 +1,130 @@
+ {% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load humanize %}
+
+<!-- DOCTYPE html -->
+
+
+{% block content %}
+
+<br>
+
+
+<div class='col-sm-8 col-sm-offset-1'>
+<h3>View net enrollment 
+{% if tot_students_active > 0 %}
+in <z style="color:#85BC22">{{pk_sch}} </z> from <z style="color:#85BC22">{{start}}</z> to <z style="color:#85BC22">{{end}}</z></h3>
+{% endif %}
+
+
+<br>
+<br> 
+	<form method='GET' action=''>
+
+	<!-- <input type='text' name='q1' placeholder='Lastname'/> -->
+	<input type="text" name= 'q0' class="form-control" placeholder="Enter school name e.g. PK1" > <br>
+	<input id="datepicker" name= 'q1' class="form-control" placeholder="Click to select period start date" > 
+	<br>
+	<input id="datepicker2" name= 'q2' class="form-control" placeholder="Click to select period end date" >
+	<br>
+	
+	<input class='btn btn-primary' type='submit' value='Search'/>
+	</form>
+<br>
+
+<hr/>
+ 
+{% if tot_students_active > 0 %}
+<b>{{pk_sch}} - Period summary</b><br>
+Net additions: <z style="color:#85BC22">{{net_joined}}  </z><br>
+# of students who joined: <z style="color:#85BC22">{{num_joined}} </z> <br>
+# of students who left: <z style="color:#85BC22">{{num_left}}</z><br>
+<br>
+Current active students: {{tot_students_active}}<br> 
+
+
+	 <br>
+ 		<TABLE class="table"> 
+ 		<caption>New student enrollments in {{pk_sch}}</caption>	
+	      <THEAD>        
+	        <TR>
+	          <TH style="text-align:center"width="150"> Date Joined </TH>
+	          <TH style="text-align:left"> Reg. # </TH>
+	          <TH style="text-align:left"> First name</TH>
+	          <TH style="text-align:left"> Last name</TH>
+	          <TH style="text-align:left"> Gender</TH>
+	          <TH style="text-align:left"> Pkss Class</TH>
+	          <TH style="text-align:left"> Added by:</TH>
+	        </TR>
+	      </THEAD>
+	      <TBODY>
+	        
+	        {% for obj in stds_joined %}
+	        <TR>
+	          <TD class="vert-hor-align"> {{obj.date_joined}} </TD>
+	          <TD class="vert-align"> {{obj.registration_number}} </TD>
+	          <TD class="vert-align"> {{obj.first_name}} </TD>
+	          <TD class="vert-align"> {{obj.last_name}} </TD> 
+	          <TD class="vert-align"> {{obj.gender}} </TD> 
+	          <TD class="vert-align"> {{obj.pkss_class}} </TD> 
+	          <TD class="vert-align"> {{obj.updated_last_by}} </TD> 
+	        {% endfor %}
+	        </TR>	        
+	      </TBODY>
+	    </TABLE>
+	<br><br>
+
+		<TABLE class="table"> 
+ 		<caption>Students that left {{pk_sch}}</caption>	
+	      <THEAD>        
+	        <TR>
+	          <TH style="text-align:center"width="150"> Date Left </TH>
+	          <TH style="text-align:left"> Reg. # </TH>
+	          <TH style="text-align:left"> First name</TH>
+	          <TH style="text-align:left"> Last name</TH>
+	          <TH style="text-align:left"> Gender</TH>
+	          <TH style="text-align:left"> Pkss Class</TH>
+	          <TH style="text-align:left"> Reason left</TH>
+	          <TH style="text-align:left"> Updated by</TH>
+	        </TR>
+	      </THEAD>
+	      <TBODY>
+	        
+	        {% for obj in stds_left %}
+	        <TR>
+	          <TD class="vert-hor-align"> {{obj.date_left}} </TD>
+	          <TD class="vert-align"> {{obj.registration_number}} </TD>
+	          <TD class="vert-align"> {{obj.first_name}} </TD>
+	          <TD class="vert-align"> {{obj.last_name}} </TD> 
+	          <TD class="vert-align"> {{obj.gender}} </TD> 
+	          <TD class="vert-align"> {{obj.pkss_class}} </TD> 
+	          <TD class="vert-align"> {{obj.reason_left}} </TD> 
+	          <TD class="vert-align"> {{obj.updated_last_by}} </TD> 
+	        {% endfor %}
+	        </TR>	        
+	      </TBODY>
+	    </TABLE>
+	<br><br>
+{% endif %}
+
+
+
+{% endblock %}
+
+
+
+{% block scr %}
+
+   <script>
+  $(document).ready(function() {
+    $("#datepicker").datepicker({
+    	dateFormat: "yy-mm-dd"	
+    });
+    $("#datepicker2").datepicker({
+    	dateFormat: "yy-mm-dd"	
+    });
+  });
+  </script>
+
+{% endblock scr %}
+

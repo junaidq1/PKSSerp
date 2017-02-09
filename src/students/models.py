@@ -1,7 +1,9 @@
 from __future__ import unicode_literals
 
 from django.db import models
-
+from django.db.models.signals import post_save, pre_save
+from django.contrib.auth.models import User
+from classes.models import Class
 # Create your models here.
 
 class Student(models.Model):
@@ -38,6 +40,9 @@ class Student(models.Model):
 		('other', 'other'),
 	)
 	reason_left =  models.CharField(max_length=30, choices=REASON_LEFT_CHOICES, null=True, blank=True)
+	updated_last = models.DateField(auto_now=True, auto_now_add=False)
+	updated_last_by = models.CharField(max_length=255, null=True, blank=True)
+
 
 	@property
 	def full_name(self):
@@ -50,5 +55,24 @@ class Student(models.Model):
 		return self.full_name
 
 	def get_absolute_url(self):
-		return reverse("student_profile", kwargs={"pk": self.pk} )
+		return reverse("student_profile", kwargs={"pk": self.pk} ) 
 
+# #this is signal receiver that updates the updated_last_by field when a student model is modified
+# def update_student_model(sender, instance, **kwargs):
+# 	user = instance.user
+# 	Student.objects.filter(id=instance.id).update(updated_last_by=user)
+# 	print "user" + " " + user
+# 	print "instance" + " " + Student.objects.get(id=instance.id)
+
+# #this is a post save signal generator once a student object is created or modified
+# post_save.connect(update_student_model, sender=Student)
+
+
+#signal receiver to update the school the student is enrolled in based on the class
+def updated_school_classification(sender, instance, **kwargs):
+	Student.objects.filter(id=instance.id).update(pkss_school = instance.pkss_class.school )
+
+#this is a pre save signal to assign a student to the right school based on the class they are ernolled in
+post_save.connect(updated_school_classification, sender=Student)
+
+ 

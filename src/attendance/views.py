@@ -47,11 +47,11 @@ def get_dates_range(start, end, delta):
         yield curr
         curr += delta
 
-
-@login_required()
+ 
 def affiliated_schools(request):
     schools = School.objects.filter(teacher=request.user.teacher)
-    return render(request, 'affiliated_schools.html', {'affiliated_schools': schools})
+    cls = Class.objects.filter(school_id__in = schools) #JQ: added
+    return render(request, 'affiliated_schools.html', {'affiliated_schools': schools, 'cls': cls})
 
 # this helper function below is a custom func to convert the cursor object return to a dict
 def dictfetchall(cursor):
@@ -63,7 +63,8 @@ def dictfetchall(cursor):
     ]
 
 @login_required()
-def attendance_dates(request, school_id):
+#def attendance_dates(request, school_id):
+def attendance_dates(request, school_id, shift):    
     five_days_back = date.today() - timedelta(5)
     next_day = date.today() + timedelta(1)
     dates_range = list(get_dates_range(five_days_back, next_day, timedelta(days=1)))
@@ -80,22 +81,24 @@ def attendance_dates(request, school_id):
     LEFT JOIN (SELECT X.*, Y.pkss_school_id
     FROM attendance_attendance AS X
     INNER JOIN students_student AS Y ON X.student_id = Y.id
-    WHERE pkss_school_id= %s) AS B ON A.i = B.attendance_date
+    INNER JOIN classes_class AS Z ON Y.pkss_class_id = Z.id
+    WHERE pkss_school_id= %s AND Z.shift = %s) AS B ON A.i = B.attendance_date
     GROUP BY i 
-    ORDER BY i DESC;''', [school_id, school_id])
+    ORDER BY i DESC;''', [school_id, school_id, shift])
 
-    l1 = dictfetchall(cursor) #raw sql query for students by class
+    l1 = dictfetchall(cursor) #raw sql query list of dates
     sch = School.objects.get(pk=school_id)
-    return render(request, 'attendance_dates.html', {'dates_range': dates_range, 'school_id': school_id, 'l1': l1, 'sch': sch})
+    return render(request, 'attendance_dates.html', {'dates_range': dates_range, 'school_id': school_id, 'l1': l1, 'sch': sch, 'shift': shift})
 
 
 @login_required()
-def add_attendance2(request, school_id, date, readonly=False):
+def add_attendance2(request, school_id, date, shift, readonly=False):
     school = School.objects.get(pk=school_id)
     dateobj = date
     ## classes_list = Class.objects.filter(teacher=request.user.teacher, school__id=school.pk)
     s = School.objects.filter(teacher__id = request.user.teacher.id) #JQ: added
-    classes_list = Class.objects.filter(school__id=school.pk).filter(school_id__in = s) #JQ: added
+    #classes_list = Class.objects.filter(school__id=school.pk).filter(school_id__in = s) #JQ: added
+    classes_list = Class.objects.filter(school__id=school.pk).filter(school_id__in = s).filter(shift = shift) #JQ: added
 
     formsets = {}
 
@@ -122,7 +125,8 @@ def add_attendance2(request, school_id, date, readonly=False):
     if request.method == 'POST':
         #classes_list = Class.objects.filter(teacher=request.user.teacher, school__id=school.pk)
         s = School.objects.filter(teacher__id = request.user.teacher.id) #JQ: added
-        classes_list = Class.objects.filter(school__id=school.pk).filter(school_id__in = s) #JQ: added
+        #classes_list = Class.objects.filter(school__id=school.pk).filter(school_id__in = s) #JQ: added
+        classes_list = Class.objects.filter(school__id=school.pk).filter(school_id__in = s).filter(shift = shift) #JQ: added
         
         formsets = {}
         formsets_valid = True
@@ -140,11 +144,11 @@ def add_attendance2(request, school_id, date, readonly=False):
                 formsets_valid = False
 
         if formsets_valid:
-            msg = 'Attendance submitted successfully for %s on %s.' % (school.school_name, date.strftime("%b %d, %Y"))
+            msg = 'Attendance submitted successfully for %s on %s for %s classes.' % (school.school_name, date.strftime("%b %d, %Y"), shift)
             messages.success(request, msg)
-            return redirect(reverse('attendance_dates', kwargs={'school_id': school.pk}))
+            return redirect(reverse('attendance_dates', kwargs={'school_id': school.pk, 'shift': shift}))
 
-    return render(request, 'group_attendance.html', {'formsets': formsets, 'date': date, 'school': school, 'dateobj':dateobj})
+    return render(request, 'group_attendance.html', {'formsets': formsets, 'date': date, 'school': school, 'dateobj':dateobj, 'shift':shift}) 
 
 
 
@@ -457,4 +461,63 @@ def attendance_by_school_month(request):
 
     return render(request, 'attendance_by_school_month.html', {'attendance': attendance})
 
+
+
+#SECOND VERSION OF ATTENDANCE - JUST FOR report viewing
+@login_required()
+def view_attendance_deets(request, school_id, date, readonly=False):
+    school = School.objects.get(pk=school_id)
+    dateobj = date
+    ## classes_list = Class.objects.filter(teacher=request.user.teacher, school__id=school.pk)
+    s = School.objects.filter(teacher__id = request.user.teacher.id) #JQ: added
+    classes_list = Class.objects.filter(school__id=school.pk).filter(school_id__in = s) #JQ: added
+
+    formsets = {}
+
+    for clas in classes_list:
+        students_list = Student.objects.filter(pkss_school__id=school.pk, pkss_class=clas).filter(currently_enrolled=True)
+        students_list_initial = [{
+                             'student': student,
+                             'attendance_date': date,
+                         }
+                         for student in students_list
+                         ]
+
+        attendance_formset = modelformset_factory(Attendance, form=AttendanceForm,
+                                                  extra=len(students_list),
+                                                  max_num=len(students_list)
+                                                  )
+
+        formsets[clas] = attendance_formset(initial=students_list_initial,
+                                            queryset=Attendance.objects.filter(attendance_date=date, student__in=students_list),
+                                            prefix=clas)
+
+    date = datetime.datetime.strptime(date, "%Y-%m-%d").date()
+
+    if request.method == 'POST':
+        #classes_list = Class.objects.filter(teacher=request.user.teacher, school__id=school.pk)
+        s = School.objects.filter(teacher__id = request.user.teacher.id) #JQ: added
+        classes_list = Class.objects.filter(school__id=school.pk).filter(school_id__in = s) #JQ: added
+        
+        formsets = {}
+        formsets_valid = True
+        for clas in classes_list:
+            students_list = Student.objects.filter(pkss_school__id=school.pk, pkss_class=clas).filter(currently_enrolled=True)
+            attendance_formset = modelformset_factory(Attendance, form=AttendanceForm,
+                                                      extra=len(students_list),
+                                                      max_num=len(students_list)
+                                                      )
+
+            formsets[clas] = attendance_formset(request.POST, prefix=clas)
+            if formsets[clas].is_valid():
+                formsets[clas].save()
+            else:
+                formsets_valid = False
+
+        if formsets_valid:
+            msg = 'Attendance submitted successfully for %s on %s.' % (school.school_name, date.strftime("%b %d, %Y"))
+            messages.success(request, msg)
+            return redirect(reverse('attendance_dates', kwargs={'school_id': school.pk}))
+
+    return render(request, 'group_attendance_view.html', {'formsets': formsets, 'date': date, 'school': school, 'dateobj':dateobj})
 

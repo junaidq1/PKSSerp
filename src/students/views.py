@@ -41,18 +41,20 @@ def student_profile_details(request, pk=None):
 	context = {
 	"std": std,  #update this
 	}
-	return render(request, "student_profile_details.html", context)
+	return render(request, "student_profile_details.html", context) 
 
 
 #edit an existing student record
 @login_required
 def edit_student_record(request, pk=None):
 	std = get_object_or_404(Student, pk=pk)
-	form = StudentForm(request.POST or None, request.FILES or None, instance=std)
+	#form = StudentForm(request.POST or None, request.FILES or None, instance=std)
+	form = StudentForm(request.POST or None, instance=std)
 	if form.is_valid():
 		try:
 			instance = form.save(commit=False)
-			#instance.master = Master.objects.get(pk=pk)
+			curr_user = request.user.username
+			instance.updated_last_by = curr_user
 			instance.save()
 
 			return HttpResponseRedirect( instance.get_absolute_url() )
@@ -73,7 +75,8 @@ def unenroll_student(request, pk=None):
 	if form.is_valid():
 		try:
 			instance = form.save(commit=False)
-			#instance.master = Master.objects.get(pk=pk)
+			curr_user = request.user.username
+			instance.updated_last_by = curr_user
 			instance.save()
 
 			return HttpResponseRedirect( instance.get_absolute_url() )
@@ -93,7 +96,8 @@ def add_a_student(request):
 	if form.is_valid():
 		try:
 			instance = form.save(commit=False)
-			#instance.master = Master.objects.get(pk=pk)
+			curr_user = request.user.username
+			instance.updated_last_by = curr_user
 			instance.save()
 
 			return HttpResponseRedirect( instance.get_absolute_url() )
@@ -273,3 +277,41 @@ def unexpected_holidays_deepdive(request, pk=None):
 	"sch": sch,
 	}
 	return render(request, "unexpected_holidays_deepdive.html", context)
+
+
+
+#view students who enrolled or left in a given period
+@login_required 
+def view_student_enrollments_and_leaving(request): 
+	#donations_list = Donor_log.objects.filter(donation_date__lt ='1990-01-01') 
+	context = {}
+	pk_sch = request.GET.get("q0")
+	start = request.GET.get("q1")
+	end = request.GET.get("q2")
+	 
+	if start is not None:	
+		stds_joined = Student.objects.filter( Q(pkss_school__school_name__icontains=pk_sch)).\
+			filter(date_joined__gte =start).filter(date_joined__lte =end).order_by('-date_joined')
+		stds_left = Student.objects.filter( Q(pkss_school__school_name__icontains=pk_sch)).\
+			filter(date_left__gte =start).filter(date_left__lte =end).order_by('-date_left')
+
+		tot_students_active = Student.objects.filter( Q(pkss_school__school_name__icontains=pk_sch)).filter(currently_enrolled =True)
+		tot_students_active = len(tot_students_active)
+		num_joined = len(stds_joined)
+		num_left = len(stds_left)
+		net_joined = num_joined - num_left
+
+		context = {
+		"tot_students_active": tot_students_active,
+		"stds_joined": stds_joined,
+		"stds_left": stds_left,
+		"start": start,
+		"end": end,
+		"pk_sch": pk_sch,
+		"num_joined": num_joined,
+		"num_left": num_left,
+		"net_joined": net_joined,
+		}
+
+	return render(request, "net_enrollments.html", context) 
+

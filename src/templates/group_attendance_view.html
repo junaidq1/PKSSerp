@@ -11,11 +11,11 @@
 
 <div class='col-sm-8 col-sm-offset-1'>
 
-<h3> Enter attendance for: <b style="color:#85BC22"> {{ school|title }} | {{shift}} | {{ date}}  </b></h3>
+<h3> Enter attendance for: <b style="color:#85BC22"> {{ school|title }}  | {{ date}}  </b></h3>
 <br>
 
 
-<form method='POST' action="{% url 'add_attendance2' school.pk date shift %}"> {% csrf_token %}
+<form method='POST' action=""> {% csrf_token %}
      <table id="formset" class="form">
 
 

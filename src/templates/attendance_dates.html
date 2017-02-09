@@ -12,7 +12,7 @@
 <br>
 <div class='col-sm-8 col-sm-offset-1'>
 <br>
-	<h3> Select a date to enter attendance for: <z style="color:#85BC22">{{sch}}</z> </h3>
+	<h3> Select a date to enter attendance for: <z style="color:#85BC22">{{sch}} | {{shift}} classes </z> </h3>
 
 	<br>
 
@@ -31,8 +31,8 @@
     {% for obj in l1 %}
     <p>
     <ul>
-        <a href="{% url 'add_attendance2' obj.school_id obj.i %}">{{ obj.i }} | 
-        Attendance entered for this date: </a>
+        <a href="{% url 'add_attendance2' obj.school_id obj.i shift %}">{{ obj.i }} | 
+        Attendance entered: </a>
         {% if obj.num_att > 1 %}  <b style="color:#00b200"> Yes</b>  
 	 	{% else %}  <b style="color:#990000"> No </b>{% endif %}<br/>
     </ul>

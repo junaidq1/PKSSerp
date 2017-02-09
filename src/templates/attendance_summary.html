@@ -40,9 +40,9 @@
 
         {% for school in schools_list %}
 
-            <tbody>
+            <tbody> 
                 <tr>
-                    <td><a href="{% url 'school_attendance_details' school.pk date %}">{{ school.school_name }}</a> </td>
+                    <td><a href="{% url 'school_attendance_det_view' school.pk date %}">{{ school.school_name }}</a> </td>
                     <td>{{ school.days_attendance_entered }}</td>
                     <td>{{ school.working_days }}</td>
                     <td>{{ school.overall_attendance|floatformat:"-1" }}%</td>

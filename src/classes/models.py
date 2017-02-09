@@ -25,6 +25,11 @@ class Class(models.Model):
 		('D', 'D'),
 	)
 	section = models.CharField(max_length=255, choices=SECTION_CHOICES, default='A')
+	SHIFT_CHOICES = (
+		('morning', 'morning'),
+		('evening', 'evening'),
+	)
+	shift = models.CharField(max_length=255, choices=SHIFT_CHOICES)
 	school_class_section = models.CharField(max_length=255, null=True, blank=True) 
 	teacher = models.ForeignKey('teachers.Teacher') 
 
@@ -42,7 +47,8 @@ def create_school_class_section_field(sender, instance, **kwargs):
 	c_school = instance.school.school_name
 	c_class = instance.class_name	
 	c_section = instance.section
-	concat = c_school + "_" + c_class + "_" + c_section
+	c_shift = instance.shift
+	concat = c_school + "_" + c_class + "_" + c_section + "_" + c_shift
 	Class.objects.filter(id=instance.id).update(school_class_section=concat)	
 
 	

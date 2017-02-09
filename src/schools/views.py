@@ -105,14 +105,14 @@ def school_profile_deepdive(request, pk=None):
 	FROM (SELECT A.*, B.pkss_school_id
 	FROM attendance_attendance AS A
 	INNER JOIN students_student AS B ON A.student_id = B.id
-	WHERE pkss_school_id = 1 AND attendance_date > Date(Now() -  Interval '12 month')) AS q1 
+	WHERE pkss_school_id = %s AND attendance_date > Date(Now() -  Interval '12 month')) AS q1 
 	GROUP BY yr, mth, school_id
 	ORDER BY yr DESC, mth DESC ) as q2
 	INNER JOIN (SELECT * FROM attendance_attendance INNER JOIN students_student AS D 
 		ON student_id = D.pkss_school_id) AS C ON (q2.max_date = C.attendance_date AND q2.school_id = C.pkss_school_id)
-	WHERE school_id = 1
+	WHERE school_id = %s
 	GROUP BY q2.yr, q2.mth, q2.max_date, q2.school_id
-	ORDER BY yr DESC, mth DESC;''', [pk]) #end of month enrollment - last 12 months 
+	ORDER BY yr DESC, mth DESC;''', [pk, pk]) #end of month enrollment - last 12 months 
 
 	queryset3 = dictfetchall(cursor) #end of month enrollment
 
@@ -145,5 +145,9 @@ def student_list_school(request, pk=None):
 	} 
 	
 	return render (request, "student_list_by_school.html", context)
+
+
+
+
 
 	

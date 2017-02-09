@@ -19,9 +19,17 @@
 
 	<br>
 
-    {% for school in affiliated_schools %}
+    {% for school in affiliated_schools %} 
     	<ul>
-        <a href="{% url 'attendance_dates' school.pk %}">{{ school}}</a><br/>
+        {% comment %} <a href="{% url 'attendance_dates' school.pk %}">{{ school}}</a> &nbsp&nbsp-    {% endcomment %}
+
+        {{ school}} &nbsp&nbsp-
+        	<!-- net new -->
+        	
+        	&nbsp&nbsp&nbsp <a href="{% url 'attendance_dates' school.pk 'morning' %}">Morning</a>
+        	&nbsp&nbsp&nbsp <a href="{% url 'attendance_dates' school.pk 'evening' %}">Evening</a> 
+        	
+        	<!-- finish -->
         </ul>
         <hr/>
     {% endfor %}
