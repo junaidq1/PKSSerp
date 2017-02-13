@@ -91,11 +91,11 @@ class Donor_log(models.Model):
 	# 	return reverse("donor_profile", kwargs={"pk": self.pk} )
 
 
-# #signal receiver to update the donation amount in pkr
-# def updated_pkr_donation_value(sender, instance, **kwargs):
-# 	am_pkr = instance.conversion_rate_if_not_PKR * instance.amount_local_currency
-# 	Donor_log.objects.filter(id=instance.id).update(amount_pkr = am_pkr)
+#signal receiver to update the donation amount in pkr
+def updated_pkr_donation_value(sender, instance, **kwargs):
+	am_pkr = instance.conversion_rate_if_not_PKR * instance.amount_local_currency
+	Donor_log.objects.filter(id=instance.id).update(amount_pkr = am_pkr)
 
-# #this is a post save signal to calculate amount in pkr
-# post_save.connect(updated_pkr_donation_value, sender=Donor_log)
+#this is a post save signal to calculate amount in pkr
+post_save.connect(updated_pkr_donation_value, sender=Donor_log)
 	

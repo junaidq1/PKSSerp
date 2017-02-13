@@ -57,7 +57,7 @@
 			          <TH style="text-align:center">Fiscal Yr</TH>
 			          <TH style="text-align:center" width="120">Donation date</TH>
 			          <TH style="text-align:center" > Currency</TH>
-			          <TH style="text-align:center" width="80" > Amount (Local)</TH>
+			          <TH style="text-align:center" width="90" > Amount (Local Cur)</TH>
 			          <TH style="text-align:center" > Amount (PKR)</TH>
 			          <TH style="text-align:center" width="125"> Notes</TH>
 			        </TR>
@@ -69,9 +69,9 @@
 			          <TD class="vert-hor-align"> {{obj.fiscal_year}} </TD>
 			          <TD class="vert-hor-align"> {{obj.donation_date}} </TD>
 			          <TD class="vert-hor-align"> {{obj.currency}} </TD> 
-			          <TD class="vert-hor-align"> {{obj.amount_local_currency|intcomma}} </TD>   
-			          <TD class="vert-hor-align">  {{obj.amount_pkr|intcomma}}</TD>  
-			          <TD class="vert-hor-align">  {{obj.donation_notes}}</TD>  
+			          <TD class="vert-align"> {{obj.amount_local_currency|intcomma}} </TD>   
+			          <TD class="vert-align">  {{obj.amount_pkr|intcomma}}</TD>  
+			          <TD class="vert-align">  {{obj.donation_notes}}</TD>  
 			        {% endfor %}
 			        
 			        </TR>

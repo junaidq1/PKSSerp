@@ -68,6 +68,7 @@ urlpatterns = [
     url(r'^donor_profile/(?P<pk>\d+)/$', don.donor_profile_details, name='donor_profile'), #donor profile deets
     url(r'^add_donation/(?P<pk>\d+)/$', don.add_donation, name='add_donation'), #add donation
     url(r'^donations_in_period/$', don.view_donations_in_period, name='donations_in_period'), #donations in aperiod
+    url(r'^donations_crosstab/$', don.donation_crosstab, name='donations_xtab'), #donation crosstab
     #enrollment report
     url(r'^net_enrollment_report/$', st.view_student_enrollments_and_leaving, name='net_enrollment'), 
 ]

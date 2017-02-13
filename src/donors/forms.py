@@ -10,7 +10,7 @@ from .models import Donor, Donor_log
 class DonorForm(forms.ModelForm):
 	class Meta:
 		model = Donor
-		fields = ["first_name", "last_name", "city", "country","email","address", "phone", 
+		fields = ["reg","first_name", "last_name", "city", "country","email","address", "phone", 
 		 "title","organization","tier", "flagged", "regular_donor", "cycle", "notes"]
 
 class AddDonationForm(forms.ModelForm):

@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}
+	Donor Profile
+{% endblock %}
+
+
+{% block content %} 
+
+ <div class='container'>
+<br>
+ 	<div class='row'>
+		<div class='col-sm-12'> 
+
+ 			<br>
+ 			<h4>Donor History by Year (All amounts in PKR):</h4>
+ 			<br>
+ 			
+ 			<TABLE class="table"> 
+				
+			      <THEAD>        
+			        <TR>
+			          <TH style="text-align:center">#</TH>
+			          <TH style="text-align:center">First Name</TH>
+			          <TH style="text-align:center">Last Name</TH>
+			          <TH style="text-align:center">FY07</TH>
+			          <TH style="text-align:center">FY08</TH>
+			          <TH style="text-align:center">FY09</TH>
+			          <TH style="text-align:center">FY10</TH>
+			          <TH style="text-align:center">FY11</TH>
+			          <TH style="text-align:center">FY12</TH>
+			          <TH style="text-align:center">FY13</TH>
+			          <TH style="text-align:center">FY14</TH>
+			          <TH style="text-align:center">FY15</TH>
+			          <TH style="text-align:center">FY16</TH>
+			          <TH style="text-align:center">FY17</TH>
+			          <TH style="text-align:center">FY18</TH>
+			          <TH style="text-align:center">Lifetime donation</TH>
+			        </TR>
+			      </THEAD>
+			      <TBODY>
+			        
+			        {% for obj in donation_crosstab %}
+			        <TR>
+			          <TD class="vert-hor-align"> {{forloop.counter}} </TD>
+			          <TD class="vert-align"><a href='{% url "donor_profile" pk=obj.id %}'> {{obj.first_name}} </a></TD>
+			          <TD class="vert-align"><a href='{% url "donor_profile" pk=obj.id %}'> {{obj.last_name}} </a></TD>
+			          <TD class="vert-align"> {{obj.sum_fy07|intcomma}} </TD>
+			          <TD class="vert-align"> {{obj.sum_fy08|intcomma}} </TD>
+			          <TD class="vert-align"> {{obj.sum_fy09|intcomma}} </TD>
+			          <TD class="vert-align"> {{obj.sum_fy10|intcomma}} </TD>
+			          <TD class="vert-align"> {{obj.sum_fy11|intcomma}} </TD>
+			          <TD class="vert-align"> {{obj.sum_fy12|intcomma}} </TD>
+			          <TD class="vert-align"> {{obj.sum_fy13|intcomma}} </TD>
+			          <TD class="vert-align"> {{obj.sum_fy14|intcomma}} </TD>
+			          <TD class="vert-align"> {{obj.sum_fy15|intcomma}} </TD>
+			          <TD class="vert-align"> {{obj.sum_fy16|intcomma}} </TD>
+			          <TD class="vert-align"> {{obj.sum_fy17|intcomma}} </TD>
+			          <TD class="vert-align"> {{obj.sum_fy18|intcomma}} </TD>
+			          <TD class="vert-align"> {{obj.lifetime_donations|intcomma}} </TD>
+			        {% endfor %}
+			        
+			        </TR>
+			        
+			      </TBODY>
+			    </TABLE>
+				<!-- </div> -->
+		
+ 		</div>
+
+ 		<hr/>
+	</div>
+
+</div>
+
+{% endblock %}

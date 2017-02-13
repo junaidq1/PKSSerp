@@ -13,100 +13,106 @@ from attendance.models import AttendanceCalendar, NonScheduledHolidays
 from schools.models import School
 from attendance.forms import AddAttCalDateForm, AddUnexpectedHolidayForm
 from datetime import datetime, timedelta
+from django.contrib import messages
 
 @login_required 
 def search_students(request):
-	queryset_list = Student.objects.all()
-	query = request.GET.get("q1")
-	if query:
-		queryset_list = queryset_list.filter(
-						Q(first_name__icontains=query) | Q(last_name__icontains=query)
-						)
-		#print queryset_list
-	context = {
-	"queryset_list":queryset_list,
-	"query": query
-	}
+	if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'staff' or request.user.useraccess.access_level == 'coordinator':
+		queryset_list = Student.objects.all()
+		query = request.GET.get("q1")
+		if query:
+			queryset_list = queryset_list.filter(
+							Q(first_name__icontains=query) | Q(last_name__icontains=query)
+							)
+			#print queryset_list
+		context = {
+		"queryset_list":queryset_list,
+		"query": query
+		}
 
-	return render(request, "student_list.html", context)
-	#<a href='{% url "cont_detail" pk=obj.pk %}'> Select </a>
+		return render(request, "student_list.html", context)
+		#<a href='{% url "cont_detail" pk=obj.pk %}'> Select </a>
 
 #view profile details for a student
 @login_required 
 def student_profile_details(request, pk=None):
-	std = get_object_or_404(Student, pk=pk) #student object
-	#sch = School.objects.get(id = std.pkss_school_id) #school of object
-	#cls = Class.objects.get(id= std.pkss_class_id)  #class of student
-
-	context = {
-	"std": std,  #update this
-	}
-	return render(request, "student_profile_details.html", context) 
+	if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'staff' or request.user.useraccess.access_level == 'coordinator':
+		std = get_object_or_404(Student, pk=pk) #student object
+		#sch = School.objects.get(id = std.pkss_school_id) #school of object
+		context = {
+		"std": std,  #update this
+		}
+		return render(request, "student_profile_details.html", context) 
 
 
 #edit an existing student record
 @login_required
 def edit_student_record(request, pk=None):
-	std = get_object_or_404(Student, pk=pk)
-	#form = StudentForm(request.POST or None, request.FILES or None, instance=std)
-	form = StudentForm(request.POST or None, instance=std)
-	if form.is_valid():
-		try:
-			instance = form.save(commit=False)
-			curr_user = request.user.username
-			instance.updated_last_by = curr_user
-			instance.save()
+	if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'staff' or request.user.useraccess.access_level == 'coordinator':
+		std = get_object_or_404(Student, pk=pk)
+		#form = StudentForm(request.POST or None, request.FILES or None, instance=std)
+		form = StudentForm(request.POST or None, instance=std)
+		if form.is_valid():
+			try:
+				instance = form.save(commit=False)
+				curr_user = request.user.username
+				instance.updated_last_by = curr_user
+				instance.save()
 
-			return HttpResponseRedirect( instance.get_absolute_url() )
-		except:
-			return HttpResponseRedirect('/student_profile/%s' %(pk))
-	context = {
-		"form": form,
-		"std": std,
-	}
-	return render(request, "edit_student_profile.html", context)
+				return HttpResponseRedirect( instance.get_absolute_url() )
+			except:
+				return HttpResponseRedirect('/student_profile/%s' %(pk))
+		context = {
+			"form": form,
+			"std": std,
+		}
+		return render(request, "edit_student_profile.html", context)
 
 
 #unenroll student
 @login_required
 def unenroll_student(request, pk=None):
-	std = get_object_or_404(Student, pk=pk)
-	form = StudentUnenrollForm(request.POST or None, request.FILES or None, instance=std)
-	if form.is_valid():
-		try:
-			instance = form.save(commit=False)
-			curr_user = request.user.username
-			instance.updated_last_by = curr_user
-			instance.save()
+	if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'staff' or request.user.useraccess.access_level == 'coordinator':
+		std = get_object_or_404(Student, pk=pk)
+		form = StudentUnenrollForm(request.POST or None, request.FILES or None, instance=std)
+		if form.is_valid():
+			try:
+				instance = form.save(commit=False)
+				curr_user = request.user.username
+				instance.updated_last_by = curr_user
+				instance.save()
 
-			return HttpResponseRedirect( instance.get_absolute_url() )
-		except:
-			return HttpResponseRedirect('/student_profile/%s' %(pk))
-	context = {
-		"form": form,
-		"std": std,
-	}
-	return render(request, "unenroll_student.html", context)
+				return HttpResponseRedirect( instance.get_absolute_url() )
+			except:
+				return HttpResponseRedirect('/student_profile/%s' %(pk))
+		context = {
+			"form": form,
+			"std": std,
+		}
+		return render(request, "unenroll_student.html", context)
 
 
 #Add a student
 @login_required
-def add_a_student(request): 
-	form = StudentForm(request.POST or None, request.FILES or None)
-	if form.is_valid():
-		try:
-			instance = form.save(commit=False)
-			curr_user = request.user.username
-			instance.updated_last_by = curr_user
-			instance.save()
+def add_a_student(request):
+	if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'staff' or request.user.useraccess.access_level == 'coordinator':
+		form = StudentForm(request.POST or None, request.FILES or None)
+		if form.is_valid():
+			try:
+				instance = form.save(commit=False)
+				curr_user = request.user.username
+				instance.updated_last_by = curr_user
+				instance.save()
 
-			return HttpResponseRedirect( instance.get_absolute_url() )
-		except:
-			return HttpResponseRedirect('/')
-	context = {
-		"form": form,
-	}
-	return render(request, "add_student.html", context)
+				#return HttpResponseRedirect( instance.get_absolute_url() )
+				#<a href='{% url "std_profile" pk=obj.pk %}'>
+				return HttpResponseRedirect( reverse('std_profile', kwargs={'pk': instance.pk}))
+			except:
+				return HttpResponseRedirect('/')
+		context = {
+			"form": form,
+		}
+		return render(request, "add_student.html", context)
 
 # this helper function below is a custom func to convert the cursor object return to a dict
 def dictfetchall(cursor):
@@ -124,6 +130,8 @@ def view_attendance_calendar(request):
 		view all of the working days in a year by school
 	"""	
 	year_filter = request.GET.get("q1")
+	if year_filter is None:
+		year_filter = datetime.now().year
 
 	cursor = connection.cursor()
 
@@ -145,74 +153,81 @@ def view_attendance_calendar(request):
 	FROM schools_school as A
 	INNER JOIN attendance_attendancecalendar as B ON A.id = B.school_id
 	WHERE Extract(year from first_day_of_month) =  %s 
-	GROUP BY school_name, school_id''', [year_filter])
+	GROUP BY school_name, school_id
+	ORDER BY school_name''', [year_filter])
 
 	queryset = dictfetchall(cursor)
 		
 	context = {
 		"queryset": queryset,
+		"year_filter": year_filter,
 	}
 	return render(request, "school_attendance_calendar.html", context) 
 
 #Add a cal date 
 @login_required
-def add_a_cal_date(request): 
-	form = AddAttCalDateForm(request.POST or None, request.FILES or None)
-	if form.is_valid():
-		try:
-			instance = form.save(commit=False)
-			#instance.master = Master.objects.get(pk=pk)
-			instance.save()
-			return HttpResponseRedirect( reverse('attend_calendar'))
-		except:
-			return HttpResponseRedirect('/')
-	context = {
-		"form": form,
-	}
-	return render(request, "add_cal_date.html", context)
+def add_a_cal_date(request):
+	if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'staff' or request.user.useraccess.access_level == 'coordinator':
+		form = AddAttCalDateForm(request.POST or None, request.FILES or None)
+		if form.is_valid():
+			try:
+				instance = form.save(commit=False)
+				#instance.master = Master.objects.get(pk=pk)
+				instance.save()
+				return HttpResponseRedirect( reverse('attend_calendar'))
+			except:
+				return HttpResponseRedirect('/')
+		context = {
+			"form": form,
+		}
+		return render(request, "add_cal_date.html", context)
 
 
 #edit an existing calendar record
 @login_required
 def edit_school_caldate(request, pk=None, month=None):
-	try:
-		inst = AttendanceCalendar.objects.filter(school_id=pk).filter(first_day_of_month__month = month)[0]
-	except:
-		return HttpResponseRedirect( reverse('add_cal_date')) #if error, then make user enter cal date
-	#std = get_object_or_404(Student, pk=pk)
-	form = AddAttCalDateForm(request.POST or None, request.FILES or None, instance=inst)
-	if form.is_valid():
+	if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'staff' or request.user.useraccess.access_level == 'coordinator':
 		try:
-			instance = form.save(commit=False)
-			#instance.master = Master.objects.get(pk=pk)
-			instance.save()
-
-			return HttpResponseRedirect( reverse('attend_calendar') )
+			inst = AttendanceCalendar.objects.filter(school_id=pk).filter(first_day_of_month__month = month)[0]
 		except:
-			return HttpResponseRedirect('/')
-	context = {
-		"form": form,
-		"inst": inst,
-	}
-	return render(request, "edit_cal_date.html", context)
+			return HttpResponseRedirect( reverse('add_cal_date')) #if error, then make user enter cal date
+		#std = get_object_or_404(Student, pk=pk)
+		form = AddAttCalDateForm(request.POST or None, request.FILES or None, instance=inst)
+		if form.is_valid():
+			try:
+				instance = form.save(commit=False)
+				#instance.master = Master.objects.get(pk=pk)
+				instance.save()
+
+				return HttpResponseRedirect( reverse('attend_calendar') )
+			except:
+				return HttpResponseRedirect('/')
+		context = {
+			"form": form,
+			"inst": inst,
+		}
+		return render(request, "edit_cal_date.html", context)
 
 
 #Add an unexpected holiday 
 @login_required
-def add_unexpected_holiday(request): 
-	form = AddUnexpectedHolidayForm(request.POST or None, request.FILES or None)
-	if form.is_valid():
-		try:
-			instance = form.save(commit=False)
-			#instance.master = Master.objects.get(pk=pk)
-			instance.save()
-			return HttpResponseRedirect( reverse('user_homepage'))
-		except:
-			return HttpResponseRedirect('/')
-	context = {
-		"form": form,
-	}
-	return render(request, "add_unexp_holiday.html", context)
+def add_unexpected_holiday(request):
+	if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'staff' or request.user.useraccess.access_level == 'coordinator':
+		form = AddUnexpectedHolidayForm(request.POST or None, request.FILES or None)
+		if form.is_valid():
+			try:
+				instance = form.save(commit=False)
+				#instance.master = Master.objects.get(pk=pk)
+				instance.save()
+
+				messages.success(request, 'Holiday submitted successfully')
+				return HttpResponseRedirect( reverse('user_homepage'))
+			except:
+				return HttpResponseRedirect('/')
+		context = {
+			"form": form,
+		}
+		return render(request, "add_unexp_holiday.html", context)
 
 #unexpected holiday report
 @login_required
@@ -220,98 +235,100 @@ def view_unexpected_holidays_tot(request):
 	"""
 		view all of the unexpected holidays by school over last 6 months
 	"""	
+	if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'staff' or request.user.useraccess.access_level == 'coordinator':
+		cursor = connection.cursor()
 
-	cursor = connection.cursor()
+		cursor.execute(
+		'''SELECT q1.school_name, q1.school_id,
+		COUNT (q1.holiday_date) AS Total_holidays,
+		SUM (CASE WHEN (Extract(month from q1.holiday_date) = Extract(month from Now() )) 
+			AND (Extract(year from q1.holiday_date) = Extract(year from Now() )) THEN  1 ELSE 0 END) AS present_m,
+		SUM (CASE WHEN (Extract(month from q1.holiday_date) = Extract(month from Now() -  Interval '1 month')) 
+			AND (Extract(year from q1.holiday_date) = Extract(year from Now() -  Interval '1 month')) THEN  1 ELSE 0 END) AS present_minus1m,
+		SUM (CASE WHEN (Extract(month from q1.holiday_date) = Extract(month from Now() -  Interval '2 month')) 
+			AND (Extract(year from q1.holiday_date) = Extract(year from Now() -  Interval '2 month')) THEN  1 ELSE 0 END) AS present_minus2m,
+		SUM (CASE WHEN (Extract(month from q1.holiday_date) = Extract(month from Now() -  Interval '3 month')) 
+			AND (Extract(year from q1.holiday_date) = Extract(year from Now() -  Interval '3 month')) THEN  1 ELSE 0 END) AS present_minus3m,
+		SUM (CASE WHEN (Extract(month from q1.holiday_date) = Extract(month from Now() -  Interval '4 month')) 
+			AND (Extract(year from q1.holiday_date) = Extract(year from Now() -  Interval '4 month')) THEN  1 ELSE 0 END) AS present_minus4m,
+		SUM (CASE WHEN (Extract(month from q1.holiday_date) = Extract(month from Now() -  Interval '5 month')) 
+			AND (Extract(year from q1.holiday_date) = Extract(year from Now() -  Interval '5 month')) THEN  1 ELSE 0 END) AS present_minus5m
+		FROM 
+		(SELECT A.*, school_name
+		FROM attendance_nonscheduledholidays AS A
+		INNER JOIN schools_school AS B ON A.school_id = B.id
+		WHERE holiday_date > Date(Now() -  Interval '6 month')) as q1
+		GROUP BY q1.school_name, q1.school_id 
+		ORDER BY q1.school_name;''', [])
 
-	cursor.execute(
-	'''SELECT q1.school_name, q1.school_id,
-	COUNT (q1.holiday_date) AS Total_holidays,
-	SUM (CASE WHEN (Extract(month from q1.holiday_date) = Extract(month from Now() )) 
-		AND (Extract(year from q1.holiday_date) = Extract(year from Now() )) THEN  1 ELSE 0 END) AS present_m,
-	SUM (CASE WHEN (Extract(month from q1.holiday_date) = Extract(month from Now() -  Interval '1 month')) 
-		AND (Extract(year from q1.holiday_date) = Extract(year from Now() -  Interval '1 month')) THEN  1 ELSE 0 END) AS present_minus1m,
-	SUM (CASE WHEN (Extract(month from q1.holiday_date) = Extract(month from Now() -  Interval '2 month')) 
-		AND (Extract(year from q1.holiday_date) = Extract(year from Now() -  Interval '2 month')) THEN  1 ELSE 0 END) AS present_minus2m,
-	SUM (CASE WHEN (Extract(month from q1.holiday_date) = Extract(month from Now() -  Interval '3 month')) 
-		AND (Extract(year from q1.holiday_date) = Extract(year from Now() -  Interval '3 month')) THEN  1 ELSE 0 END) AS present_minus3m,
-	SUM (CASE WHEN (Extract(month from q1.holiday_date) = Extract(month from Now() -  Interval '4 month')) 
-		AND (Extract(year from q1.holiday_date) = Extract(year from Now() -  Interval '4 month')) THEN  1 ELSE 0 END) AS present_minus4m,
-	SUM (CASE WHEN (Extract(month from q1.holiday_date) = Extract(month from Now() -  Interval '5 month')) 
-		AND (Extract(year from q1.holiday_date) = Extract(year from Now() -  Interval '5 month')) THEN  1 ELSE 0 END) AS present_minus5m
-	FROM 
-	(SELECT A.*, school_name
-	FROM attendance_nonscheduledholidays AS A
-	INNER JOIN schools_school AS B ON A.school_id = B.id
-	WHERE holiday_date > Date(Now() -  Interval '6 month')) as q1
-	GROUP BY q1.school_name, q1.school_id ;''', [])
+		queryset = dictfetchall(cursor)
+		
+		m = datetime.today()
+		m_minus1 = (datetime.now() - timedelta(days=30))
+		m_minus2 = (datetime.now() - timedelta(days=61))
+		m_minus3 = (datetime.now() - timedelta(days=91))
+		m_minus4 = (datetime.now() - timedelta(days=122))
+		m_minus5 = (datetime.now() - timedelta(days=152))
 
-	queryset = dictfetchall(cursor)
-	
-	m = datetime.today()
-	m_minus1 = (datetime.now() - timedelta(days=30))
-	m_minus2 = (datetime.now() - timedelta(days=61))
-	m_minus3 = (datetime.now() - timedelta(days=91))
-	m_minus4 = (datetime.now() - timedelta(days=122))
-	m_minus5 = (datetime.now() - timedelta(days=152))
-
-	context = {
-		"queryset": queryset,
-		"m": m,
-		"m_minus1": m_minus1,
-		"m_minus2": m_minus2,
-		"m_minus3": m_minus3,
-		"m_minus4": m_minus4,
-		"m_minus5": m_minus5,
-	}
-	return render(request, "school_unexpected_holidays.html", context) 
+		context = {
+			"queryset": queryset,
+			"m": m,
+			"m_minus1": m_minus1,
+			"m_minus2": m_minus2,
+			"m_minus3": m_minus3,
+			"m_minus4": m_minus4,
+			"m_minus5": m_minus5,
+		}
+		return render(request, "school_unexpected_holidays.html", context) 
 
 
 #school deails for unexpected holiday
 @login_required
 def unexpected_holidays_deepdive(request, pk=None):
-	
-	queryset = NonScheduledHolidays.objects.filter(school_id = pk)
-	sch = School.objects.get(pk=pk)
-	context = {
-	"queryset": queryset,
-	"sch": sch,
-	}
-	return render(request, "unexpected_holidays_deepdive.html", context)
+	if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'staff' or request.user.useraccess.access_level == 'coordinator':
+		queryset = NonScheduledHolidays.objects.filter(school_id = pk).order_by('-holiday_date')
+		sch = School.objects.get(pk=pk)
+		context = {
+		"queryset": queryset,
+		"sch": sch,
+		}
+		return render(request, "unexpected_holidays_deepdive.html", context)
 
 
 
 #view students who enrolled or left in a given period
 @login_required 
-def view_student_enrollments_and_leaving(request): 
-	#donations_list = Donor_log.objects.filter(donation_date__lt ='1990-01-01') 
-	context = {}
-	pk_sch = request.GET.get("q0")
-	start = request.GET.get("q1")
-	end = request.GET.get("q2")
-	 
-	if start is not None:	
-		stds_joined = Student.objects.filter( Q(pkss_school__school_name__icontains=pk_sch)).\
-			filter(date_joined__gte =start).filter(date_joined__lte =end).order_by('-date_joined')
-		stds_left = Student.objects.filter( Q(pkss_school__school_name__icontains=pk_sch)).\
-			filter(date_left__gte =start).filter(date_left__lte =end).order_by('-date_left')
+def view_student_enrollments_and_leaving(request):
+	if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'staff' or request.user.useraccess.access_level == 'coordinator': 
+		#donations_list = Donor_log.objects.filter(donation_date__lt ='1990-01-01') 
+		context = {}
+		pk_sch = request.GET.get("q0")
+		start = request.GET.get("q1")
+		end = request.GET.get("q2")
+		 
+		if start is not None:	
+			stds_joined = Student.objects.filter( Q(pkss_school__school_name__icontains=pk_sch)).\
+				filter(date_joined__gte =start).filter(date_joined__lte =end).order_by('-date_joined')
+			stds_left = Student.objects.filter( Q(pkss_school__school_name__icontains=pk_sch)).\
+				filter(date_left__gte =start).filter(date_left__lte =end).order_by('-date_left')
 
-		tot_students_active = Student.objects.filter( Q(pkss_school__school_name__icontains=pk_sch)).filter(currently_enrolled =True)
-		tot_students_active = len(tot_students_active)
-		num_joined = len(stds_joined)
-		num_left = len(stds_left)
-		net_joined = num_joined - num_left
+			tot_students_active = Student.objects.filter( Q(pkss_school__school_name__icontains=pk_sch)).filter(currently_enrolled =True)
+			tot_students_active = len(tot_students_active)
+			num_joined = len(stds_joined)
+			num_left = len(stds_left)
+			net_joined = num_joined - num_left
 
-		context = {
-		"tot_students_active": tot_students_active,
-		"stds_joined": stds_joined,
-		"stds_left": stds_left,
-		"start": start,
-		"end": end,
-		"pk_sch": pk_sch,
-		"num_joined": num_joined,
-		"num_left": num_left,
-		"net_joined": net_joined,
-		}
+			context = {
+			"tot_students_active": tot_students_active,
+			"stds_joined": stds_joined,
+			"stds_left": stds_left,
+			"start": start,
+			"end": end,
+			"pk_sch": pk_sch,
+			"num_joined": num_joined,
+			"num_left": num_left,
+			"net_joined": net_joined,
+			}
 
-	return render(request, "net_enrollments.html", context) 
+		return render(request, "net_enrollments.html", context) 
 

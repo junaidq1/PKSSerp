@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'donors',
     #'debug_toolbar',
     'datetimewidget',
+    'access',
 ]
 
 MIDDLEWARE = [
