@@ -48,6 +48,16 @@
 
                 </tr>
             {% endfor %}
+            
+            <tr>
+                <td> Overall: </td>
+                {% for obj in overall %}
+                <td>
+                     {{obj.att_perc|floatformat:1}}%   
+                </td>
+                {% endfor %} 
+                
+            </tr>
         </tbody>
 
     </table>

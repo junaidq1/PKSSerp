@@ -7,7 +7,7 @@ from schools.models import School
 from classes.models import Class
 from django.db import connection  #for custom SQL 
 # Create your views here.
-from .models import Student
+from .models import Student, StudentHistory
 from .forms import StudentForm, StudentUnenrollForm
 from attendance.models import AttendanceCalendar, NonScheduledHolidays
 from schools.models import School
@@ -33,14 +33,16 @@ def search_students(request):
 		return render(request, "student_list.html", context)
 		#<a href='{% url "cont_detail" pk=obj.pk %}'> Select </a>
 
-#view profile details for a student
+#view profile details for a student 
 @login_required 
 def student_profile_details(request, pk=None):
 	if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'staff' or request.user.useraccess.access_level == 'coordinator':
 		std = get_object_or_404(Student, pk=pk) #student object
+		s_hist = StudentHistory.objects.filter(student_name_id = std.pk)
 		#sch = School.objects.get(id = std.pkss_school_id) #school of object
 		context = {
 		"std": std,  #update this
+		"s_hist": s_hist,
 		}
 		return render(request, "student_profile_details.html", context) 
 
@@ -164,10 +166,43 @@ def view_attendance_calendar(request):
 	}
 	return render(request, "school_attendance_calendar.html", context) 
 
-#Add a cal date 
+#Add a cal date
 @login_required
 def add_a_cal_date(request):
 	if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'staff' or request.user.useraccess.access_level == 'coordinator':
+		
+		"""
+		view all of the working days in a year by school + add dates
+		"""	
+		year_filter = request.GET.get("q1")
+		if year_filter is None:
+			year_filter = datetime.now().year
+
+		cursor = connection.cursor()
+
+		cursor.execute(
+		'''SELECT school_name, school_id,
+		COUNT(first_day_of_month) AS num_instances,
+		SUM( CASE WHEN Extract(month from first_day_of_month)  = 1 THEN  workdays_in_month ELSE 0 END) AS jan,
+		SUM( CASE WHEN Extract(month from first_day_of_month)  = 2 THEN  workdays_in_month ELSE 0 END) AS feb,
+		SUM( CASE WHEN Extract(month from first_day_of_month)  = 3 THEN  workdays_in_month ELSE 0 END) AS march,
+		SUM( CASE WHEN Extract(month from first_day_of_month)  = 4 THEN  workdays_in_month ELSE 0 END) AS april,
+		SUM( CASE WHEN Extract(month from first_day_of_month)  = 5 THEN  workdays_in_month ELSE 0 END) AS may,
+		SUM( CASE WHEN Extract(month from first_day_of_month)  = 6 THEN  workdays_in_month ELSE 0 END) AS june,
+		SUM( CASE WHEN Extract(month from first_day_of_month)  = 7 THEN  workdays_in_month ELSE 0 END) AS july,
+		SUM( CASE WHEN Extract(month from first_day_of_month)  = 8 THEN  workdays_in_month ELSE 0 END) AS aug,
+		SUM( CASE WHEN Extract(month from first_day_of_month)  = 9 THEN  workdays_in_month ELSE 0 END) AS sep,
+		SUM( CASE WHEN Extract(month from first_day_of_month)  = 10 THEN  workdays_in_month ELSE 0 END) AS oct,
+		SUM( CASE WHEN Extract(month from first_day_of_month)  = 11 THEN  workdays_in_month ELSE 0 END) AS nov,
+		SUM( CASE WHEN Extract(month from first_day_of_month)  = 12 THEN  workdays_in_month ELSE 0 END) AS dec
+		FROM schools_school as A
+		INNER JOIN attendance_attendancecalendar as B ON A.id = B.school_id
+		WHERE Extract(year from first_day_of_month) =  %s 
+		GROUP BY school_name, school_id
+		ORDER BY school_name''', [year_filter])
+
+		queryset = dictfetchall(cursor)
+			
 		form = AddAttCalDateForm(request.POST or None, request.FILES or None)
 		if form.is_valid():
 			try:
@@ -179,6 +214,8 @@ def add_a_cal_date(request):
 				return HttpResponseRedirect('/')
 		context = {
 			"form": form,
+			"queryset": queryset,
+			"year_filter": year_filter,
 		}
 		return render(request, "add_cal_date.html", context)
 
@@ -233,7 +270,7 @@ def add_unexpected_holiday(request):
 @login_required
 def view_unexpected_holidays_tot(request):
 	"""
-		view all of the unexpected holidays by school over last 6 months
+		view all of the unexpected holidays by school over last 12 months
 	"""	
 	if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'staff' or request.user.useraccess.access_level == 'coordinator':
 		cursor = connection.cursor()
@@ -252,12 +289,24 @@ def view_unexpected_holidays_tot(request):
 		SUM (CASE WHEN (Extract(month from q1.holiday_date) = Extract(month from Now() -  Interval '4 month')) 
 			AND (Extract(year from q1.holiday_date) = Extract(year from Now() -  Interval '4 month')) THEN  1 ELSE 0 END) AS present_minus4m,
 		SUM (CASE WHEN (Extract(month from q1.holiday_date) = Extract(month from Now() -  Interval '5 month')) 
-			AND (Extract(year from q1.holiday_date) = Extract(year from Now() -  Interval '5 month')) THEN  1 ELSE 0 END) AS present_minus5m
+			AND (Extract(year from q1.holiday_date) = Extract(year from Now() -  Interval '5 month')) THEN  1 ELSE 0 END) AS present_minus5m,
+		SUM (CASE WHEN (Extract(month from q1.holiday_date) = Extract(month from Now() -  Interval '6 month')) 
+			AND (Extract(year from q1.holiday_date) = Extract(year from Now() -  Interval '6 month')) THEN  1 ELSE 0 END) AS present_minus6m,
+		SUM (CASE WHEN (Extract(month from q1.holiday_date) = Extract(month from Now() -  Interval '7 month')) 
+			AND (Extract(year from q1.holiday_date) = Extract(year from Now() -  Interval '7 month')) THEN  1 ELSE 0 END) AS present_minus7m,
+		SUM (CASE WHEN (Extract(month from q1.holiday_date) = Extract(month from Now() -  Interval '8 month')) 
+			AND (Extract(year from q1.holiday_date) = Extract(year from Now() -  Interval '8 month')) THEN  1 ELSE 0 END) AS present_minus8m,
+		SUM (CASE WHEN (Extract(month from q1.holiday_date) = Extract(month from Now() -  Interval '9 month')) 
+			AND (Extract(year from q1.holiday_date) = Extract(year from Now() -  Interval '9 month')) THEN  1 ELSE 0 END) AS present_minus9m,
+		SUM (CASE WHEN (Extract(month from q1.holiday_date) = Extract(month from Now() -  Interval '10 month')) 
+			AND (Extract(year from q1.holiday_date) = Extract(year from Now() -  Interval '10 month')) THEN  1 ELSE 0 END) AS present_minus10m,
+		SUM (CASE WHEN (Extract(month from q1.holiday_date) = Extract(month from Now() -  Interval '11 month')) 
+			AND (Extract(year from q1.holiday_date) = Extract(year from Now() -  Interval '11 month')) THEN  1 ELSE 0 END) AS present_minus11m
 		FROM 
 		(SELECT A.*, school_name
 		FROM attendance_nonscheduledholidays AS A
 		INNER JOIN schools_school AS B ON A.school_id = B.id
-		WHERE holiday_date > Date(Now() -  Interval '6 month')) as q1
+		WHERE holiday_date > Date(Now() -  Interval '12 month')) as q1
 		GROUP BY q1.school_name, q1.school_id 
 		ORDER BY q1.school_name;''', [])
 
@@ -269,6 +318,13 @@ def view_unexpected_holidays_tot(request):
 		m_minus3 = (datetime.now() - timedelta(days=91))
 		m_minus4 = (datetime.now() - timedelta(days=122))
 		m_minus5 = (datetime.now() - timedelta(days=152))
+		m_minus6 = (datetime.now() - timedelta(days=183))
+		m_minus7 = (datetime.now() - timedelta(days=213))
+		m_minus8 = (datetime.now() - timedelta(days=244))
+		m_minus9 = (datetime.now() - timedelta(days=274))
+		m_minus10 = (datetime.now() - timedelta(days=305))
+		m_minus11 = (datetime.now() - timedelta(days=335))
+
 
 		context = {
 			"queryset": queryset,
@@ -278,6 +334,12 @@ def view_unexpected_holidays_tot(request):
 			"m_minus3": m_minus3,
 			"m_minus4": m_minus4,
 			"m_minus5": m_minus5,
+			"m_minus6": m_minus6,
+			"m_minus7": m_minus7,
+			"m_minus8": m_minus8,
+			"m_minus9": m_minus9,
+			"m_minus10": m_minus10,
+			"m_minus11": m_minus11,
 		}
 		return render(request, "school_unexpected_holidays.html", context) 
 

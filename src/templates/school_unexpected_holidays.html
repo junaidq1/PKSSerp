@@ -12,11 +12,11 @@
 	<div class='row'>
 	<br>
 	<br>
-		<h4>Unexpected holidays taken by each school in the past 6 months (by month)</h4>
+		<h4>Unexpected holidays taken by each school in the past 12 months (by month)</h4>
 
 		<br>
 
-		<div class='col-sm-7'> 
+		<div class='col-sm-11'> 
 		 	<br>
 		 	
 		 	<br>
@@ -25,13 +25,19 @@
 			      <THEAD>        
 			        <TR>
 			          <TH style="text-align:center" >School</TH> 
-			          <TH style="text-align:center">Total holidays last 6 months</TH> 
+			          <TH style="text-align:center">Total holidays last 12 months</TH> 
 			          <TH style="text-align:center">{{m|date:"M Y"}}</TH> 
 			          <TH style="text-align:center">{{m_minus1|date:"M Y"}}</TH> 
 			          <TH style="text-align:center">{{m_minus2|date:"M Y"}}</TH>
 			          <TH style="text-align:center">{{m_minus3|date:"M Y"}}</TH>
 			          <TH style="text-align:center">{{m_minus4|date:"M Y"}}</TH>
 			          <TH style="text-align:center">{{m_minus5|date:"M Y"}}</TH>
+			          <TH style="text-align:center">{{m_minus6|date:"M Y"}}</TH>
+			          <TH style="text-align:center">{{m_minus7|date:"M Y"}}</TH>
+			          <TH style="text-align:center">{{m_minus8|date:"M Y"}}</TH>
+			          <TH style="text-align:center">{{m_minus9|date:"M Y"}}</TH>
+			          <TH style="text-align:center">{{m_minus10|date:"M Y"}}</TH>
+			          <TH style="text-align:center">{{m_minus11|date:"M Y"}}</TH>
 			        </TR>
 			      </THEAD>  
 			      <TBODY>
@@ -45,6 +51,12 @@
 			          <TD class="vert-hor-align">{{obj.present_minus3m}}</TD>
 			          <TD class="vert-hor-align">{{obj.present_minus4m}}</TD>
 			          <TD class="vert-hor-align">{{obj.present_minus5m}}</TD>
+			          <TD class="vert-hor-align">{{obj.present_minus6m}}</TD>
+			          <TD class="vert-hor-align">{{obj.present_minus7m}}</TD>
+			          <TD class="vert-hor-align">{{obj.present_minus8m}}</TD>
+			          <TD class="vert-hor-align">{{obj.present_minus9m}}</TD>
+			          <TD class="vert-hor-align">{{obj.present_minus10m}}</TD>
+			          <TD class="vert-hor-align">{{obj.present_minus11m}}</TD>
 			        {% endfor %}
 			        </TR>
 			        

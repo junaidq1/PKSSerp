@@ -21,19 +21,23 @@ from teachers.views import *
 from students import views as st
 from schools import views as sch
 from donors import views as don
-
+from tattendance import views as tatt
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', att.go_home, name='user_homepage'),
     # url(r'^2$', att.go_home_2, name='user_homepage2'),
-    # url(r'^attendance/$', att.add_attendance, name='add_attendance'),
+    #student attendance
     url(r'^affiliated_schools/$', att.affiliated_schools, name='affiliated_schools'),
     #url(r'^attendance_dates/(?P<school_id>\d+)/$', att.attendance_dates, name='attendance_dates'), old
     url(r'^attendance_dates/(?P<school_id>\d+)/(?P<shift>\w+)$', att.attendance_dates, name='attendance_dates'),
     #url(r'^attendance2/(?P<school_id>\d+)/(?P<date>\d{4}-\d{2}-\d{2})/$', att.add_attendance2, name='add_attendance2'), old
     url(r'^attendance2/(?P<school_id>\d+)/(?P<date>\d{4}-\d{2}-\d{2})/(?P<shift>\w+)$', att.add_attendance2, name='add_attendance2'),
     url(r'^att/(?P<school_id>\d+)/(?P<date>\d{4}-\d{2}-\d{2})/$', att.view_attendance_deets, name='view_att_deets'), 
-
+    #teacher attendance
+    url(r'^affiliated_schools_tattendance/$', tatt.tattendance_affiliated_schools, name='taffiliated_schools'),
+    url(r'^tattendance_dates/(?P<school_id>\d+)/$', tatt.tattendance_dates, name='tattendance_dates'),
+    url(r'^tattendance/(?P<school_id>\d+)/(?P<date>\d{4}-\d{2}-\d{2})/$', tatt.add_tattendance, name='add_tattendance'),
+    #attendance reports
     url(r'^attendance_report/$', att.attendance_report, name='attendance_report'),
     url(r'^attendance_summary/$', att.attendance_summary, name='attendance_summary'),
     url(r'^school_attendance_details/(?P<school_id>\d+)/(?P<date>.+)/$', att.school_attendance_details, name='school_attendance_det_view'),

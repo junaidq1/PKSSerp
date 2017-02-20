@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+{% crispy formset helper %}
+
+ 
+{% block content %}
+
+
+<br>
+
+<div class='col-sm-8 col-sm-offset-1'>
+
+<h3> Enter Teacher attendance for teachers in: <b style="color:#85BC22"> {{ school|title }} | {{ date}}        </b></h3>
+<br>
+
+{# commented code below is how the student attendance form is rendered #}
+{% comment %}
+  <form method='POST' action="{% url 'add_tattendance' school.pk date %}"> {% csrf_token %}
+
+  <table id="formset" class="form">
+
+  {% for formset in formsets.iteritems %}
+
+           {{ formset.management_form|crispy }}
+
+  {% for form in formset %}
+
+    <!-- {% crispy form %} -->
+    {% if forloop.first %}
+    <thead>
+
+    <tr style="height: 30px;">
+      {% for field in form.visible_fields %}
+      <th>{{ field.label|capfirst }}</th>
+      {% endfor %}
+    </tr></thead>
+    {% endif %}
+    <tr>
+
+    {% for field in form.visible_fields %}
+      <td>
+      {# Include the hidden fields in the form #}
+      {% if forloop.first %}
+        {% for hidden in form.hidden_fields %}
+        {{ hidden|as_crispy_field }}
+        {% endfor %}
+      {% endif %}
+        {{ field.errors.as_ul }}
+        {{ field}}
+      </td>
+    {% endfor %}
+    </tr>
+  {% endfor %}
+
+  {% endfor %}
+  </table>
+
+
+  <br>
+  <input class='btn btn-primary' type='submit' value='Enter'/>
+  </form>
+
+{% endcomment %}
+ 
+<!-- ############################ -->
+
+<form method='POST' action=""> {% csrf_token %}
+
+{{ formsets.management_form }} 
+<table>
+    <thead>
+        {% for form in formsets.forms %}
+            {% if forloop.first %}
+                {% for field in form %}
+                    <th>{{ field.label_tag }}</th>
+                {% endfor %}
+            {% endif %}
+    </thead>
+    <tbody>
+            <tr>
+                {% for field in form %}
+                    <td>{{ field }}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<br>
+<br>
+
+<input class='btn btn-primary' type='submit' value='Enter'/>
+</form>
+
+
+</div>
+
+
+
+{% endblock %}
+
+
+{% block extra_script %}
+
+    <script type="text/javascript">
+
+    $(document).ready(function(){
+
+        $('select').each(function(){
+            if($(this).find('option:selected').text() == 'absent')
+                $(this).css({'background-color': '#ff9999'});
+            if($(this).find('option:selected').text() == 'present')
+                $(this).css({'background-color': 'lightgreen'});
+        });
+
+        $('select').on('change', function(){
+            if($(this).find('option:selected').text() == 'absent')
+                $(this).css({'background-color': '#ff9999'});
+            if($(this).find('option:selected').text() == 'present')
+                $(this).css({'background-color': 'lightgreen'});
+        });
+
+        function getParameterByName(name, url) {
+            if (!url) {
+              url = window.location.href;
+            }
+            name = name.replace(/[\[\]]/g, "\\$&");
+            var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+                results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, " "));
+        }
+
+
+        if(getParameterByName('readonly')){
+            $(this).find('select').prop('disabled', true);
+            $(this).find('input[type="submit"]').hide();
+        }
+
+
+        $('form').bind('submit', function () {
+            $(this).find('select.attendance_student').prop('disabled', false);
+      });
+    });
+
+    </script>
+{% endblock extra_script %}

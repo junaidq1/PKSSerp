@@ -1,0 +1,53 @@
+
+
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+
+ {% block content %}
+
+<!-- need to have POST to indicate its not a default get method and action says what url to send it to -->
+<!-- <form method='POST' action=''> {% csrf_token %} -->
+<br>
+<div class='col-sm-8 col-sm-offset-1'>
+<br>
+	<h3> Select a date to enter teacher attendance for: <z style="color:#85BC22">{{sch}} </z> </h3>
+
+	<br>
+
+	<br>
+	
+    {% for date in dates_range %}
+    <p>
+    <ul>
+        <a href="{% url 'add_tattendance' school_id date %}">{{ date }}</a><br/>
+    </ul>
+    </p>
+    {% endfor %}
+    <br>
+
+
+    {% comment %}
+    {% for obj in l1 %}
+    <p>
+    <ul>
+        <a href="{% url 'add_attendance2' obj.school_id obj.i shift %}">{{ obj.i }} | 
+        Attendance entered: </a>
+        {% if obj.num_att > 1 %}  <b style="color:#00b200"> Yes</b>  
+	 	{% else %}  <b style="color:#990000"> No </b>{% endif %}<br/>
+    </ul>
+    </p>
+    {% endfor %}
+    {% endcomment %} 
+
+ <br>
+ <br>
+ <br>
+ <a href='{% url "user_homepage" %}' class="btn btn-primary" role="button">
+            Go Back Home</a> 
+
+</div>
+
+
+{% endblock %}

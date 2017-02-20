@@ -18,7 +18,9 @@
 	 		<br>
 	 		<p><b>Active: </b><z style="color:#85BC22"> 
 	 			{% if std.currently_enrolled is True %} <b>Yes</b> {% endif %} 
-	 			{% if std.currently_enrolled is False %}<b style="color:#800000"> No </b>{% endif %} 
+	 			{% if std.currently_enrolled is False %}<b style="color:#800000"> No </b><br>
+	 			<b> Reason left: <z style="color:#800000"> {{std.reason_left}} </z></b><br>
+	 			{% endif %} 
 	 		</z><br></p>
 			<b>PKSS School:</b><z style="color:#85BC22"> {{std.pkss_school}}</z><br>
 			<b>PKSS Class:</b><z style="color:#85BC22"> {{std.pkss_class}}</z>		<br>
@@ -61,10 +63,32 @@
 		 	<a href='{% url "unenroll_std_profile" std.pk %}' class="btn btn-primary" role="button">
 		 	Unenroll Student</a>
 	 		<br><br><br>
-	 		<br>
-	 		<br>
-	 		<br>
+	 		
 	 		<hr>
+ 			<h4>Enrollment History:</h4>
+ 			<table class="table">	
+				<!-- <div class='col-sm-10 col-sm-offset-2'> -->
+			    <!-- <TABLE BORDER="1"> -->
+			      <THEAD>        
+			        <TR>
+			          <TH style="text-align:center" width="30">Enroll/promo date</TH>
+			          <TH style="text-align:left" width="20"> class </TH>
+			          <TH style="text-align:center" width="20"> updated?</TH>
+			        </TR>
+			      </THEAD>
+			      <TBODY>
+			        {% for obj in s_hist %}
+			        <TR>
+			          <TD class="vert-align"> {{obj.date}} </TD>
+			          <TD class="vert-align"> {{obj.pkss_class}}</TD>  
+			          <TD class="vert-hor-align"> {{obj.created}} </TD>  
+			        {% endfor %}
+			        </TR>
+			        
+			      </TBODY>
+			    </TABLE>
+
+
  			<br>
  			<h4>Attendance History (Last 12 months):</h4>
  			<br>
@@ -90,7 +114,7 @@
 			      </TBODY>
 			    </TABLE>
 				<!-- </div> -->
-		</table>
+		
  		</div>
 
  		<hr/>

@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'teachers',
     'students',
     'attendance',
+    'tattendance',
     'donors',
     #'debug_toolbar',
     'datetimewidget',

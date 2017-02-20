@@ -5,10 +5,10 @@ from .models import School
 
 
 class SchoolModelAdmin(admin.ModelAdmin):
-	list_display = ['pk', 'school_name','shift','school_address','city','date_opened']
-	list_display_links = ['pk', 'school_name','shift', 'school_address','city','date_opened']
+	list_display = ['pk', 'school_name', 'school_address','city','date_opened']
+	list_display_links = ['pk', 'school_name', 'school_address','city','date_opened']
 	search_fields = ['school_name','shift', 'school_address','city','date_opened']
-	list_filter = ['school_name','shift', 'city']
+	list_filter = ['school_name', 'city']
 	class Meta:
 		model = School
 

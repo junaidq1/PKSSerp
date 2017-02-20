@@ -132,7 +132,6 @@ def school_profile_deepdive(request, pk=None):
 		
 		return render (request, "school_profile_details.html", context)
 
-#school profile deepdive
 @login_required
 def student_list_school(request, pk=None):
 	if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'staff' or request.user.useraccess.access_level == 'coordinator':

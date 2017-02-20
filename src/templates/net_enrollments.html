@@ -63,8 +63,8 @@ Current active students: {{tot_students_active}}<br>
 	        <TR>
 	          <TD class="vert-hor-align"> {{obj.date_joined}} </TD>
 	          <TD class="vert-align"> {{obj.registration_number}} </TD>
-	          <TD class="vert-align"> {{obj.first_name}} </TD>
-	          <TD class="vert-align"> {{obj.last_name}} </TD> 
+	          <TD class="vert-align"><a href='{% url "std_profile" pk=obj.pk %}'> {{obj.first_name}}</a> </TD>
+	          <TD class="vert-align"><a href='{% url "std_profile" pk=obj.pk %}'> {{obj.last_name}} </a></TD> 
 	          <TD class="vert-align"> {{obj.gender}} </TD> 
 	          <TD class="vert-align"> {{obj.pkss_class}} </TD> 
 	          <TD class="vert-align"> {{obj.updated_last_by}} </TD> 
@@ -79,9 +79,10 @@ Current active students: {{tot_students_active}}<br>
 	      <THEAD>        
 	        <TR>
 	          <TH style="text-align:center"width="150"> Date Left </TH>
+	          <TH style="text-align:center"width="150"> Date orig. joined</TH>
 	          <TH style="text-align:left"> Reg. # </TH>
-	          <TH style="text-align:left"> First name</TH>
-	          <TH style="text-align:left"> Last name</TH>
+	          <TH style="text-align:left">First name</TH>
+	          <TH style="text-align:left">Last name</TH>
 	          <TH style="text-align:left"> Gender</TH>
 	          <TH style="text-align:left"> Pkss Class</TH>
 	          <TH style="text-align:left"> Reason left</TH>
@@ -93,9 +94,10 @@ Current active students: {{tot_students_active}}<br>
 	        {% for obj in stds_left %}
 	        <TR>
 	          <TD class="vert-hor-align"> {{obj.date_left}} </TD>
+	          <TD class="vert-hor-align"> {{obj.date_joined}} </TD>
 	          <TD class="vert-align"> {{obj.registration_number}} </TD>
-	          <TD class="vert-align"> {{obj.first_name}} </TD>
-	          <TD class="vert-align"> {{obj.last_name}} </TD> 
+	          <TD class="vert-align"><a href='{% url "std_profile" pk=obj.pk %}'> {{obj.first_name}} </a></TD>
+	          <TD class="vert-align"><a href='{% url "std_profile" pk=obj.pk %}'> {{obj.last_name}} </a></TD> 
 	          <TD class="vert-align"> {{obj.gender}} </TD> 
 	          <TD class="vert-align"> {{obj.pkss_class}} </TD> 
 	          <TD class="vert-align"> {{obj.reason_left}} </TD> 

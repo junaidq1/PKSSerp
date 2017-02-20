@@ -47,7 +47,7 @@ def get_dates_range(start, end, delta):
         yield curr
         curr += delta
 
- 
+
 def affiliated_schools(request):
     schools = School.objects.filter(teacher=request.user.teacher)
     cls = Class.objects.filter(school_id__in = schools) #JQ: added
@@ -76,8 +76,8 @@ def attendance_dates(request, school_id, shift):
     COUNT (*) AS num_att,
     %s AS school_id
     FROM
-    (select i::date from generate_series(Date(Now() -  Interval '5 day'), 
-      Date(Now() +  Interval '1 day'), '1 day'::interval) i) AS A
+    (select i::date from generate_series(Date(Now() -  Interval '2 day'), 
+      Date(Now()), '1 day'::interval) i) AS A
     LEFT JOIN (SELECT X.*, Y.pkss_school_id
     FROM attendance_attendance AS X
     INNER JOIN students_student AS Y ON X.student_id = Y.id
@@ -461,8 +461,27 @@ def attendance_by_school_month(request):
                 else:
                     attendance['schools'][school.school_name] = {date: school.attendance}
 
-        return render(request, 'attendance_by_school_month.html', {'attendance': attendance})
+        cursor = connection.cursor()
 
+        cursor.execute(
+        '''SELECT 
+        Extract(year from q1.attendance_date) AS year,
+        Extract(month from q1.attendance_date) AS mth,
+        COUNT(DISTINCT (q1.attendance_date)) AS days_att_entered,
+        SUM( CASE WHEN  status = 'present' THEN 1 ELSE 0 END) AS present,
+        count(*) AS count,
+        SUM(CASE WHEN  status = 'present' THEN 1 ELSE 0 END)/ CAST(count(*) AS FLOAT) * 100 AS att_perc
+        FROM
+        (SELECT A.*, B.pkss_school_id
+        FROM attendance_attendance AS A
+        INNER JOIN students_student AS B ON A.student_id = B.id
+        WHERE attendance_date > Date(Now() -  Interval '12 month') ) as q1
+        GROUP BY year, mth
+        ORDER BY year DESC, mth DESC;''', [])
+        overall = dictfetchall(cursor) #raw sql query to get attendance for all schools
+
+        return render(request, 'attendance_by_school_month.html', {'attendance': attendance, 'overall': overall})
+         
 
 
 #SECOND VERSION OF ATTENDANCE - JUST FOR report viewing
@@ -520,6 +539,5 @@ def view_attendance_deets(request, school_id, date, readonly=False):
             msg = 'Attendance submitted successfully for %s on %s.' % (school.school_name, date.strftime("%b %d, %Y"))
             messages.success(request, msg)
             return redirect(reverse('attendance_dates', kwargs={'school_id': school.pk}))
-
-    return render(request, 'group_attendance_view.html', {'formsets': formsets, 'date': date, 'school': school, 'dateobj':dateobj})
+    
 

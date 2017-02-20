@@ -20,6 +20,9 @@
 			<b>Location:</b><z style="color:#85BC22"> {{sch.school_address}}, {{sch.city}} </z>	<br>
 			<b>Principal's name:</b><z style="color:#85BC22"> {{principal}}</z><br>
 			<br>
+			<b>School Notes:</b><z style="color:#85BC22"> {{sch.school_notes}}</z><br>
+			<br>
+
 			<b>Total teachers:</b><z style="color:#85BC22"> {{num_teachers}}</z><br>
 			<b>Total active students:</b><z style="color:#85BC22"> {{num_students}}
 				<a href='{% url "student_list_school" sch.pk %}'>(Click for list)</z></a><br>
