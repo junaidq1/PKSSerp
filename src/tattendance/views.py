@@ -15,7 +15,7 @@ import datetime
 from collections import OrderedDict
 from django.utils import timezone
 from dateutil.relativedelta import relativedelta
-# Create your views here.
+import json
 
 
 def tattendance_affiliated_schools(request):
@@ -73,52 +73,58 @@ def tattendance_dates(request, school_id):
 
 @login_required()
 def add_tattendance(request, school_id, date, readonly=False):
-   
-	school = School.objects.get(pk=school_id)
-	## classes_list = Class.objects.filter(teacher=request.user.teacher, school__id=school.pk)
-	#* s = School.objects.filter(teacher__id = request.user.teacher.id) #JQ: added
-	#classes_list = Class.objects.filter(school__id=school.pk).filter(school_id__in = s) #JQ: added
-	#* classes_list = Class.objects.filter(school__id=school.pk).filter(school_id__in = s).filter(shift = shift) #JQ: added
+        school = School.objects.get(pk=school_id)
+        ## classes_list = Class.objects.filter(teacher=request.user.teacher, school__id=school.pk)
+        #* s = School.objects.filter(teacher__id = request.user.teacher.id) #JQ: added
+        #classes_list = Class.objects.filter(school__id=school.pk).filter(school_id__in = s) #JQ: added
+        #* classes_list = Class.objects.filter(school__id=school.pk).filter(school_id__in = s).filter(shift = shift) #JQ: added
 
-	#formsets = {}  #delete this
+        #formsets = {}  #delete this
 
-	teacher_list = Teacher.objects.all()  # < filter this for just teachers in the school
-	teacher_list_initial = [{
-							'teacher': teacher,
-							'attendance_date': date,
-							'school': school
- 							}
- 							for teacher in teacher_list ]
+        teacher_list = Teacher.objects.all()  # < filter this for just teachers in the school
+        teacher_list_initial = [{
+                                'teacher': teacher,
+                                'attendance_date': date,
+                                'school': school
+                                }
+                                for teacher in teacher_list]
 
- 	tattendance_formset = modelformset_factory(TeacherAttendance, form=TeacherAttendanceForm,
-											extra=len(teacher_list),
- 											max_num=len(teacher_list) )
+        tattendance_formset = modelformset_factory(TeacherAttendance, form=TeacherAttendanceForm,
+                                                   extra=len(teacher_list),
+                                                   max_num=len(teacher_list)
+                                                   )
 
- 	formsets = tattendance_formset(initial=teacher_list_initial,
-								queryset=TeacherAttendance.objects.filter(attendance_date=date, teacher__in=teacher_list))
+        formsets = tattendance_formset(initial=teacher_list_initial,
+                                       queryset=TeacherAttendance.objects.filter(school=school, attendance_date=date, teacher__in=teacher_list)
+                                       )
 
- 	date = datetime.datetime.strptime(date, "%Y-%m-%d").date()
+        date = datetime.datetime.strptime(date, "%Y-%m-%d").date()
 
-	if request.method == 'POST':
-		#formsets = {}  # delete this
-		#formsets_valid = True
-		
-		teacher_list = Teacher.objects.all()  # < filter this for just teachers in the school
-		tattendance_formset = modelformset_factory(TeacherAttendance, form=TeacherAttendanceForm,
-													extra=len(teacher_list),
-													max_num=len(teacher_list))
-		formsets = tattendance_formset(request.POST)
-		if formsets.is_valid():
-			formsets.save()
-	
-			msg = 'Attendance submitted successfully for %s on %s' % (school.school_name, date.strftime("%b %d, %Y"))
-			messages.success(request, msg)
-			return redirect(reverse('tattendance_dates', kwargs={'school_id': school.pk}))
+        if request.method == 'POST':
+            #formsets = {}  # delete this
+            #formsets_valid = True
 
-	context = {
-	'formsets': formsets, 
-	'date': date, 
-	'school': school,
-	'teacher_list': teacher_list
-	}
-	return render(request, 'teacher_attendance_formset.html', context)
+            teacher_list = Teacher.objects.all()  # < filter this for just teachers in the school
+            tattendance_formset = modelformset_factory(TeacherAttendance, form=TeacherAttendanceForm,
+                                                       extra=len(teacher_list),
+                                                       max_num=len(teacher_list))
+
+            formsets = tattendance_formset(request.POST)
+            if formsets.is_valid():
+                formsets.save()
+
+                msg = 'Attendance submitted successfully for %s on %s' % (school.school_name, date.strftime("%b %d, %Y"))
+                messages.success(request, msg)
+                return redirect(reverse('tattendance_dates', kwargs={'school_id': school.pk}))
+            else:
+                print json.dumps(formsets.errors, indent=4)
+
+
+        context = {
+        'formset': formsets,
+        'date': date,
+        'school': school,
+        'teacher_list': teacher_list
+        }
+
+        return render(request, 'teacher_attendance_formset.html', context)

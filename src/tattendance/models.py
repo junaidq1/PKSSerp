@@ -23,7 +23,7 @@ class TeacherAttendance(models.Model):
 	att_taker = models.CharField(max_length=120, null=True, blank=True)
 
 	class Meta: 
-		unique_together = ("teacher", "attendance_date")
+		unique_together = ("teacher", "attendance_date", "school")
 
 	@property
 	def attendance_instance(self):

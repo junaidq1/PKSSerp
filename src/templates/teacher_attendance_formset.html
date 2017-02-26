@@ -14,17 +14,13 @@
 <h3> Enter Teacher attendance for teachers in: <b style="color:#85BC22"> {{ school|title }} | {{ date}}        </b></h3>
 <br>
 
-{# commented code below is how the student attendance form is rendered #}
-{% comment %}
-  <form method='POST' action="{% url 'add_tattendance' school.pk date %}"> {% csrf_token %}
+  <form method='POST'> {% csrf_token %}
 
   <table id="formset" class="form">
 
-  {% for formset in formsets.iteritems %}
+   {{ formset.management_form|crispy }}
 
-           {{ formset.management_form|crispy }}
-
-  {% for form in formset %}
+  {% for form in formset.forms %}
 
     <!-- {% crispy form %} -->
     {% if forloop.first %}
@@ -52,8 +48,6 @@
     {% endfor %}
     </tr>
   {% endfor %}
-
-  {% endfor %}
   </table>
 
 
@@ -61,44 +55,12 @@
   <input class='btn btn-primary' type='submit' value='Enter'/>
   </form>
 
-{% endcomment %}
- 
-<!-- ############################ -->
-
-<form method='POST' action=""> {% csrf_token %}
-
-{{ formsets.management_form }} 
-<table>
-    <thead>
-        {% for form in formsets.forms %}
-            {% if forloop.first %}
-                {% for field in form %}
-                    <th>{{ field.label_tag }}</th>
-                {% endfor %}
-            {% endif %}
-    </thead>
-    <tbody>
-            <tr>
-                {% for field in form %}
-                    <td>{{ field }}</td>
-                {% endfor %}
-            </tr>
-        {% endfor %}
-    </tbody>
-</table>
-
-<br>
-<br>
-
-<input class='btn btn-primary' type='submit' value='Enter'/>
-</form>
-
 
 </div>
 
 
 
-{% endblock %}
+{% endblock content %}
 
 
 {% block extra_script %}
@@ -141,7 +103,8 @@
 
 
         $('form').bind('submit', function () {
-            $(this).find('select.attendance_student').prop('disabled', false);
+            $(this).find('select.attendance_school').prop('disabled', false);
+            $(this).find('select.attendance_teacher').prop('disabled', false);
       });
     });
 

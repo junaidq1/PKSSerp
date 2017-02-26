@@ -376,6 +376,7 @@ def school_attendance_details(request, school_id, date):
                                 for att in by_date_attendance}
 
         # calculate by date attendance for each class in current school in current month's each date
+        by_date_classes = dict()
         for dt in by_date_attendance.keys():
             class_attendance = school_attendance\
                 .filter(attendance_date=dt)\
@@ -390,14 +391,16 @@ def school_attendance_details(request, school_id, date):
 
             by_date_attendance[dt]['class_attendance'] = by_date_class_attendance
 
+            # we are getting classes for date on which there is maximum attendance to get all classes names
+            if len(by_date_classes) < len(by_date_class_attendance):
+                by_date_classes = by_date_class_attendance
+
         # append by_date_attendance to monthly attendance
         by_date_attendance = OrderedDict(sorted(by_date_attendance.items(), key=lambda t: t[0], reverse=True))
 
-        monthly_attendance['by_date_classes'] = by_date_attendance[dt]['class_attendance'].keys()
+        monthly_attendance['by_date_classes'] = by_date_classes  # by_date_attendance[dt]['class_attendance'].keys()
 
         monthly_attendance['by_date_attendance'] = by_date_attendance
-
-        print(monthly_attendance['by_date_attendance'])
 
         return render(request, 'school_attendance_details.html', {'attendance': monthly_attendance})
 
