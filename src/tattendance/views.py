@@ -19,10 +19,20 @@ import json
 
 
 def tattendance_affiliated_schools(request):
-	#schools = School.objects.filter(teacher=request.user.teacher)
-	schools = School.objects.all()
-	#cls = Class.objects.filter(school_id__in = schools) #JQ: added
-	return render(request, 'tattendance_affiliated schools.html', {'affiliated_schools': schools})
+	#schools = School.objects.all()
+    schools = {}  #by default, the dict of schools for tattendance should be empty
+    #logic: if a superuser or manager is loggin on, they should see all schools. Otherwise, only if a user is a principal, they should see the schools they are affiliated with
+    if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager':
+        schools = School.objects.all()
+    elif request.user.teacher.level == 'principal':
+        schools = School.objects.filter(teacher__id = request.user.teacher.id)
+    #test = request.user.teacher.pkss_school.all().values_list('id', flat=True) 
+    test = 0
+    context = {
+        'affiliated_schools': schools, 
+        'test': test, 
+        } 
+    return render(request, 'tattendance_affiliated schools.html', context)
 
 # this helper function below is a custom func to convert the cursor object return to a dict
 def dictfetchall(cursor):
@@ -41,9 +51,9 @@ def get_dates_range(start, end, delta):
 
 @login_required()
 def tattendance_dates(request, school_id):    
-	five_days_back = date.today() - timedelta(2)
-	next_day = date.today() + timedelta(1)
-	dates_range = list(get_dates_range(five_days_back, next_day, timedelta(days=1)))
+    five_days_back = date.today() - timedelta(2)
+    next_day = date.today() + timedelta(1)
+    dates_range = list(get_dates_range(five_days_back, next_day, timedelta(days=1)))
 	# cursor = connection.cursor()
 
 	# cursor.execute(
@@ -62,26 +72,32 @@ def tattendance_dates(request, school_id):
 	# ORDER BY i DESC;''', [school_id, school_id])
 
 	# l1 = dictfetchall(cursor) #raw sql query list of dates
-	sch = School.objects.get(pk=school_id)
-	context = {
+
+    #logic: only submit the request if superuser or a principal with access to a specific school
+    if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager':
+        sch = School.objects.get(pk=school_id)
+    #elif request.user.teacher.level == 'principal' and school_id in test:
+    elif request.user.teacher.level == 'principal' and request.user.teacher.pkss_school.filter(id=school_id).exists(): 
+        sch = School.objects.get(pk=school_id)
+    else:
+        sch = {}
+        school_id = {}
+
+    #sch = School.objects.get(pk=school_id) #use this if no controls required
+    context = {
 		'dates_range': dates_range, 
 		'school_id': school_id, 
-		'sch': sch, 
-		} 
-	return render(request, 'tattendance_dates.html', context)
+		'sch': sch,
+    } 
+    return render(request, 'tattendance_dates.html', context)
 
 
 @login_required()
 def add_tattendance(request, school_id, date, readonly=False):
         school = School.objects.get(pk=school_id)
-        ## classes_list = Class.objects.filter(teacher=request.user.teacher, school__id=school.pk)
-        #* s = School.objects.filter(teacher__id = request.user.teacher.id) #JQ: added
-        #classes_list = Class.objects.filter(school__id=school.pk).filter(school_id__in = s) #JQ: added
-        #* classes_list = Class.objects.filter(school__id=school.pk).filter(school_id__in = s).filter(shift = shift) #JQ: added
 
-        #formsets = {}  #delete this
-
-        teacher_list = Teacher.objects.all()  # < filter this for just teachers in the school
+        #teacher_list = Teacher.objects.all()  # < filter this for just teachers in the school
+        teacher_list = Teacher.objects.filter(pkss_school = school_id) #filter teachers for just those associated with the school
         teacher_list_initial = [{
                                 'teacher': teacher,
                                 'attendance_date': date,
@@ -101,10 +117,7 @@ def add_tattendance(request, school_id, date, readonly=False):
         date = datetime.datetime.strptime(date, "%Y-%m-%d").date()
 
         if request.method == 'POST':
-            #formsets = {}  # delete this
-            #formsets_valid = True
-
-            teacher_list = Teacher.objects.all()  # < filter this for just teachers in the school
+            teacher_list = Teacher.objects.filter(pkss_school = school_id) #filter teachers for just those associated with the school
             tattendance_formset = modelformset_factory(TeacherAttendance, form=TeacherAttendanceForm,
                                                        extra=len(teacher_list),
                                                        max_num=len(teacher_list))
@@ -128,3 +141,4 @@ def add_tattendance(request, school_id, date, readonly=False):
         }
 
         return render(request, 'teacher_attendance_formset.html', context)
+

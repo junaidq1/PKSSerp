@@ -6,8 +6,8 @@ from .models import TeacherAttendance
 
 class TeacherAttendanceModelAdmin(admin.ModelAdmin):
 
-	list_display = ['pk', 'attendance_date','teacher', 'datestamp', 'status', 'notes', 'att_taker']
-	list_display_links = ['pk','attendance_date','teacher', 'datestamp', 'status', 'notes', 'att_taker']
+	list_display = ['pk', 'attendance_date','teacher', 'school', 'datestamp', 'status', 'notes', 'att_taker']
+	list_display_links = ['pk','attendance_date','teacher', 'school','datestamp', 'status', 'notes', 'att_taker']
 	search_fields = ['attendance_date', 'datestamp', 'status']
 	list_filter = ['attendance_date', 'datestamp', 'status', 'teacher']
 	

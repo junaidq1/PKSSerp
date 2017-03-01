@@ -73,7 +73,7 @@
 	<div class='col-xs-12 col-xs-offset-1 col-md-3 col-md-offset-1'>
 		
 		
-		{% if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' %}
+		{% if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'principal' %}
 
 		<h3> Teacher </h3>
 		<hr/>

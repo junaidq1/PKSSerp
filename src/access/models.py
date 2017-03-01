@@ -13,6 +13,7 @@ class UserAccess(models.Model):
 	ACCESS_CHOICES = (
 		('super', 'super'),
 		('manager', 'manager'),
+		('principal', 'principal'),
 		('staff', 'staff'),
 		('coordinator', 'coordinator'),
 		('accountant', 'accountant'),
