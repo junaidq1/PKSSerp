@@ -1,0 +1,80 @@
+{% extends "base.html" %} 
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+
+
+
+{% block title %}
+	List of teachers
+{% endblock %}
+
+
+ 
+{% block content %}
+
+<div class='container'>
+<br>
+ 	<div class='row'>
+
+	<div class='col-sm-10 '>
+	<br>
+	<h4> List of PKSS teachers and Affiliated Schools (sorted on first name)</h4>
+	<br>
+	Total Teachers: <z style="color:#85BC22">{{num_teachers}}</z><br>
+	Total Active Teachers: <z style="color:#85BC22"> {{num_active_teachers}} </z><br><br>
+
+	<h5> Click on a teacher's name to view their profile</h5><br>
+	<TABLE class="table">
+			      <THEAD>        
+			        <TR>
+			          <TH style="text-align:center">#</TH> 
+			          <TH style="text-align:center">First Name</TH> 
+			          <TH style="text-align:center">Last Name</TH>
+			          <TH style="text-align:center">Level</TH> 
+			          <TH style="text-align:center">Gender</TH>
+			          <TH style="text-align:center">Date joined</TH>
+			          <TH style="text-align:center">Active</TH>
+			          <TH style="text-align:center">Affliated Schools</TH>
+			        </TR>
+			      </THEAD> 
+			      <TBODY>
+			        {% for obj in teach %}
+			        <TR> 
+			          <TD class="vert-hor-align">{{forloop.counter}} </TD>
+			          
+			          <TD class="vert-hor-align"><a href='{% url "teacher_profile" pk=obj.pk %}'>{{obj.first_name}} </a></TD>
+			          <TD class="vert-hor-align"><a href='{% url "teacher_profile" pk=obj.pk %}'>{{obj.last_name}} </a> </TD>
+			          <TD class="vert-hor-align">{{obj.level}} </TD> 
+			          <TD class="vert-hor-align">{{obj.gender}} </TD>
+			          <TD class="vert-hor-align">{{obj.date_joined}} </TD>
+			          <TD class="vert-hor-align">
+			 			{% if obj.currently_active is True %} <b style="color:#85BC22">Yes</b> {% endif %} 
+			 			{% if obj.currently_active is False %} <b style="color:#800000">No</b> {% endif %}
+			 		  </TD>
+			   
+			          <TD class="vert-align">&nbsp
+			          	
+			          		{% for sc in obj.pkss_school.all %}
+			          			<a href='{% url "school_profile_deets" pk=sc.id %}'> {{sc.school_name}}</a> |
+			          		{% endfor %}
+			          </TD>
+			        	
+			        {% endfor %}
+			        </TR>
+			        
+			      </TBODY>
+			    </TABLE>
+<br>
+<a href='{% url "user_homepage"%}' class="btn btn-primary" role="button">Go Home</a> 
+
+
+
+
+</div>
+
+</div>
+</div>
+<!-- <input type='text' name='q' placeholder='Search posts' value='{{ request.GET.q }}'/> -->
+
+{% endblock %}

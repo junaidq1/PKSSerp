@@ -22,6 +22,8 @@ from students import views as st
 from schools import views as sch
 from donors import views as don
 from tattendance import views as tatt
+from teachers import views as teach
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', att.go_home, name='user_homepage'),
@@ -37,6 +39,13 @@ urlpatterns = [
     url(r'^affiliated_schools_tattendance/$', tatt.tattendance_affiliated_schools, name='taffiliated_schools'),
     url(r'^tattendance_dates/(?P<school_id>\d+)/$', tatt.tattendance_dates, name='tattendance_dates'),
     url(r'^tattendance/(?P<school_id>\d+)/(?P<date>\d{4}-\d{2}-\d{2})/$', tatt.add_tattendance, name='add_tattendance'),
+    url(r'^teacher_att_report/$', tatt.teacher_attendance_summary, name='teacher_att_report'), #teacher_attendance_report
+    #teacher
+    url(r'^teacher_list/$', teach.list_of_teachers, name='teacher_list'),
+    url(r'^teacher_profile/(?P<pk>\d+)/$', teach.teacher_profile_details, name='teacher_profile'),
+    url(r'^edit_teacher_profile/(?P<pk>\d+)/$', teach.edit_teacher_record, name='edit_tch_profile'),
+    url(r'^deactivate_teacher_profile/(?P<pk>\d+)/$', teach.deactivate_teacher, name='deactivate_teacher'),
+    url(r'^add_teacher/$', teach.add_a_teacher, name='add_teacher'),
     #attendance reports
     url(r'^attendance_report/$', att.attendance_report, name='attendance_report'),
     url(r'^attendance_summary/$', att.attendance_summary, name='attendance_summary'),
@@ -47,7 +56,7 @@ urlpatterns = [
 
     url(r'^login/', LoginView.as_view(), name='login'),
     url(r'^logout/$', LogoutView.as_view(), name='logout'),
-    
+    #student details
     url(r'^search_students/$', st.search_students, name='search_student'),
     url(r'^student_profile/(?P<pk>\d+)/$', st.student_profile_details, name='std_profile'),
     url(r'^edit_student_profile/(?P<pk>\d+)/$', st.edit_student_record, name='edit_std_profile'),

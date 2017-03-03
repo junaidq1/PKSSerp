@@ -1,0 +1,36 @@
+{% extends "base.html" %} 
+{% load crispy_forms_tags %}
+
+
+
+{% block title %}
+	Deactivate Teacher
+{% endblock %}
+
+
+ 
+{% block content %}
+
+
+ <div class='container'>
+<br>
+    <div class='row'>
+<div class='col-sm-6'>
+<br>
+
+
+<h4>Deactivate Teacher Profile for:  <z style="color:#85BC22"> {{tch}} </z></h4>
+<br>
+
+
+	<form method='POST' action=''> {% csrf_token %}
+
+	{{form|crispy}}
+	<input class='btn btn-primary' type='submit' value='Update'/>
+	</form>
+</div>
+</div>
+</div>
+
+
+{% endblock %}

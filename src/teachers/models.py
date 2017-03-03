@@ -36,6 +36,10 @@ class Teacher(models.Model):
         starting_qualifications =  models.CharField(max_length=200, null=False, blank=False)
         current_qualifications =  models.CharField(max_length=200, null=False, blank=False)
         starting_years_experience =  models.IntegerField(null=True, blank=True)
+        currently_active = models.BooleanField(default=True)
+        notes = models.TextField(max_length=2500, null=True, blank=True) 
+        updated_last = models.DateField(auto_now=True, auto_now_add=False)
+        updated_last_by = models.CharField(max_length=255, null=True, blank=True)
 
         @property
         def full_name(self):

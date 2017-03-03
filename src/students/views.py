@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from django.shortcuts import render, get_object_or_404, redirect, reverse
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, Http404
@@ -14,6 +13,8 @@ from schools.models import School
 from attendance.forms import AddAttCalDateForm, AddUnexpectedHolidayForm
 from datetime import datetime, timedelta
 from django.contrib import messages
+from dateutil.relativedelta import relativedelta
+
 
 @login_required 
 def search_students(request):
@@ -313,17 +314,17 @@ def view_unexpected_holidays_tot(request):
 		queryset = dictfetchall(cursor)
 		
 		m = datetime.today()
-		m_minus1 = (datetime.now() - timedelta(days=30))
-		m_minus2 = (datetime.now() - timedelta(days=61))
-		m_minus3 = (datetime.now() - timedelta(days=91))
-		m_minus4 = (datetime.now() - timedelta(days=122))
-		m_minus5 = (datetime.now() - timedelta(days=152))
-		m_minus6 = (datetime.now() - timedelta(days=183))
-		m_minus7 = (datetime.now() - timedelta(days=213))
-		m_minus8 = (datetime.now() - timedelta(days=244))
-		m_minus9 = (datetime.now() - timedelta(days=274))
-		m_minus10 = (datetime.now() - timedelta(days=305))
-		m_minus11 = (datetime.now() - timedelta(days=335))
+		m_minus1 = (datetime.now() - relativedelta(months=1))
+		m_minus2 = (datetime.now() - relativedelta(months=2))
+		m_minus3 = (datetime.now() - relativedelta(months=3))
+		m_minus4 = (datetime.now() - relativedelta(months=4))
+		m_minus5 = (datetime.now() - relativedelta(months=5))
+		m_minus6 = (datetime.now() - relativedelta(months=6))
+		m_minus7 = (datetime.now() - relativedelta(months=7))
+		m_minus8 = (datetime.now() - relativedelta(months=8))
+		m_minus9 = (datetime.now() - relativedelta(months=9))
+		m_minus10 = (datetime.now() - relativedelta(months=10))
+		m_minus11 = (datetime.now() - relativedelta(months=11))
 
 
 		context = {

@@ -9,15 +9,18 @@
 
 <!-- need to have POST to indicate its not a default get method and action says what url to send it to -->
 <!-- <form method='POST' action=''> {% csrf_token %} -->
+ <div class='container'>
 <br>
-<div class='col-sm-8 col-sm-offset-1'>
+    <div class='row'>
+<br>
+<div class='col-sm-8'>
 <br>
 	<h3> Select a date to enter teacher attendance for: <z style="color:#85BC22">{{sch}} </z> </h3>
 
 	<br>
 
 	<br>
-	
+    {% comment %}	
     {% for date in dates_range %}
     <p>
     <ul>
@@ -26,20 +29,19 @@
     </p>
     {% endfor %}
     <br>
+    {% endcomment %}
 
 
-    {% comment %}
     {% for obj in l1 %}
     <p>
     <ul>
-        <a href="{% url 'add_attendance2' obj.school_id obj.i shift %}">{{ obj.i }} | 
+        <a href="{% url 'add_tattendance' obj.school_id obj.i %}">{{ obj.i }} | 
         Attendance entered: </a>
         {% if obj.num_att > 1 %}  <b style="color:#00b200"> Yes</b>  
 	 	{% else %}  <b style="color:#990000"> No </b>{% endif %}<br/>
     </ul>
     </p>
     {% endfor %}
-    {% endcomment %} 
 
  <br>
  <br>
@@ -48,6 +50,7 @@
             Go Back Home</a> 
 
 </div>
-
+</div>
+</div>
 
 {% endblock %}

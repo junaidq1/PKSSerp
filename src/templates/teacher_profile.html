@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block title %}
+	Teacher Profile
+{% endblock %}
+
+
+{% block content %} 
+
+ <div class='container'>
+<br>
+ 	<div class='row'>
+		<div class='col-sm-6'> 
+			
+			<br>
+	 		<h3> Teacher name: <b style="color:#85BC22"> {{teach.first_name}} {{teach.last_name}} </b></h3>
+	 		
+	 		<br>
+	 		<p><b>Active: </b><z style="color:#85BC22"> 
+	 			{% if teach.currently_active is True %} <b>Yes</b> {% endif %} 
+	 			{% if teach.currently_active is False %}<b style="color:#800000"> No </b><br>
+	 			{% endif %} 
+	 		</z></p>
+	 		<b>Level:</b><b style="color:#85BC22"> {{teach.level}}</b><br>
+	 		<b>Notes:</b><z style="color:#939393"> {{teach.notes}}</z><br>
+	 		<br>
+			<b>PKSS School Affiliations:</b><z style="color:#85BC22"> 
+			{% for sc in teach.pkss_school.all %} {{sc.school_name}} | {% endfor %}</z><br>
+			
+			<b>Employed since:</b><z style="color:#85BC22"> {{teach.date_joined|date:"M d Y"}} | {{teach.date_joined|timesince}} ago </z>		
+	 		
+	 		<br>
+	 		<br>
+	 		<hr>
+	 		
+	 		<h4>Personal Information</h4>
+	 		<br>
+	 		<b>Gender:</b><z style="color:#939393"> {{teach.gender}}</z><br>
+	 		<b>Phone #:</b><z style="color:#939393"> {{teach.phone_number}}</z><br>
+	 		<b>Address:</b><z style="color:#939393"> {{teach.address}}</z><br>
+	 		<br>
+	 		<b>Starting Qualifications:</b><z style="color:#939393"> {{teach.starting_qualifications}}</z><br>
+	 		<b>Current Qualifications:</b><z style="color:#939393"> {{teach.current_qualifications}}</z><br>
+	 		<b>Starting Salary:</b><z style="color:#939393"> {{teach.starting_salary}}</z><br>
+	 		<b>Current Salary:</b><z style="color:#939393"> {{teach.current_salary}}</z><br>
+	 		<b>Starting Years Experience:</b><z style="color:#939393"> {{teach.starting_years_experience}}</z><br>
+	 		<br>
+	 		<b>Profile last edited:</b><z style="color:#939393"> {{teach.updated_last}}</z><br>
+	 		<b>Profile last edited by:</b><z style="color:#939393"> {{teach.updated_last_by}}</z><br>
+	 	
+	 		
+	 		<br>
+	 		<br>
+	 		<br>
+	 		<a href='{% url "user_homepage"%}' class="btn btn-default" role="button">
+		 	Go Home</a> &nbsp
+		 	<a href='{% url "teacher_list"%}' class="btn btn-primary" role="button">
+		 	Back to teacher list</a><br>
+ 		</div>
+ 		<div class='col-sm-6'> 
+ 			<br>
+ 			<br><br>
+
+ 			<a href='{% url "edit_tch_profile" teach.pk %}' class="btn btn-primary" role="button">
+		 	Edit Teacher data</a>
+		 	<a href='{% url "deactivate_teacher" teach.pk %}' class="btn btn-primary" role="button">
+		 	Deactivate Teacher</a>
+	 		<br><br><br>
+	 		
+	 		<hr>
+
+ 			<br>
+ 			<h4>Attendance History (Last 12 months):</h4>
+ 			<br>
+ 			<table class="table">
+				<!-- <div class='col-sm-10 col-sm-offset-2'> -->
+			    <!-- <TABLE BORDER="1"> -->
+			      <THEAD>        
+			        <TR>
+			          <TH style="text-align:center" width="30">Month</TH>
+			          <TH style="text-align:left" width="20"> Days Attended</TH>
+			          <TH style="text-align:center" width="20"> % Attendance</TH>
+			        </TR>
+			      </THEAD>
+			      <TBODY>
+			        {% for obj in last_year_touchpoints %}
+			        <TR>
+			          <TD class="vert-hor-align">  </TD>
+			          <TD class="vert-hor-align">  </TD>  
+			          <TD class="vert-hor-align">  </TD>  
+			        {% endfor %}
+			        </TR>
+			        
+			      </TBODY>
+			    </TABLE>
+				<!-- </div> -->
+		
+ 		</div>
+
+ 		<hr/>
+	</div>
+
+</div>
+
+{% endblock %}
