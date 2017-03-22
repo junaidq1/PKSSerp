@@ -7,6 +7,7 @@ from django.db.models.signals import post_save
 from django.db.models import Count, Sum, Avg, Max
 from django.core.urlresolvers import reverse
 
+
 # Create your models here.
 
 

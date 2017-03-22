@@ -19,22 +19,27 @@
 <!-- need to have POST to indicate its not a default get method and action says what url to send it to -->
 <!-- <form method='POST' action=''> {% csrf_token %} -->
 
-
-<div class='col-sm-8 col-sm-offset-1'>
-
-<h3> Edit Student Profile </h3>
-
+<div class='container'>
 <br>
+ <div class='row'>
 
-<h3>Details for:  <z style="color:#85BC22"> {{std}} </z></h3>
-<br>
+	<div class='col-sm-8'>
+
+	<h3> Edit Student Profile </h3>
+
+	<br>
+
+	<h3>Details for:  <z style="color:#85BC22"> {{std}} </z></h3>
+	<br>
 
 
-	<form method='POST' action=''> {% csrf_token %}
+		<form method='POST' action=''> {% csrf_token %}
 
-	{{form|crispy}}
-	<input class='btn btn-primary' type='submit' value='Update'/>
-	</form>
+		{{form|crispy}}
+		<input class='btn btn-primary' type='submit' value='Update'/>
+		</form>
+</div>
+</div>
 </div>
 <!-- <input type='text' name='q' placeholder='Search posts' value='{{ request.GET.q }}'/> -->
 

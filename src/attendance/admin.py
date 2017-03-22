@@ -6,10 +6,10 @@ from .models import Attendance, AttendanceCalendar, NonScheduledHolidays
 
 class AttendanceModelAdmin(admin.ModelAdmin):
 
-	list_display = ['pk', 'get_school', 'get_class', 'attendance_date','student', 'datestamp', 'status', 'notes']
-	list_display_links = ['pk', 'student','attendance_date', 'datestamp', 'status', 'notes']
+	list_display = ['pk', 'get_school', 'get_class', 'attendance_date','student', 'datestamp', 'status', 'notes', 'att_taker']
+	list_display_links = ['pk', 'student','attendance_date', 'datestamp', 'status', 'notes','att_taker']
 	search_fields = ['attendance_date', 'datestamp', 'status']
-	list_filter = ['attendance_date', 'datestamp', 'status']
+	list_filter = ['attendance_date', 'datestamp', 'status', 'att_taker']
 	
 	class Meta:
 		model = Attendance

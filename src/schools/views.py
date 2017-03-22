@@ -38,7 +38,7 @@ def dictfetchall(cursor):
 #school profile deepdive
 @login_required
 def school_profile_deepdive(request, pk=None):
-	if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'staff' or request.user.useraccess.access_level == 'coordinator':
+	if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'principal' or request.user.useraccess.access_level == 'teacher' or request.user.useraccess.access_level == 'coordinator':
 		sch = get_object_or_404(School, pk=pk)
 		teach = Teacher.objects.filter(pkss_school = pk).filter( ~Q(level ='management')) #the list of teachers associated with school excluding management
 		num_teachers = len(teach) #the number of teachers associated with school	
@@ -134,7 +134,7 @@ def school_profile_deepdive(request, pk=None):
 
 @login_required
 def student_list_school(request, pk=None):
-	if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'staff' or request.user.useraccess.access_level == 'coordinator':
+	if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'principal' or request.user.useraccess.access_level == 'teacher' or request.user.useraccess.access_level == 'coordinator':
 		sch = get_object_or_404(School, pk=pk)
 		std = Student.objects.filter(pkss_school_id = pk).filter(currently_enrolled =True) #students at school
 		

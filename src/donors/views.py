@@ -14,6 +14,7 @@ from attendance.forms import AddAttCalDateForm, AddUnexpectedHolidayForm
 from datetime import datetime, timedelta
 from .models import Donor, Donor_log
 from donors.forms import DonorForm, AddDonationForm
+import json #test this
 
 #enter new donation
 @login_required 
@@ -193,3 +194,53 @@ def donation_crosstab(request):
 		}
 
 		return render(request, "donations_crosstab.html", context) 
+
+
+
+####MESSING AROUND WITH CHARTS BELOW THIS
+
+
+
+def get_donor_data():
+	data = {'currency': [], 
+	         'amount_pkr': []}
+
+	donations = Donor_log.objects.filter(contact_name__first_name="Navaid")
+
+	for each in donations:
+		data['currency'].append(each.currency)
+		data['amount_pkr'].append(each.amount_pkr)
+	return data   
+
+def chart(request):
+    data = get_donor_data()
+    xname = data['currency']
+    xvals = data['amount_pkr']
+    
+    context = {
+    "xname": xname,
+    "xvals": xvals,
+    } 
+    return render(request, 'test.html', context)
+
+# def plot(request, chartID = 'chart_ID', chart_type = 'line', chart_height = 500):
+# 	data = get_donor_data()
+# 	#data = ChartData()
+# 	#data.get_donor_data()
+
+# 	chart = {"renderTo": chartID, "type": chart_type, "height": chart_height,}  
+# 	title = {"text": 'Check Valve Data'}
+# 	xAxis = {"title": {"text": 'donations'}, "categories": data['currency']}
+# 	yAxis = {"title": {"text": 'Data'}}
+# 	series = [
+# 		{"name": 'donation_s', "data": data['amount_pkr']}, 
+# 		]
+
+# 	return render(request, 'chartplot.html', {'chartID': chartID, 'chart': chart,
+# 											'series': series, 'title': title, 
+# 											'xAxis': xAxis, 'yAxis': yAxis})
+
+
+
+
+

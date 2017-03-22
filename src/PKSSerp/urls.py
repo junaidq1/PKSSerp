@@ -30,6 +30,10 @@ urlpatterns = [
     # url(r'^2$', att.go_home_2, name='user_homepage2'),
     #student attendance
     url(r'^affiliated_schools/$', att.affiliated_schools, name='affiliated_schools'),
+##
+    #url(r'^chart/$', don.chart, name='chart'), ####delete later
+    #url(r'^chart2/$', don.plot, name='chart2'), ####delete later
+
     #url(r'^attendance_dates/(?P<school_id>\d+)/$', att.attendance_dates, name='attendance_dates'), old
     url(r'^attendance_dates/(?P<school_id>\d+)/(?P<shift>\w+)$', att.attendance_dates, name='attendance_dates'),
     #url(r'^attendance2/(?P<school_id>\d+)/(?P<date>\d{4}-\d{2}-\d{2})/$', att.add_attendance2, name='add_attendance2'), old
@@ -40,6 +44,7 @@ urlpatterns = [
     url(r'^tattendance_dates/(?P<school_id>\d+)/$', tatt.tattendance_dates, name='tattendance_dates'),
     url(r'^tattendance/(?P<school_id>\d+)/(?P<date>\d{4}-\d{2}-\d{2})/$', tatt.add_tattendance, name='add_tattendance'),
     url(r'^teacher_att_report/$', tatt.teacher_attendance_summary, name='teacher_att_report'), #teacher_attendance_report
+    url(r'^teacher_report_daily_details/(?P<date_month>\d+)/(?P<date_year>\d+)/(?P<school_id>\d+)/$', tatt.teacher_report_daily_details, name='teacher_report_details'), #teacher_attendance_report
     #teacher
     url(r'^teacher_list/$', teach.list_of_teachers, name='teacher_list'),
     url(r'^teacher_profile/(?P<pk>\d+)/$', teach.teacher_profile_details, name='teacher_profile'),

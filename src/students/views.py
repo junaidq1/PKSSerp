@@ -18,7 +18,7 @@ from dateutil.relativedelta import relativedelta
 
 @login_required 
 def search_students(request):
-	if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'staff' or request.user.useraccess.access_level == 'coordinator':
+	if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'principal' or request.user.useraccess.access_level == 'teacher' or request.user.useraccess.access_level == 'coordinator':
 		queryset_list = Student.objects.all()
 		query = request.GET.get("q1")
 		if query:
@@ -37,7 +37,7 @@ def search_students(request):
 #view profile details for a student 
 @login_required 
 def student_profile_details(request, pk=None):
-	if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'staff' or request.user.useraccess.access_level == 'coordinator':
+	if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'principal' or request.user.useraccess.access_level == 'teacher' or request.user.useraccess.access_level == 'coordinator':
 		std = get_object_or_404(Student, pk=pk) #student object
 		s_hist = StudentHistory.objects.filter(student_name_id = std.pk)
 		#sch = School.objects.get(id = std.pkss_school_id) #school of object
@@ -51,7 +51,7 @@ def student_profile_details(request, pk=None):
 #edit an existing student record
 @login_required
 def edit_student_record(request, pk=None):
-	if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'staff' or request.user.useraccess.access_level == 'coordinator':
+	if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'principal' or request.user.useraccess.access_level == 'teacher' or request.user.useraccess.access_level == 'coordinator':
 		std = get_object_or_404(Student, pk=pk)
 		#form = StudentForm(request.POST or None, request.FILES or None, instance=std)
 		form = StudentForm(request.POST or None, instance=std)
@@ -75,7 +75,7 @@ def edit_student_record(request, pk=None):
 #unenroll student
 @login_required
 def unenroll_student(request, pk=None):
-	if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'staff' or request.user.useraccess.access_level == 'coordinator':
+	if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'principal' or request.user.useraccess.access_level == 'teacher' or request.user.useraccess.access_level == 'coordinator':
 		std = get_object_or_404(Student, pk=pk)
 		form = StudentUnenrollForm(request.POST or None, request.FILES or None, instance=std)
 		if form.is_valid():
@@ -98,7 +98,7 @@ def unenroll_student(request, pk=None):
 #Add a student
 @login_required
 def add_a_student(request):
-	if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'staff' or request.user.useraccess.access_level == 'coordinator':
+	if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'principal' or request.user.useraccess.access_level == 'teacher' or request.user.useraccess.access_level == 'coordinator':
 		form = StudentForm(request.POST or None, request.FILES or None)
 		if form.is_valid():
 			try:
@@ -170,7 +170,7 @@ def view_attendance_calendar(request):
 #Add a cal date
 @login_required
 def add_a_cal_date(request):
-	if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'staff' or request.user.useraccess.access_level == 'coordinator':
+	if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'principal' or request.user.useraccess.access_level == 'teacher' or request.user.useraccess.access_level == 'coordinator':
 		
 		"""
 		view all of the working days in a year by school + add dates
@@ -224,7 +224,7 @@ def add_a_cal_date(request):
 #edit an existing calendar record
 @login_required
 def edit_school_caldate(request, pk=None, month=None):
-	if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'staff' or request.user.useraccess.access_level == 'coordinator':
+	if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'principal' or request.user.useraccess.access_level == 'teacher' or request.user.useraccess.access_level == 'coordinator':
 		try:
 			inst = AttendanceCalendar.objects.filter(school_id=pk).filter(first_day_of_month__month = month)[0]
 		except:
@@ -250,7 +250,7 @@ def edit_school_caldate(request, pk=None, month=None):
 #Add an unexpected holiday 
 @login_required
 def add_unexpected_holiday(request):
-	if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'staff' or request.user.useraccess.access_level == 'coordinator':
+	if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'principal' or request.user.useraccess.access_level == 'teacher' or request.user.useraccess.access_level == 'coordinator':
 		form = AddUnexpectedHolidayForm(request.POST or None, request.FILES or None)
 		if form.is_valid():
 			try:
@@ -273,7 +273,7 @@ def view_unexpected_holidays_tot(request):
 	"""
 		view all of the unexpected holidays by school over last 12 months
 	"""	
-	if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'staff' or request.user.useraccess.access_level == 'coordinator':
+	if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'principal' or request.user.useraccess.access_level == 'teacher' or request.user.useraccess.access_level == 'coordinator':
 		cursor = connection.cursor()
 
 		cursor.execute(
@@ -348,7 +348,7 @@ def view_unexpected_holidays_tot(request):
 #school deails for unexpected holiday
 @login_required
 def unexpected_holidays_deepdive(request, pk=None):
-	if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'staff' or request.user.useraccess.access_level == 'coordinator':
+	if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'principal' or request.user.useraccess.access_level == 'teacher' or request.user.useraccess.access_level == 'coordinator':
 		queryset = NonScheduledHolidays.objects.filter(school_id = pk).order_by('-holiday_date')
 		sch = School.objects.get(pk=pk)
 		context = {
@@ -362,7 +362,7 @@ def unexpected_holidays_deepdive(request, pk=None):
 #view students who enrolled or left in a given period
 @login_required 
 def view_student_enrollments_and_leaving(request):
-	if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'staff' or request.user.useraccess.access_level == 'coordinator': 
+	if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'principal' or request.user.useraccess.access_level == 'teacher' or request.user.useraccess.access_level == 'coordinator': 
 		#donations_list = Donor_log.objects.filter(donation_date__lt ='1990-01-01') 
 		context = {}
 		pk_sch = request.GET.get("q0")

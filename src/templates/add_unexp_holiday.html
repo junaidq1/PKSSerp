@@ -13,8 +13,10 @@
  
 {% block content %}
 
+<div class='container'>
+<br>
 <div row>
-<div class='col-sm-8 col-sm-offset-1'>
+<div class='col-sm-8'>
 <br>
 <h3> Add an unexpected holiday </h3>
 
@@ -26,6 +28,7 @@
 	{{form|crispy}}
 	<input class='btn btn-primary' type='submit' value='Add unexpected holiday'/>
 	</form>
+</div>
 </div>
 </div>
 <!-- <input type='text' name='q' placeholder='Search posts' value='{{ request.GET.q }}'/> -->

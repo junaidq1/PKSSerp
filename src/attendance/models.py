@@ -15,6 +15,7 @@ class Attendance(models.Model):
 
 	status =  models.CharField(max_length=7, choices=STATUS_CHOICES, default='absent')
 	notes = models.CharField(max_length=100, null=True, blank=True)
+	att_taker = models.CharField(max_length=120, null=True, blank=True)
 
 	class Meta: 
 		unique_together = ("student", "attendance_date")

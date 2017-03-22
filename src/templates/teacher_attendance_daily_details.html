@@ -1,0 +1,152 @@
+{% extends "base.html" %} 
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+
+
+
+{% block title %}
+	List of teachers
+{% endblock %}
+
+
+ 
+{% block content %}
+
+<div class='container'>
+<br>
+ 	<div class='row'>
+
+	<div class='col-sm-12'>
+<br>
+<h4>Teacher attendance details for <z style="color:#85BC22">{{attendance_details.0.school_name}}</z> for <z style="color:#85BC22">{{date_month}}-{{date_year}}</z> </h4>
+<br> <emp style="color:#a8a8a8"> Note: 1 = Present, 0 = Absent or attendance not taken</emp><br><br>
+
+<table class="table" id="att_table">
+      <THEAD>        
+        <TR>
+          <TH style="text-align:center" >School</TH>
+          <TH style="text-align:center" >First_Name</TH>
+          <TH style="text-align:center" >Last_Name</TH>
+          <TH style="text-align:center" >1</TH>
+          <TH style="text-align:center" >2</TH>
+          <TH style="text-align:center" >3</TH>
+          <TH style="text-align:center" >4</TH>
+          <TH style="text-align:center" >5</TH>
+          <TH style="text-align:center" >6</TH>
+          <TH style="text-align:center" >7</TH>
+          <TH style="text-align:center" >8</TH>
+          <TH style="text-align:center" >9</TH>
+          <TH style="text-align:center" >10</TH>
+          <TH style="text-align:center" >11</TH>
+          <TH style="text-align:center" >12</TH>
+          <TH style="text-align:center" >13</TH>
+          <TH style="text-align:center" >14</TH>
+          <TH style="text-align:center" >15</TH>
+          <TH style="text-align:center" >16</TH>
+          <TH style="text-align:center" >17</TH>
+          <TH style="text-align:center" >18</TH>
+          <TH style="text-align:center" >19</TH>
+          <TH style="text-align:center" >20</TH>
+          <TH style="text-align:center" >21</TH>
+          <TH style="text-align:center" >22</TH>
+          <TH style="text-align:center" >23</TH>
+          <TH style="text-align:center" >24</TH>
+          <TH style="text-align:center" >25</TH>
+          <TH style="text-align:center" >26</TH>
+          <TH style="text-align:center" >27</TH>
+          <TH style="text-align:center" >28</TH>
+          <TH style="text-align:center" >29</TH>
+          <TH style="text-align:center" >30</TH>
+          <TH style="text-align:center" >31</TH>
+        </TR>
+      </THEAD>  
+      <TBODY>
+        {% for obj in attendance_details %}
+        <TR> 
+          <TD class="vert-align" width="120">{{obj.school_name}}</TD> 
+          <TD class="vert-align" width="120"><a href='{% url "teacher_profile" pk=obj.teacher_id %}'>			{{obj.first_name}}</a></TD> 
+          <TD class="vert-align" width="120"><a href='{% url "teacher_profile" pk=obj.teacher_id %}'>			{{obj.last_name}}</a></TD>  
+          <TD class="vert-hor-align">
+          	{% if obj.d1 < 1 %} <b style="color:#ff0000">0</b> {% else %}<b style="color:#85BC22">{{obj.d1}} </b>  {% endif %} </TD> 
+          <TD class="vert-hor-align">
+          	{% if obj.d2 < 1 %} <b style="color:#ff0000">0</b> {% else %}<b style="color:#85BC22">{{obj.d2}} </b>  {% endif %} </TD> 
+          <TD class="vert-hor-align">
+          	{% if obj.d3 < 1 %} <b style="color:#ff0000">0</b> {% else %}<b style="color:#85BC22">{{obj.d3}} </b>  {% endif %} </TD> 
+          <TD class="vert-hor-align">
+          	{% if obj.d4 < 1 %} <b style="color:#ff0000">0</b> {% else %}<b style="color:#85BC22">{{obj.d4}} </b>  {% endif %} </TD> 
+          <TD class="vert-hor-align">
+          	{% if obj.d5 < 1 %} <b style="color:#ff0000">0</b> {% else %}<b style="color:#85BC22">{{obj.d5}} </b>  {% endif %} </TD> 
+          <TD class="vert-hor-align">
+          	{% if obj.d6 < 1 %} <b style="color:#ff0000">0</b> {% else %}<b style="color:#85BC22">{{obj.d6}} </b>  {% endif %} </TD> 
+          <TD class="vert-hor-align">
+          	{% if obj.d7 < 1 %} <b style="color:#ff0000">0</b> {% else %}<b style="color:#85BC22">{{obj.d7}} </b>  {% endif %} </TD> 
+          <TD class="vert-hor-align">
+          	{% if obj.d8 < 1 %} <b style="color:#ff0000">0</b> {% else %}<b style="color:#85BC22">{{obj.d8}} </b>  {% endif %} </TD> 
+          <TD class="vert-hor-align">
+          	{% if obj.d9 < 1 %} <b style="color:#ff0000">0</b> {% else %}<b style="color:#85BC22">{{obj.d9}} </b>  {% endif %} </TD> 
+          <TD class="vert-hor-align">
+          	{% if obj.d10 < 1 %} <b style="color:#ff0000">0</b> {% else %}<b style="color:#85BC22">{{obj.d10}} </b>  {% endif %} </TD> 
+          <TD class="vert-hor-align">
+          	{% if obj.d11 < 1 %} <b style="color:#ff0000">0</b> {% else %}<b style="color:#85BC22">{{obj.d11}} </b>  {% endif %} </TD> 
+          <TD class="vert-hor-align">
+          	{% if obj.d12 < 1 %} <b style="color:#ff0000">0</b> {% else %}<b style="color:#85BC22">{{obj.d12}} </b>  {% endif %} </TD> 
+          <TD class="vert-hor-align">
+          	{% if obj.d13 < 1 %} <b style="color:#ff0000">0</b> {% else %}<b style="color:#85BC22">{{obj.d13}} </b>  {% endif %} </TD> 
+          <TD class="vert-hor-align">
+          	{% if obj.d14 < 1 %} <b style="color:#ff0000">0</b> {% else %}<b style="color:#85BC22">{{obj.d14}} </b>  {% endif %} </TD> 
+          <TD class="vert-hor-align">
+          	{% if obj.d51 < 1 %} <b style="color:#ff0000">0</b> {% else %}<b style="color:#85BC22">{{obj.d15}} </b>  {% endif %} </TD> 
+          <TD class="vert-hor-align">
+          	{% if obj.d16 < 1 %} <b style="color:#ff0000">0</b> {% else %}<b style="color:#85BC22">{{obj.d16}} </b>  {% endif %} </TD> 
+          <TD class="vert-hor-align">
+          	{% if obj.d17 < 1 %} <b style="color:#ff0000">0</b> {% else %}<b style="color:#85BC22">{{obj.d17}} </b>  {% endif %} </TD> 
+          <TD class="vert-hor-align">
+          	{% if obj.d18 < 1 %} <b style="color:#ff0000">0</b> {% else %}<b style="color:#85BC22">{{obj.d18}} </b>  {% endif %} </TD> 
+          <TD class="vert-hor-align">
+          	{% if obj.d19 < 1 %} <b style="color:#ff0000">0</b> {% else %}<b style="color:#85BC22">{{obj.d19}} </b>  {% endif %} </TD> 
+          <TD class="vert-hor-align">
+          	{% if obj.d20 < 1 %} <b style="color:#ff0000">0</b> {% else %}<b style="color:#85BC22">{{obj.d20}} </b>  {% endif %} </TD> 
+          <TD class="vert-hor-align">
+          	{% if obj.d21 < 1 %} <b style="color:#ff0000">0</b> {% else %}<b style="color:#85BC22">{{obj.d21}} </b>  {% endif %} </TD> 
+          <TD class="vert-hor-align">
+          	{% if obj.d22 < 1 %} <b style="color:#ff0000">0</b> {% else %}<b style="color:#85BC22">{{obj.d22}} </b>  {% endif %} </TD> 
+          <TD class="vert-hor-align">
+          	{% if obj.d23 < 1 %} <b style="color:#ff0000">0</b> {% else %}<b style="color:#85BC22">{{obj.d23}} </b>  {% endif %} </TD> 
+          <TD class="vert-hor-align">
+          	{% if obj.d24 < 1 %} <b style="color:#ff0000">0</b> {% else %}<b style="color:#85BC22">{{obj.d24}} </b>  {% endif %} </TD> 
+          <TD class="vert-hor-align">
+          	{% if obj.d25 < 1 %} <b style="color:#ff0000">0</b> {% else %}<b style="color:#85BC22">{{obj.d25}} </b>  {% endif %} </TD> 
+          <TD class="vert-hor-align">
+          	{% if obj.d26 < 1 %} <b style="color:#ff0000">0</b> {% else %}<b style="color:#85BC22">{{obj.d26}} </b>  {% endif %} </TD> 
+          <TD class="vert-hor-align">
+          	{% if obj.d27 < 1 %} <b style="color:#ff0000">0</b> {% else %}<b style="color:#85BC22">{{obj.d27}} </b>  {% endif %} </TD> 
+          <TD class="vert-hor-align">
+          	{% if obj.d28 < 1 %} <b style="color:#ff0000">0</b> {% else %}<b style="color:#85BC22">{{obj.d28}} </b>  {% endif %} </TD> 
+          <TD class="vert-hor-align">
+          	{% if obj.d29 < 1 %} <b style="color:#ff0000">0</b> {% else %}<b style="color:#85BC22">{{obj.d29}} </b>  {% endif %} </TD> 
+          <TD class="vert-hor-align">
+          	{% if obj.d30 < 1 %} <b style="color:#ff0000">0</b> {% else %}<b style="color:#85BC22">{{obj.d30}} </b>  {% endif %} </TD> 
+          <TD class="vert-hor-align">
+          	{% if obj.d31 < 1 %} <b style="color:#ff0000">0</b> {% else %}<b style="color:#85BC22">{{obj.d31}} </b>  {% endif %} </TD> 
+        {% endfor %}
+        </TR>
+        
+        
+      </TBODY>
+    </TABLE>
+	<hr/>
+	<br>
+	<a href='{% url "user_homepage" %}' class="btn btn-primary" role="button">
+ 	Go back home</a> &nbsp
+ 	<a href='{% url "teacher_att_report" %}' class="btn btn-primary" role="button">
+ 	Teacher Att Report</a> 
+
+
+</div>
+
+</div>
+</div>
+<!-- <input type='text' name='q' placeholder='Search posts' value='{{ request.GET.q }}'/> -->
+
+{% endblock %}

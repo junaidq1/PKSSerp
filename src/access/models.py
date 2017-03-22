@@ -14,7 +14,7 @@ class UserAccess(models.Model):
 		('super', 'super'),
 		('manager', 'manager'),
 		('principal', 'principal'),
-		('staff', 'staff'),
+		('teacher', 'teacher'),
 		('coordinator', 'coordinator'),
 		('accountant', 'accountant'),
 	)
@@ -34,7 +34,7 @@ class UserAccess(models.Model):
 def useraccess_post_save_receiver(sender, **kwargs):
 	user = kwargs["instance"]
 	if kwargs["created"]:
-		user_access = UserAccess(user=user, access_level='staff')
+		user_access = UserAccess(user=user, access_level='teacher')
 		user_access.save()
 
 #post save signal to create a UserAccess instance every time a new user is built

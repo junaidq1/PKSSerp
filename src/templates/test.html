@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}
+	Practitioner detail
+{% endblock %}
+
+
+{% block content %} 
+
+ <div class='container'>
+
+ 		<div class='row'>
+		<div class='col-sm-8'> 
+		<br>
+ 		<h3> User Feedback for: <em style="color:#85BC22"> Johnny </em></h3>
+ 		<br>
+		
+		<br>
+		<a href='{% url "user_homepage" %}' class="btn btn-default" role="button">Go back to home page</a>
+		<br>
+		<br>
+		<br>
+
+	    	<div id="line_container" style="min-width: 350px; max-width: 1200px; height: 600px"></div>
+
+		</div>
+
+		</div>
+		<hr/>
+
+
+</div>
+
+
+
+{% endblock %}

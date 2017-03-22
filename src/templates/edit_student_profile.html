@@ -19,8 +19,10 @@
 <!-- need to have POST to indicate its not a default get method and action says what url to send it to -->
 <!-- <form method='POST' action=''> {% csrf_token %} -->
 
-
-<div class='col-sm-8 col-sm-offset-1'>
+<div class='container'>
+<br>
+ 	<div class='row'>
+<div class='col-sm-7'>
 
 <h3> Edit Student Profile </h3>
 
@@ -35,6 +37,8 @@
 	{{form|crispy}}
 	<input class='btn btn-primary' type='submit' value='Update'/>
 	</form>
+</div>
+</div>
 </div>
 <!-- <input type='text' name='q' placeholder='Search posts' value='{{ request.GET.q }}'/> -->
 

@@ -26,45 +26,52 @@
 	<br><br><br>
 
 	<table class="table">
-			      <THEAD>        
-			        <TR>
-			          <TH style="text-align:center" >School</TH> 
-			          <TH style="text-align:center">{{m|date:"M Y"}}</TH> 
-			          <TH style="text-align:center">{{m_minus1|date:"M Y"}}</TH> 
-			          <TH style="text-align:center">{{m_minus2|date:"M Y"}}</TH>
-			          <TH style="text-align:center">{{m_minus3|date:"M Y"}}</TH>
-			          <TH style="text-align:center">{{m_minus4|date:"M Y"}}</TH>
-			          <TH style="text-align:center">{{m_minus5|date:"M Y"}}</TH>
-			        </TR>
-			      </THEAD>  
-			      <TBODY>
-			        {% for obj in tattend %}
-			        <TR>
-			          <TD class="vert-hor-align" width="120">{{obj.school_name}}</TD> 
-			          <TD class="vert-hor-align">{{obj.attendance_currentm|floatformat:"0"}}%</TD>
-			          <TD class="vert-hor-align">{{obj.attendance_minus1m|floatformat:"0"}}%</TD>
-			          <TD class="vert-hor-align">{{obj.attendance_minus2m|floatformat:"0"}}%</TD>
-			          <TD class="vert-hor-align">{{obj.attendance_minus3m|floatformat:"0"}}%</TD>
-			          <TD class="vert-hor-align">{{obj.attendance_minus4m|floatformat:"0"}}%</TD>
-			          <TD class="vert-hor-align">{{obj.attendance_minus5m|floatformat:"0"}}%</TD>
-			        {% endfor %}
-			        </TR>
-			        <TR>
-		                <TD class="vert-hor-align" width="120">Overall:</TD> 
+      <THEAD>        
+        <TR>
+          <TH style="text-align:center" >School</TH> 
+          <TH style="text-align:center">{{m|date:"M Y"}}</TH> 
+          <TH style="text-align:center">{{m_minus1|date:"M Y"}}</TH> 
+          <TH style="text-align:center">{{m_minus2|date:"M Y"}}</TH>
+          <TH style="text-align:center">{{m_minus3|date:"M Y"}}</TH>
+          <TH style="text-align:center">{{m_minus4|date:"M Y"}}</TH>
+          <TH style="text-align:center">{{m_minus5|date:"M Y"}}</TH>
+        </TR>
+      </THEAD>  
+      <TBODY>
+        {% for obj in tattend %} 
+        <TR> 
+          <TD class="vert-hor-align" width="120">{{obj.school_name}}</TD> 
+          <TD class="vert-hor-align">
+          	<a href='{% url "teacher_report_details" date_month=m|date:'m' date_year=m|date:'Y' school_id=obj.school_id %}'>{{obj.attendance_currentm|floatformat:"0"}}% </a></TD> 
+          <TD class="vert-hor-align">
+          	<a href='{% url "teacher_report_details" date_month=m_minus1|date:'m' date_year=m_minus1|date:'Y' school_id=obj.school_id %}'>{{obj.attendance_minus1m|floatformat:"0"}}% </a></TD>
+          <TD class="vert-hor-align">
+          	<a href='{% url "teacher_report_details" date_month=m_minus2|date:'m' date_year=m_minus2|date:'Y' school_id=obj.school_id %}'>{{obj.attendance_minus2m|floatformat:"0"}}% </a></TD>
+          <TD class="vert-hor-align">
+          	<a href='{% url "teacher_report_details" date_month=m_minus3|date:'m' date_year=m_minus3|date:'Y' school_id=obj.school_id %}'>{{obj.attendance_minus3m|floatformat:"0"}}% </a></TD>
+          <TD class="vert-hor-align">
+          	<a href='{% url "teacher_report_details" date_month=m_minus4|date:'m' date_year=m_minus4|date:'Y' school_id=obj.school_id %}'>{{obj.attendance_minus4m|floatformat:"0"}}% </a></TD>
+          <TD class="vert-hor-align">
+          	<a href='{% url "teacher_report_details" date_month=m_minus5|date:'m' date_year=m_minus5|date:'Y' school_id=obj.school_id %}'>{{obj.attendance_minus5m|floatformat:"0"}}%</TD>
+        {% endfor %}
+        </TR>
+        <TR>
+            <TD class="vert-hor-align" width="120">Overall:</TD> 
 
-		                {% for obj in tattend_total %}
-		                <TD class="vert-hor-align">
-		                		{{obj.att_perc|floatformat:"0"}}% 
-		                </TD>
-		                {% endfor %} 
-                	</TR>
-			        
-			      </TBODY>
-			    </TABLE>
-				<hr/>
-				<br>
-				<a href='{% url "user_homepage" %}' class="btn btn-primary" role="button">
-			 	Go back home</a> 
+            {% for obj in tattend_total %}
+            <TD class="vert-hor-align">
+            		{{obj.att_perc|floatformat:"0"}}% 
+            </TD>
+            {% endfor %} 
+    	</TR>
+        
+      </TBODY>
+    </TABLE>
+	<hr/>
+	<z> Click on percentage for details </z><br><br><br>
+
+	<a href='{% url "user_homepage" %}' class="btn btn-primary" role="button">
+ 	Go back home</a> 
 
 
 

@@ -16,29 +16,12 @@ from collections import OrderedDict
 from django.utils import timezone
 from dateutil.relativedelta import relativedelta
 
- 
+
 def go_home(request):
     if request.user.is_authenticated():
         return render(request, "home.html", {})
     else:
         return render(request, "home_not_loggedin.html", {})
-
-# def add_attendance(request):
-# 	form = AttendanceForm(request.POST or None, request.FILES or None)
-# 	if form.is_valid():
-# 		try:
-# 			instance = form.save(commit=False)
-# 			#instance.master = Master.objects.get(pk=pk)
-# 			instance.save()
-# 			#return HttpResponseRedirect( instance.get_absolute_url() )
-# 			return HttpResponseRedirect('/')
-# 		except:
-# 			return HttpResponseRedirect('/')
-# 	context = {
-# 		"form": form,
-# 	}
-# 	return render(request, "add_attendance.html", context)
-
 
 
 def get_dates_range(start, end, delta):
@@ -49,9 +32,19 @@ def get_dates_range(start, end, delta):
 
 
 def affiliated_schools(request):
-    schools = School.objects.filter(teacher=request.user.teacher)
-    cls = Class.objects.filter(school_id__in = schools) #JQ: added
-    return render(request, 'affiliated_schools.html', {'affiliated_schools': schools, 'cls': cls})
+    #schools = School.objects.filter(teacher=request.user.teacher) #original
+    #cls = Class.objects.filter(school_id__in = schools) #JQ: added #original
+    if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'principal':
+        schools = School.objects.all()
+        cls = Class.objects.all()
+    elif request.user.teacher.level == 'teacher':
+        schools = School.objects.filter(teacher__id = request.user.teacher.id)
+        cls = Class.objects.filter(school_id__in = schools)
+    context = {
+            'affiliated_schools': schools, 
+            'cls': cls, 
+            } 
+    return render(request, 'affiliated_schools.html', context)
 
 # this helper function below is a custom func to convert the cursor object return to a dict
 def dictfetchall(cursor):
@@ -70,7 +63,6 @@ def attendance_dates(request, school_id, shift):
     dates_range = list(get_dates_range(five_days_back, next_day, timedelta(days=1)))
     
     cursor = connection.cursor()
-
     cursor.execute(
     '''SELECT i,
     COUNT (*) AS num_att,
@@ -87,19 +79,38 @@ def attendance_dates(request, school_id, shift):
     ORDER BY i DESC;''', [school_id, school_id, shift])
 
     l1 = dictfetchall(cursor) #raw sql query list of dates
-    sch = School.objects.get(pk=school_id)
-    return render(request, 'attendance_dates.html', {'dates_range': dates_range, 'school_id': school_id, 'l1': l1, 'sch': sch, 'shift': shift})
+
+    #logic: only submit the request if superuser or a principal with access to a specific school
+    if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager':
+        sch = School.objects.get(pk=school_id)
+    #elif request.user.teacher.level == 'principal' and school_id in test:
+    elif (request.user.teacher.level == 'principal' or request.user.teacher.level == 'teacher') and request.user.teacher.pkss_school.filter(id=school_id).exists(): 
+        sch = School.objects.get(pk=school_id)
+    else:
+        sch = {}
+        school_id = {}
+    #sch = School.objects.get(pk=school_id) #original
+    context = {
+            'dates_range': dates_range, 
+            'school_id': school_id,
+            'l1': l1, 
+            'sch': sch,
+            'shift': shift,
+            } 
+    return render(request, 'attendance_dates.html', context)
 
 
 @login_required()
 def add_attendance2(request, school_id, date, shift, readonly=False):
-    if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'staff' or request.user.useraccess.access_level == 'coordinator':
+    if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'principal' or request.user.useraccess.access_level == 'teacher' or request.user.useraccess.access_level == 'coordinator':
         school = School.objects.get(pk=school_id)
         dateobj = date
-        ## classes_list = Class.objects.filter(teacher=request.user.teacher, school__id=school.pk)
-        s = School.objects.filter(teacher__id = request.user.teacher.id) #JQ: added
-        #classes_list = Class.objects.filter(school__id=school.pk).filter(school_id__in = s) #JQ: added
-        classes_list = Class.objects.filter(school__id=school.pk).filter(school_id__in = s).filter(shift = shift) #JQ: added
+        ## classes_list = Class.objects.filter(teacher=request.user.teacher, school__id=school.pk) 
+        if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager':
+            classes_list = Class.objects.filter(school__id=school.pk).filter(shift = shift) #JQ: added
+        else:
+            s = School.objects.filter(teacher__id = request.user.teacher.id) #JQ: added
+            classes_list = Class.objects.filter(school__id=school.pk).filter(school_id__in = s).filter(shift = shift) #JQ: added
 
         formsets = {}
 
@@ -124,10 +135,13 @@ def add_attendance2(request, school_id, date, shift, readonly=False):
         date = datetime.datetime.strptime(date, "%Y-%m-%d").date()
 
         if request.method == 'POST':
-            #classes_list = Class.objects.filter(teacher=request.user.teacher, school__id=school.pk)
-            s = School.objects.filter(teacher__id = request.user.teacher.id) #JQ: added
-            #classes_list = Class.objects.filter(school__id=school.pk).filter(school_id__in = s) #JQ: added
-            classes_list = Class.objects.filter(school__id=school.pk).filter(school_id__in = s).filter(shift = shift) #JQ: added
+            #s = School.objects.filter(teacher__id = request.user.teacher.id) #JQ: added
+            #classes_list = Class.objects.filter(school__id=school.pk).filter(school_id__in = s).filter(shift = shift) #JQ: added
+            if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager':
+                classes_list = Class.objects.filter(school__id=school.pk).filter(shift = shift) #JQ: added
+            else:
+                s = School.objects.filter(teacher__id = request.user.teacher.id) #JQ: added
+                classes_list = Class.objects.filter(school__id=school.pk).filter(school_id__in = s).filter(shift = shift) #JQ: added
             
             formsets = {}
             formsets_valid = True
@@ -140,7 +154,10 @@ def add_attendance2(request, school_id, date, shift, readonly=False):
 
                 formsets[clas] = attendance_formset(request.POST, prefix=clas)
                 if formsets[clas].is_valid():
-                    formsets[clas].save()
+                    #formsets[clas].save()
+                    for ins in formsets[clas].save(commit=False):
+                        ins.att_taker = request.user.username
+                        ins.save()
                 else:
                     formsets_valid = False
 
@@ -182,7 +199,7 @@ def attendance_summary(request):
     Group attendance by Month
     Calculate %ages for each School in each of the 12 months
     """
-    if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'staff' or request.user.useraccess.access_level == 'coordinator':
+    if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'principal' or request.user.useraccess.access_level == 'teacher' or request.user.useraccess.access_level == 'coordinator':
         attendance_months = get_attendance_months()
 
         if request.GET.get('date'):
@@ -251,7 +268,7 @@ def attendance_summary(request):
 
 @login_required
 def school_attendance_details(request, school_id, date):
-    if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'staff' or request.user.useraccess.access_level == 'coordinator':
+    if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'teacher' or request.user.useraccess.access_level == 'principal' or request.user.useraccess.access_level == 'coordinator':
         date = datetime.datetime.strptime(date, "%Y-%m-%d").date()
         previous_month = date - relativedelta(months=1)
 
@@ -413,7 +430,7 @@ def attendance_by_month(request):
 
 @login_required
 def attendance_by_school_month(request):
-    if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'staff' or request.user.useraccess.access_level == 'coordinator':
+    if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'principal' or request.user.useraccess.access_level == 'teacher' or request.user.useraccess.access_level == 'coordinator':
         attendance_months = get_attendance_months()
 
         attendance = dict()

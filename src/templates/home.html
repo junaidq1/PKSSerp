@@ -29,7 +29,7 @@
 	<!-- <div class='col-sm-4 col-sm-offset-1'> -->
 	<!-- <div class='col-md-4 col-md-offset-1'> -->
 	
-	{% if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'staff' or request.user.useraccess.access_level == 'coordinator'   %}
+	{% if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'principal' or request.user.useraccess.access_level == 'teacher' or request.user.useraccess.access_level == 'coordinator'   %}
 
 	<div class='col-xs-12 col-md-4'>
 
@@ -44,7 +44,7 @@
 		{% endif %}
 
 
-		{% if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'staff' or request.user.useraccess.access_level == 'coordinator'   %}
+		{% if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'principal' or request.user.useraccess.access_level == 'teacher' or request.user.useraccess.access_level == 'coordinator'   %}
 		<h3> Student Details </h3>
 		<hr/>
 
@@ -58,7 +58,7 @@
 		{% endif %}
 		
 		
-		{% if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'staff' or request.user.useraccess.access_level == 'coordinator'   %}
+		{% if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'principal' or request.user.useraccess.access_level == 'teacher' or request.user.useraccess.access_level == 'coordinator'   %}
 		<h3> Student Attendance Calendar </h3>
 		<hr/>
 		
@@ -94,7 +94,7 @@
 		{% endif %}  
 
 
-		{% if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'staff' or request.user.useraccess.access_level == 'coordinator'   %}
+		{% if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'principal' or request.user.useraccess.access_level == 'teacher' or request.user.useraccess.access_level == 'coordinator'   %}
 		<h3> Reports </h3>
 		<hr/>
 		
@@ -102,7 +102,7 @@
 		<p class='lead text-align-left'><p class='lead text-align-left'>  <span class="glyphicon glyphicon-stats" aria-hidden="true"></span> Student attendance reports </p></a>
 
 		<a href='{% url "net_enrollment" %}'>
-		<p class='lead text-align-left'><p class='lead text-align-left'>  <span class="glyphicon glyphicon-stats" aria-hidden="true"></span> Enrollment report </p></a>
+		<p class='lead text-align-left'><p class='lead text-align-left'>  <span class="glyphicon glyphicon-stats" aria-hidden="true"></span> Student enrollment reports </p></a>
 
 		<a href='{% url "school_list" %}'>
 		<p class='lead text-align-left'><p class='lead text-align-left'>  <span class="glyphicon glyphicon-home" aria-hidden="true"></span> View school profile </p></a>

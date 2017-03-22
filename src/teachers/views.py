@@ -34,15 +34,16 @@ class LogoutView(RedirectView):
 #view list of all teachers
 @login_required
 def list_of_teachers(request):
-    teach = Teacher.objects.all().order_by("first_name")  #filter for active later
-    num_teachers = len(teach)
-    num_active_teachers = len(Teacher.objects.filter(currently_active=True))
-    context = {
-        "teach": teach,
-        "num_teachers": num_teachers,  
-        "num_active_teachers": num_active_teachers,  
-    }
-    return render(request, "list_of_teachers.html", context)
+    if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'principal' or request.user.useraccess.access_level == 'coordinator':
+        teach = Teacher.objects.all().order_by("first_name")  #filter for active later
+        num_teachers = len(teach)
+        num_active_teachers = len(Teacher.objects.filter(currently_active=True))
+        context = {
+            "teach": teach,
+            "num_teachers": num_teachers,  
+            "num_active_teachers": num_active_teachers,  
+        }
+        return render(request, "list_of_teachers.html", context)
 
 
 
@@ -109,7 +110,7 @@ def deactivate_teacher(request, pk=None):
 #Add a new teacher
 @login_required
 def add_a_teacher(request):
-    if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'principal':
+    if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'principal' or request.user.useraccess.access_level == 'coordinator':
         #form = StudentForm(request.POST or None, request.FILES or None, instance=std)
         form = AddTeacherForm(request.POST or None)
         if form.is_valid():

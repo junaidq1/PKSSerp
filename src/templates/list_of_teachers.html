@@ -17,7 +17,7 @@
 <br>
  	<div class='row'>
 
-	<div class='col-sm-10 '>
+	<div class='col-sm-10'>
 	<br>
 	<h4> List of PKSS teachers and Affiliated Schools (sorted on first name)</h4>
 	<br>
@@ -29,9 +29,9 @@
 			      <THEAD>        
 			        <TR>
 			          <TH style="text-align:center">#</TH> 
-			          <TH style="text-align:center">First Name</TH> 
-			          <TH style="text-align:center">Last Name</TH>
-			          <TH style="text-align:center">Level</TH> 
+			          <TH style="text-align:left">First Name</TH> 
+			          <TH style="text-align:left">Last Name</TH>
+			          <TH style="text-align:left">Level</TH> 
 			          <TH style="text-align:center">Gender</TH>
 			          <TH style="text-align:center">Date joined</TH>
 			          <TH style="text-align:center">Active</TH>
@@ -43,9 +43,9 @@
 			        <TR> 
 			          <TD class="vert-hor-align">{{forloop.counter}} </TD>
 			          
-			          <TD class="vert-hor-align"><a href='{% url "teacher_profile" pk=obj.pk %}'>{{obj.first_name}} </a></TD>
-			          <TD class="vert-hor-align"><a href='{% url "teacher_profile" pk=obj.pk %}'>{{obj.last_name}} </a> </TD>
-			          <TD class="vert-hor-align">{{obj.level}} </TD> 
+			          <TD class="vert-align"><a href='{% url "teacher_profile" pk=obj.pk %}'>{{obj.first_name}} </a></TD>
+			          <TD class="vert-align"><a href='{% url "teacher_profile" pk=obj.pk %}'>{{obj.last_name}} </a> </TD>
+			          <TD class="vert-align">{{obj.level}} </TD> 
 			          <TD class="vert-hor-align">{{obj.gender}} </TD>
 			          <TD class="vert-hor-align">{{obj.date_joined}} </TD>
 			          <TD class="vert-hor-align">
@@ -65,7 +65,7 @@
 			        
 			      </TBODY>
 			    </TABLE>
-<br>
+
 <a href='{% url "user_homepage"%}' class="btn btn-primary" role="button">Go Home</a> 
 
 
