@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% load crispy_forms_tags %}
+
+
+
+{% block content %}
+
+<br>
+<div class='container'>
+
+
+	<div class='row'> 		
+		<div class='col-sm-7'>
+
+<br>
+
+<h3> Use the form below to update your password</h3>
+<br>
+<br>
+<br>
+ 
+
+<form method="post">
+  {% csrf_token %}
+  {{ form|crispy }}
+   
+  <input class='btn btn-primary' type='submit' value='Save changes'/>
+</form>
+<br>
+<br>
+<hr/>
+<a href='{% url "user_homepage" %}' class="btn btn-default" role="button">
+		 	Return home without updating</a> 
+
+	</div>
+	</div>
+</div>
+{% endblock %}
+
+
+
+<form method="post">
+  {% csrf_token %}
+  {{ form }}
+  <button type="submit">Save changes</button>
+</form>

@@ -1,6 +1,8 @@
 from django import forms
 from .models import Attendance, AttendanceCalendar, NonScheduledHolidays
 from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout
+from crispy_forms.bootstrap import InlineRadios, InlineCheckboxes
 from datetimewidget.widgets import DateWidget
 
 class AttendanceForm(forms.ModelForm):
@@ -10,6 +12,10 @@ class AttendanceForm(forms.ModelForm):
 	class Meta:
 		model = Attendance
 		fields = ("student", "attendance_date", "status", "notes")
+		# widgets = {
+		# # 	#'status': forms.RadioSelect() SelectMultiple()
+		#  	'status': forms.RadioSelect() 
+		# }
 
 	def __init__(self, *args, **kwargs):
 		super(AttendanceForm, self).__init__(*args, **kwargs)
@@ -19,9 +25,9 @@ class AttendanceForm(forms.ModelForm):
 		#self.helper = FormHelper()
 		self.helper.form_tag = False
 		self.helper.form_style = 'inline'
-		#helper = FormHelper()
-		#helper.form_tag = False
-		#self.helper.form_style = 'inline'
+		#self.helper.layout = Layout('student', 'attendance_date', InlineRadios('status'), 'notes')
+		#self.helper[2] = InlineRadios('status')  # <- this should work but it doesn't
+		
 
 class AddAttCalDateForm(forms.ModelForm):
 	class Meta:

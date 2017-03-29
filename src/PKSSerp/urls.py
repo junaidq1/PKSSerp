@@ -15,6 +15,7 @@ Including another URLconf
 """ 
 from django.conf.urls import url, include
 from django.contrib import admin
+from django.contrib.auth import views as auth_views #password change
 
 from attendance import views as att
 from teachers.views import *
@@ -24,16 +25,18 @@ from donors import views as don
 from tattendance import views as tatt
 from teachers import views as teach
 
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', att.go_home, name='user_homepage'),
     # url(r'^2$', att.go_home_2, name='user_homepage2'),
+    #change password    
+    url(r'^change-password/$', auth_views.password_change, {'template_name': 'change_pass.html', 'post_change_redirect': 'pass_updated'}, name='password_change'),
+    url(r'^password_updated/$', teach.password_updated, name='pass_updated'),
     #student attendance
     url(r'^affiliated_schools/$', att.affiliated_schools, name='affiliated_schools'),
-##
     #url(r'^chart/$', don.chart, name='chart'), ####delete later
     #url(r'^chart2/$', don.plot, name='chart2'), ####delete later
-
     #url(r'^attendance_dates/(?P<school_id>\d+)/$', att.attendance_dates, name='attendance_dates'), old
     url(r'^attendance_dates/(?P<school_id>\d+)/(?P<shift>\w+)$', att.attendance_dates, name='attendance_dates'),
     #url(r'^attendance2/(?P<school_id>\d+)/(?P<date>\d{4}-\d{2}-\d{2})/$', att.add_attendance2, name='add_attendance2'), old

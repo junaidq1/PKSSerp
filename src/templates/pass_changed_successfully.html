@@ -1,0 +1,30 @@
+<!-- DOCTYPE html -->
+{% extends "base.html" %}
+
+
+
+
+
+{% block content %}
+
+<br>
+<div class='container'>
+
+
+	<div class='row'> 		
+		<div class='col-sm-7'>
+
+<br>
+
+<br>
+
+<h3> Your password has been successfully updated. Please note it down for future use</h3>
+<br>
+<br>
+<a href='{% url "user_homepage" %}' class="btn btn-primary" role="button">
+		 	Return home</a> 
+
+	</div>
+	</div>
+</div>
+{% endblock %}
