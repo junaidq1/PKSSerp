@@ -7,9 +7,11 @@ git_lal_jan14_2/
 conf/
 
 *.pyc
-
-PKSSerp.sublime-project
-PKSSerp.sublime-workspace
+*.sql
+*.json
+*.sqlite3
+*.sublime-project
+*.sublime-workspace
 
 
 
