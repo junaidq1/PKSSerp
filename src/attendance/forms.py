@@ -12,10 +12,10 @@ class AttendanceForm(forms.ModelForm):
 	class Meta:
 		model = Attendance
 		fields = ("student", "attendance_date", "status", "notes")
-		# widgets = {
+		widgets = {
 		# # 	#'status': forms.RadioSelect() SelectMultiple()
-		#  	'status': forms.RadioSelect() 
-		# }
+		    'status': forms.RadioSelect()
+		}
 
 	def __init__(self, *args, **kwargs):
 		super(AttendanceForm, self).__init__(*args, **kwargs)
@@ -27,7 +27,7 @@ class AttendanceForm(forms.ModelForm):
 		self.helper.form_style = 'inline'
 		#self.helper.layout = Layout('student', 'attendance_date', InlineRadios('status'), 'notes')
 		#self.helper[2] = InlineRadios('status')  # <- this should work but it doesn't
-		
+
 
 class AddAttCalDateForm(forms.ModelForm):
 	class Meta:
