@@ -37,22 +37,28 @@
   </tr>
   <tr style="height: 30px;">
     {% for field in form.visible_fields %}
-    <th>{{ field.label|capfirst }}</th>
+    <th style="padding-left: 5px">{{ field.label|capfirst }}</th>
     {% endfor %}
   </tr></thead>
   {% endif %}
   <tr>
 
   {% for field in form.visible_fields %}
-    <td>
-    {# Include the hidden fields in the form #}
-    {% if forloop.first %}
-      {% for hidden in form.hidden_fields %}
-      {{ hidden|as_crispy_field }}
+    <td style="padding: 5px">
+    {% if field.label == 'Status' %} <!-- was used native Django widget -->
+      {% for radio in form.status %}
+      <span class="radio-inline radio-attendance"> {{ radio }} </span>
       {% endfor %}
+    {% else %}  <!-- was used crispy_form -->
+      {# Include the hidden fields in the form #}
+      {% if forloop.first %}
+        {% for hidden in form.hidden_fields %}
+        {{ hidden|as_crispy_field }}
+        {% endfor %}
+      {% endif %}
+        {{ field.errors.as_ul }}
+        {{ field }}
     {% endif %}
-      {{ field.errors.as_ul }}
-      {{ field}}
     </td>
   {% endfor %}
   </tr>
