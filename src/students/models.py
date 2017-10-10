@@ -29,7 +29,8 @@ class Student(models.Model):
 	date_joined = models.DateField(auto_now=False, auto_now_add=False, default = datetime.date.today)
 	pkss_school = models.ForeignKey('schools.School')
 	pkss_class = models.ForeignKey('classes.Class')
-	pkss_class_original = models.ForeignKey('classes.Class', related_name = 'pkss_class_original')
+	#pkss_class_original = models.ForeignKey('classes.Class', related_name = 'pkss_class_original')
+	pkss_class_original = models.CharField(max_length=255, null=False, blank=False, default='aa')
 	enrollment_notes = models.TextField(max_length=2500, null=True, blank=True)
 	FEE_CHOICES = (
 		(0, 0),
@@ -78,13 +79,13 @@ class StudentHistory(models.Model):
 		return self.student_name
 
 
-
+	
 #signal received to create a new student history object after the creation of a new student object
 def create_a_student_history_object(sender, instance, **kwargs):
 	s = StudentHistory.objects.filter(student_name_id = instance.id).order_by("-pk")
 	#only create a new student hist instance if an existing one doesnt exist (not s checks for an empty dict)
 	if not s: #if there is no prior record of this student
-		if instance.pkss_class  == instance.pkss_class_original: #if current class = call student joined
+		if instance.pkss_class.school_class_section == instance.pkss_class_original: #if current class = class student joined
 			StudentHistory.objects.create(student_name=instance, date=instance.date_joined, pkss_class=instance.pkss_class)
 		else: #if class joined and current class is different, create 2 entries, original and current
 			StudentHistory.objects.create(student_name=instance, date=instance.date_joined, pkss_class=instance.pkss_class_original)

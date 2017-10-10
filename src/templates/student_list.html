@@ -10,8 +10,7 @@
 <div class='container'>
 <br>
  	<div class='row'>
-<br>
-<br>
+
 
 <div class='col-sm-9'>
 <h3>Lookup Student Profile</h3>
@@ -24,7 +23,7 @@
 <br>
 <br>
 
-Enter the first name OR last name of the student you are looking for
+Enter the first name OR last name OR registration number of the student you are looking for
 
 <br>
 <br> 
@@ -33,7 +32,7 @@ Enter the first name OR last name of the student you are looking for
 	<form method='GET' action=''>
 
 	<!-- <input type='text' name='q1' placeholder='Lastname'/> -->
-	<input type="text" name= 'q1' class="form-control" placeholder="firstname OR lastname" >
+	<input type="text" name= 'q1' class="form-control" placeholder="firstname OR lastname OR registration num" >
 
 	<br>
 	<input class='btn btn-primary' type='submit' value='Search'/>
@@ -43,8 +42,11 @@ Enter the first name OR last name of the student you are looking for
 
 
 <hr/>
-
+ 
 {% if query %}
+	
+	<emp style="color:#A9A9A9">Number of hits:  {{num_students}} </emp><br><hr/> 
+	
 	{% for obj in queryset_list %}
 	<ul>
 	<a href='{% url "std_profile" pk=obj.pk %}'>

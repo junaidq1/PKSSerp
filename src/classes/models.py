@@ -10,8 +10,8 @@ class Class(models.Model):
 	CLASS_CHOICES = (
 		('Play Group', 'Play Group'),
 		('Nursery', 'Nursery'),
-		('M1', 'M1'),
-		('M2', 'M2'),
+		('Class 1', 'Class 1'),
+		('Class 2', 'Class 2'),
 		('Class 3', 'Class 3'),
 		('Class 4', 'Class 4'),
 		('Class 5', 'Class 5'),
@@ -31,7 +31,9 @@ class Class(models.Model):
 	)
 	shift = models.CharField(max_length=255, choices=SHIFT_CHOICES)
 	school_class_section = models.CharField(max_length=255, null=True, blank=True) 
-	teacher = models.ForeignKey('teachers.Teacher') 
+	currently_active = models.BooleanField(default=True)  #an active flag for the class
+	notes = models.TextField(max_length=2500, null=True, blank=True)
+	#teacher = models.ForeignKey('teachers.Teacher')   #removed on 3-29
 
 	def __unicode__(self):
 		return self.school_class_section

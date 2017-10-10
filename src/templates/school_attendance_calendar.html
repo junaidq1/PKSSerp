@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
+{% load staticfiles %}
 
 <!-- DOCTYPE html -->
 
@@ -68,10 +69,14 @@
 			      </TBODY>
 			    </TABLE>
 				<hr/>
+				
+			
 				<emp>Click on a date above to add or change the number of working days in that month</emp><br><br>
+				
 				
 				<a href='{% url "add_cal_date" %}' class="btn btn-primary" role="button">
 			 	Add a date</a>
+			
 		</div>
 		
 		 	
@@ -85,5 +90,5 @@
 
 </div>
 
-{% endblock%}
+{% endblock %}
 

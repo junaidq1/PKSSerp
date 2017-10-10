@@ -42,9 +42,9 @@ def password_updated(request):
 #view list of all teachers 
 @login_required
 def list_of_teachers(request):
-    if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'principal' or request.user.useraccess.access_level == 'coordinator':
+    if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'principal' or request.user.useraccess.access_level == 'coordinator' or request.user.useraccess.access_level == 'accountant':
         # superusers, managers and coordinators can see all teachers
-        if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'coordinator':
+        if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'coordinator' or request.user.useraccess.access_level == 'coordinator' or request.user.useraccess.access_level == 'accountant':
             teach = Teacher.objects.order_by("first_name")  #filter for active later
         # principals can only see profile views of the teachers in their school
         if request.user.useraccess.access_level == 'principal':
@@ -64,7 +64,7 @@ def list_of_teachers(request):
 #view profile details for a teacher 
 @login_required 
 def teacher_profile_details(request, pk=None):
-    if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'principal' or request.user.useraccess.access_level == 'coordinator':
+    if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'principal' or request.user.useraccess.access_level == 'coordinator' or request.user.useraccess.access_level == 'coordinator' or request.user.useraccess.access_level == 'accountant':
         #principals should only be able to see this profile detail if the teacher is in their school
         teach = {}
         if request.user.useraccess.access_level == 'principal':
@@ -86,7 +86,7 @@ def teacher_profile_details(request, pk=None):
 #edit an existing teacher record
 @login_required
 def edit_teacher_record(request, pk=None):
-    if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'principal' or request.user.useraccess.access_level == 'coordinator':
+    if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'principal' or request.user.useraccess.access_level == 'coordinator' or request.user.useraccess.access_level == 'coordinator' or request.user.useraccess.access_level == 'accountant':
         tch = get_object_or_404(Teacher, pk=pk)
         #form = StudentForm(request.POST or None, request.FILES or None, instance=std)
         form = EditTeacherForm(request.POST or None, instance=tch)
@@ -111,7 +111,7 @@ def edit_teacher_record(request, pk=None):
 #Deactivate a teacher
 @login_required
 def deactivate_teacher(request, pk=None):
-    if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'principal' or request.user.useraccess.access_level == 'coordinator':
+    if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'principal' or request.user.useraccess.access_level == 'coordinator' or request.user.useraccess.access_level == 'coordinator' or request.user.useraccess.access_level == 'accountant':
         tch = get_object_or_404(Teacher, pk=pk)
         #form = StudentForm(request.POST or None, request.FILES or None, instance=std)
         form = TeacherDeactivateForm(request.POST or None, request.FILES or None, instance=tch)
@@ -134,7 +134,7 @@ def deactivate_teacher(request, pk=None):
 #Add a new teacher
 @login_required
 def add_a_teacher(request):
-    if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'principal' or request.user.useraccess.access_level == 'coordinator':
+    if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'principal' or request.user.useraccess.access_level == 'coordinator' or request.user.useraccess.access_level == 'coordinator' or request.user.useraccess.access_level == 'accountant':
         #form = StudentForm(request.POST or None, request.FILES or None, instance=std)
         form = AddTeacherForm(request.POST or None)
         if form.is_valid():

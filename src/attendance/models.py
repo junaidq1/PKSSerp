@@ -4,7 +4,7 @@ from django.db import models
 
 # Create your models here.
 class Attendance(models.Model):
-	student = models.ForeignKey('students.Student')
+	student = models.ForeignKey('students.Student', on_delete=models.CASCADE)
 	attendance_date = models.DateField(auto_now=False, auto_now_add=False)
 	datestamp = models.DateField(auto_now=False, auto_now_add=True) 
 	datestamp_change = models.DateTimeField(auto_now=True, auto_now_add=False) 

@@ -60,8 +60,12 @@
 
  			<a href='{% url "edit_std_profile" std.pk %}' class="btn btn-primary" role="button">
 		 	Edit Student data</a>
+		 	
+		 	{% if request.user.useraccess.access_level != 'teacher' %}
 		 	<a href='{% url "unenroll_std_profile" std.pk %}' class="btn btn-primary" role="button">
 		 	Unenroll Student</a>
+		 	{% endif %}
+
 	 		<br><br><br>
 	 		
 	 		<hr>

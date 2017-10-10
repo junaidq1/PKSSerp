@@ -11,6 +11,7 @@ from teachers.models import Teacher
 from django.contrib import messages
 from django.db import connection #for custom sql
 from django.db.models import *
+from django.shortcuts import HttpResponseRedirect
 #import datetime
 from datetime import datetime, timedelta
 from collections import OrderedDict
@@ -20,11 +21,11 @@ import json
 
 
 def tattendance_affiliated_schools(request):
-    if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'principal':
+    if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'principal' or request.user.useraccess.access_level == 'coordinator' or request.user.useraccess.access_level == 'accountant':
         #schools = School.objects.all()
         schools = {}  #by default, the dict of schools for tattendance should be empty
         #logic: if a superuser or manager is loggin on, they should see all schools. Otherwise, only if a user is a principal, they should see the schools they are affiliated with
-        if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager':
+        if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'coordinator' or request.user.useraccess.access_level == 'accountant':
             schools = School.objects.all()
         elif request.user.teacher.level == 'principal':
             schools = School.objects.filter(teacher__id = request.user.teacher.id)
@@ -53,7 +54,7 @@ def get_dates_range(start, end, delta):
 
 @login_required()
 def tattendance_dates(request, school_id):
-    if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'principal':
+    if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'principal' or request.user.useraccess.access_level == 'coordinator' or request.user.useraccess.access_level == 'accountant':
         #five_days_back = date.today() - timedelta(2)
         #next_day = date.today() + timedelta(1)
         #dates_range = list(get_dates_range(five_days_back, next_day, timedelta(days=1)))
@@ -73,7 +74,7 @@ def tattendance_dates(request, school_id):
         l1 = dictfetchall(cursor) #raw sql query get list of attedances entered by date
         
         #logic: only submit the request if superuser or a principal with access to a specific school
-        if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager':
+        if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'coordinator' or request.user.useraccess.access_level == 'accountant':
             sch = School.objects.get(pk=school_id)
         #elif request.user.teacher.level == 'principal' and school_id in test:
         elif request.user.teacher.level == 'principal' and request.user.teacher.pkss_school.filter(id=school_id).exists(): 
@@ -81,6 +82,7 @@ def tattendance_dates(request, school_id):
         else:
             sch = {}
             school_id = {}
+            l1= {}
 
         #sch = School.objects.get(pk=school_id) #use this if no controls required and delete the if logic above
         context = {
@@ -94,11 +96,32 @@ def tattendance_dates(request, school_id):
 
 @login_required()
 def add_tattendance(request, school_id, date, readonly=False):
-    if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'principal':
-        school = School.objects.get(pk=school_id)
+    if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'principal' or request.user.useraccess.access_level == 'coordinator':        
+        
+        #the code below is to ensure that people dont game the system (enter att for old dates) via url. Note: check does not apply to superuser
+        if request.user.useraccess.access_level != 'super':
+            date_d = datetime.strptime(date, "%Y-%m-%d").date() #convert date string to date object
+            three_days_back = date_d.today() - timedelta(3) #create a cutoff for 3 days ago 
+            if date_d < three_days_back: #check to see if the url date is within the 3 day cutoff
+                return HttpResponseRedirect(reverse('user_homepage')) #send user back home if its not
 
-        #teacher_list = Teacher.objects.all()  # < filter this for just teachers in the school
-        teacher_list = Teacher.objects.filter(pkss_school = school_id).filter(currently_active=True) #filter teachers for just those associated with the school
+        #main code
+        # superusers, managers and coordinators then no additional filtering neccessary
+        if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'coordinator':
+            school = School.objects.get(pk=school_id) #pull up the school
+            teacher_list = Teacher.objects.filter(pkss_school = school_id).filter(currently_active=True) #pull up all the teachers in the school
+        if request.user.useraccess.access_level == 'principal': #if principal, ensure that they are allowed to see this school
+            authorized_schools = School.objects.filter(teacher__id = request.user.teacher.id) #get the list of schools that princ is affiliated with
+            if authorized_schools.filter(id=school_id).exists(): #if the requested school is in set, proceed
+                school = School.objects.get(pk=school_id)
+                teacher_list = Teacher.objects.filter(pkss_school = school_id).filter(currently_active=True) #pull up all the teachers in the school
+            else: #if requested school is not one the principal is affiliated with then errors
+                school ={}
+                teacher_list ={}
+                return HttpResponseRedirect( reverse('user_homepage'))
+
+        #school = School.objects.get(pk=school_id) 
+        #teacher_list = Teacher.objects.filter(pkss_school = school_id).filter(currently_active=True) #filter teachers for just those associated with the school
         teacher_list_initial = [{
                                 'teacher': teacher,
                                 'attendance_date': date,
@@ -149,7 +172,7 @@ def add_tattendance(request, school_id, date, readonly=False):
 
 @login_required()
 def teacher_attendance_summary(request):
-    if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'principal':
+    if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'principal' or request.user.useraccess.access_level == 'coordinator' or request.user.useraccess.access_level == 'accountant':
         cursor = connection.cursor()
         cursor.execute(
         '''SELECT school_name, school_id,
@@ -250,7 +273,7 @@ def teacher_attendance_summary(request):
 
 @login_required()
 def teacher_report_daily_details(request, date_month, date_year, school_id):
-    if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'principal':
+    if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'principal' or request.user.useraccess.access_level == 'coordinator' or request.user.useraccess.access_level == 'accountant':
         cursor = connection.cursor()
         cursor.execute(
         '''SELECT school_name, first_name, last_name, teacher_id,

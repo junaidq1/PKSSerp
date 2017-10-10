@@ -12,10 +12,12 @@ class AttendanceForm(forms.ModelForm):
 	class Meta:
 		model = Attendance
 		fields = ("student", "attendance_date", "status", "notes")
-		# widgets = {
+		widgets = {
+			'status': forms.RadioSelect()
+		} 
 		# # 	#'status': forms.RadioSelect() SelectMultiple()
 		#  	'status': forms.RadioSelect() 
-		# }
+		# } 
 
 	def __init__(self, *args, **kwargs):
 		super(AttendanceForm, self).__init__(*args, **kwargs)

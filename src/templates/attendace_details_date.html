@@ -1,0 +1,68 @@
+{% extends "base.html" %} 
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+
+{% block title %}
+    Daily attendance
+{% endblock %}
+
+
+
+{% block content %}
+
+<div class='container'>
+<br>
+    <div class='row'>
+
+    <div class='col-sm-9'>
+    <br>
+    <h4> Student Attendance by Day - {{school}} - {{date_d}} </h4>
+    <br>
+    <!-- Current Total Active Teachers: <z style="color:#85BC22">{{num_active_teachers}}</z><br>
+    Avg. Total Teacher shifts (last 1 month): <z style="color:#85BC22"> {{num_teacher_shifts}} </z> -->
+    <br>
+
+    <TABLE class="table">
+      <THEAD>        
+        <TR> 
+        <!-- #class, student, status, date, datestamp, att taker - filter school and date -->
+          <TH style="text-align:center">Shift</TH>
+          <TH style="text-align:center">Class</TH>
+          <TH style="text-align:center">Student</TH>
+          <TH style="text-align:center">Status</TH>
+          <TH style="text-align:center">Actual Date taken</TH> 
+          <TH style="text-align:center">Attendance taker</TH>
+          <TH style="text-align:center">Notes</TH> 
+
+        </TR>
+      </THEAD>  
+      <TBODY>
+        {% for obj in att_list %} 
+        <TR> 
+          <TD class="vert-hor-align">{{obj.student.pkss_class.shift}}</TD>
+          <TD class="vert-hor-align">{{obj.student.pkss_class.class_name}} - {{obj.student.pkss_class.section}}</TD>
+          <TD class="vert-align">{{obj.student}}</TD>
+          <TD class="vert-hor-align"> {% if obj.status == 'present' %} <b style="color:#00cc00">Present  <br> {% endif %} 
+          {% if obj.status == 'absent' %} <b style="color:#ff1919">Absent <br> {% endif %} </TD>
+          <TD class="vert-hor-align">{{obj.datestamp}}</TD>
+          <TD class="vert-hor-align">{{obj.att_taker}}</TD>
+          <TD class="vert-hor-align">{{obj.notes}}</TD> 
+        {% endfor %}
+        </TR> 
+      </TBODY>
+    </TABLE>
+    <hr/>
+    
+
+    <a href='{% url "user_homepage" %}' class="btn btn-primary" role="button">
+    Go back home</a> 
+
+<br>
+<br>
+
+</div>
+</div>
+</div>
+
+{% endblock %}

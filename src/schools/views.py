@@ -20,7 +20,9 @@ from students.models import Student
 @login_required
 def view_list_of_schools(request):
 	sch_list = School.objects.all()
-
+	#affil_schools =School.objects.filter(teacher__id = request.user.teacher.id) #get schools assoc with teacher/prin
+	if request.user.useraccess.access_level == 'principal' or request.user.useraccess.access_level == 'teacher': #for princ and teachers - filter for just their schools
+		sch_list = School.objects.filter(teacher__id = request.user.teacher.id)
 	context = {
 	"sch_list": sch_list,
 	} 
@@ -38,8 +40,17 @@ def dictfetchall(cursor):
 #school profile deepdive
 @login_required
 def school_profile_deepdive(request, pk=None):
-	if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'principal' or request.user.useraccess.access_level == 'teacher' or request.user.useraccess.access_level == 'coordinator':
-		sch = get_object_or_404(School, pk=pk)
+	if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'principal' or request.user.useraccess.access_level == 'teacher' or request.user.useraccess.access_level == 'coordinator' or request.user.useraccess.access_level == 'accountant':
+		#this logic is to ensure that princ and teachers only see schools they are suppose to
+		if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'coordinator' or request.user.useraccess.access_level == 'accountant':
+			sch = get_object_or_404(School, pk=pk)
+		elif (request.user.useraccess.access_level == 'principal' or request.user.useraccess.access_level == 'teacher') and request.user.teacher.pkss_school.filter(id=pk).exists():
+			sch = get_object_or_404(School, pk=pk)
+		else:
+			sch ={}
+			return HttpResponseRedirect(reverse('user_homepage')) #send user back home if its not
+		
+		#sch = get_object_or_404(School, pk=pk)
 		teach = Teacher.objects.filter(pkss_school = pk).filter( ~Q(level ='management')) #the list of teachers associated with school excluding management
 		num_teachers = len(teach) #the number of teachers associated with school	
 		try:
@@ -134,14 +145,24 @@ def school_profile_deepdive(request, pk=None):
 
 @login_required
 def student_list_school(request, pk=None):
-	if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'principal' or request.user.useraccess.access_level == 'teacher' or request.user.useraccess.access_level == 'coordinator':
-		sch = get_object_or_404(School, pk=pk)
-		std = Student.objects.filter(pkss_school_id = pk).filter(currently_enrolled =True) #students at school
-		
+	if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'principal' or request.user.useraccess.access_level == 'teacher' or request.user.useraccess.access_level == 'coordinator' or request.user.useraccess.access_level == 'accountant':
+		#logic to ensure princ and teacher only see their school
+		if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'coordinator' or request.user.useraccess.access_level == 'accountant':
+			sch = get_object_or_404(School, pk=pk)
+			std = Student.objects.filter(pkss_school_id = pk).filter(currently_enrolled =True) #students at school
+		elif (request.user.useraccess.access_level == 'principal' or request.user.useraccess.access_level == 'teacher') and request.user.teacher.pkss_school.filter(id=pk).exists():
+			sch = get_object_or_404(School, pk=pk)
+			std = Student.objects.filter(pkss_school_id = pk).filter(currently_enrolled =True) #students at school
+		else:
+			sch ={}
+			std = {}
+			return HttpResponseRedirect(reverse('user_homepage')) #send user back home if its not
+		#sch = get_object_or_404(School, pk=pk)
+		#std = Student.objects.filter(pkss_school_id = pk).filter(currently_enrolled =True) #students at school
 		context = {
 		"sch": sch,
 		"students": std,
-		} 
+		}  
 		
 		return render (request, "student_list_by_school.html", context)
 

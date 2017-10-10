@@ -35,8 +35,9 @@ class Command(BaseCommand):
 				std.pkss_school =   std_school
 				std_class = Class.objects.get(school_class_section=row[14])  #first get class name
 				std.pkss_class = std_class
-				#std.enrollment_notes = row[15]
 				std.fee_concession_percent = row[15]
+				#std_class_orig = Class.objects.get(school_class_section=row[16]) 
+				std.pkss_class_original = row[16]
 				std.save()
 				self.stdout.write(
 					'Created student {} {}'.format(std.first_name, std.last_name)

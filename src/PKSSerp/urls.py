@@ -1,4 +1,4 @@
-"""PKSSerp URL Configuration
+"""PKSSerp URL Configuration 
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/1.10/topics/http/urls/
@@ -41,7 +41,7 @@ urlpatterns = [
     url(r'^attendance_dates/(?P<school_id>\d+)/(?P<shift>\w+)$', att.attendance_dates, name='attendance_dates'),
     #url(r'^attendance2/(?P<school_id>\d+)/(?P<date>\d{4}-\d{2}-\d{2})/$', att.add_attendance2, name='add_attendance2'), old
     url(r'^attendance2/(?P<school_id>\d+)/(?P<date>\d{4}-\d{2}-\d{2})/(?P<shift>\w+)$', att.add_attendance2, name='add_attendance2'),
-    url(r'^att/(?P<school_id>\d+)/(?P<date>\d{4}-\d{2}-\d{2})/$', att.view_attendance_deets, name='view_att_deets'), 
+    url(r'^att/(?P<school_id>\d+)/(?P<date>\d{4}-\d{2}-\d{2})$', att.view_attendance_deets, name='view_att_deets'), 
     #teacher attendance
     url(r'^affiliated_schools_tattendance/$', tatt.tattendance_affiliated_schools, name='taffiliated_schools'),
     url(r'^tattendance_dates/(?P<school_id>\d+)/$', tatt.tattendance_dates, name='tattendance_dates'),
@@ -61,6 +61,8 @@ urlpatterns = [
 
     url(r'^attendance_by_month/$', att.attendance_by_month, name='attendance_by_school'),
     url(r'^attendance_by_school_month/$', att.attendance_by_school_month, name='attendance_by_school_month'),
+    #new daily attendance dates (8-8-17)
+    url(r'^daily_attendance_details/(?P<school_id>\d+)/(?P<date>\d{4}-\d{2}-\d{2})/$', att.view_daily_attendance_deets, name='view_daily_deets'),
 
     url(r'^login/', LoginView.as_view(), name='login'),
     url(r'^logout/$', LogoutView.as_view(), name='logout'),

@@ -10,7 +10,6 @@ from schools.models import School
    
 class Teacher(models.Model):
         LEVEL_CHOICES = (
-            ('management', 'management'),
             ('principal', 'principal'),
             ('vice principal', 'vice principal'),
             ('teacher', 'teacher'),
