@@ -36,7 +36,8 @@
           </thead>
 
           {% for student in attendance_students %}
-                <tr class="student-attendance-row {% if not dfdf %}attendance-to-create{% endif %}" data-student-id="{{ student.id }}"
+                <tr class="student-attendance-row {% if not student.attendance_id %}attendance-to-create{% endif %}"
+                    data-student-id="{{ student.id }}"
                     data-class-id="{{ class.id }}"
                     data-attendance-id="{{student.attendance_id}}">
                    <td style="padding: 2px">

@@ -152,13 +152,6 @@ def add_attendance2(request, school_id, date, shift, readonly=False):
             student_classes_attendance[cl] = students_list
 
         if request.method == 'POST':
-            #s = School.objects.filter(teacher__id = request.user.teacher.id) #JQ: added
-            #classes_list = Class.objects.filter(school__id=school.pk).filter(school_id__in = s).filter(shift = shift) #JQ: added
-            if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager':
-                classes_list = Class.objects.filter(school__id=school.pk).filter(shift = shift) #JQ: added
-            else:
-                s = School.objects.filter(teacher__id = request.user.teacher.id) #JQ: added
-                classes_list = Class.objects.filter(school__id=school.pk).filter(school_id__in = s).filter(shift = shift) #JQ: added
             msg = 'Attendance submitted successfully for %s on %s for %s classes.' % (school.school_name, date.strftime("%b %d, %Y"), shift)
             messages.success(request, msg)
             return redirect(reverse('attendance_dates', kwargs={'school_id': school.pk, 'shift': shift}))
