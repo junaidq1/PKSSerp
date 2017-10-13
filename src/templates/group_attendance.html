@@ -18,54 +18,52 @@
 <br>
 
 
-<form method='POST' action="{% url 'add_attendance2' school.pk date shift %}"> {% csrf_token %}
-     <table id="formset" class="form">
+<form id="attendance_form" class="form" method="post" data-link="{% url 'ajax_save_student_attendance' %}">{% csrf_token %}
+    <input id="general_data" name="general_data" class="hidden">
 
+    <table class="attendance_table">
+    {% for class, attendance_students in student_classes_attendance.items %}
+          <thead>
+              <tr style="height: 30px">
+                  <th>{{ class }}</th>
+              </tr>
+              <tr style="height: 30px;">
+                  <th style="padding-left: 2px">Student</th>
+                  <th style="padding-left: 2px">Attendance date</th>
+                  <th style="padding-left: 2px">Status</th>
+                  <th style="padding-left: 2px">Notes</th>
+              </tr>
+          </thead>
 
-
-{% for clas, formset in formsets.iteritems %}
-
-         {{ formset.management_form|crispy }}
-
-{% for form in formset %}
-
-  <!-- {% crispy form %} -->
-  {% if forloop.first %}
-  <thead>
-  <tr style="height: 30px">
-      <th>{{ clas }}</th>
-  </tr>
-  <tr style="height: 30px;">
-    {% for field in form.visible_fields %}
-    <!-- <th>{{ field.label|capfirst }}</th> -->
-    <th style="padding-left: 2px">{{ field.label|capfirst }}</th>
+          {% for student in attendance_students %}
+                <tr class="student-attendance-row {% if not student.attendance_id %}attendance-to-create{% endif %}"
+                    data-student-id="{{ student.id }}"
+                    data-class-id="{{ class.id }}"
+                    data-attendance-id="{{student.attendance_id}}">
+                   <td style="padding: 2px">
+                       <select disabled class="form-control" name="student">
+                           <option selected>{{student.first_name }} {{student.last_name }}</option>
+                       </select>
+                   </td>
+                   <td  style="padding: 2px">
+                       <input disabled class="form-control" name="attendance_date" value="{{ date }}">
+                   </td>
+                   <td  style="padding: 2px">
+                       <div class="radio-inline">
+                          <label><input type="radio" name="status-{{ student.id }}" value="present"
+                           {% if student.status == "present" %}checked{% endif %}>present</label>
+                       </div>
+                       <div class="radio-inline">
+                          <label><input type="radio" name="status-{{ student.id }}" value="absent"
+                                        {% if not student.status or student.status == "absent" %}checked{% endif %}>absent</label>
+                       </div>
+                   </td>
+                   <td  style="padding: 2px">
+                        <input class="form-control" name="notes" value="{{ student.notes }}">
+                   </td>
+                </tr>
+          {% endfor %}
     {% endfor %}
-  </tr></thead>
-  {% endif %}
-  <tr>
-
-  {% for field in form.visible_fields %}
-   <td style="padding: 2px">
-     {% if field.label == 'Status' %} <!-- was used native Django widget -->
-     {% for radio in form.status %}
-      <span class="radio-inline"> {{ radio }} </span>
-      {% endfor %}
-     {% else %}  <!-- was used crispy_form -->
-         {# Include the hidden fields in the form #}
-         {% if forloop.first %}
-         {% for hidden in form.hidden_fields %}
-         {{ hidden|as_crispy_field }}
-         {% endfor %}
-      {% endif %}
-         {{ field.errors.as_ul }}
-         {{ field }}
-    {% endif %}
-    </td>
-  {% endfor %}
-  </tr>
-{% endfor %}
-
-{% endfor %}
 </table>
 
 
@@ -90,38 +88,47 @@
 
     $(document).ready(function(){
 
-        // $('select').each(function(){
-        //     if($(this).find('option:selected').text() == 'absent')
-        //         $(this).css({'background-color': '#ff9999'});
-        //     if($(this).find('option:selected').text() == 'present')
-        //         $(this).css({'background-color': 'lightgreen'});
-        // });
+        $('.student-attendance-row input, .student-attendance-row select').on("change", function(){
+            $(this).closest('.student-attendance-row').addClass('changed')
+        });
 
-        // $('select').on('change', function(){
-        //     if($(this).find('option:selected').text() == 'absent')
-        //         $(this).css({'background-color': '#ff9999'});
-        //     if($(this).find('option:selected').text() == 'present')
-        //         $(this).css({'background-color': 'lightgreen'});
-        // });
-
-        function getParameterByName(name, url) {
-            if (!url) {
-              url = window.location.href;
+        form_submitted = false;
+        $('#attendance_form').on("submit", function(e){
+//            console.log("submit");
+            if (form_submitted==false){
+                e.preventDefault();
+                data = {};
+                var csrf_token = $('#attendance_form [name="csrfmiddlewaretoken"]').val();
+                data["csrfmiddlewaretoken"] = csrf_token;
+                data["school_id"] = "{{ school_id }}";
+                data["shift"] = "{{ shift }}";
+                data["attendance_date"] = "{{ date }}";
+                attendance_data = [];
+                $('.student-attendance-row.changed, .student-attendance-row.attendance-to-create').each(function(){
+                    class_id = $(this).data("class-id");
+                    student_id = $(this).data("student-id");
+                    status = $(this).find('[type="radio"]:checked').val();
+                    notes = $(this).find('[name="notes"]').val();
+                    attendance_id = $(this).data("attendance-id");
+                    attendance_data.push({"class_id": class_id,
+                        "attendance_id": attendance_id,
+                        "student_id": student_id, "status": status,
+                        "notes": notes})
+                });
+                data["attendance_students_data"] = JSON.stringify(attendance_data);
+                var url = $(this).data('link');
+                form_submitted = true;
+                $.ajax({
+                     url: url,
+                     type: 'POST',
+                     data: data,
+                     cache: true,
+                     success: function (data) {
+                         $('#attendance_form').submit();
+                     }
+                });
             }
-            name = name.replace(/[\[\]]/g, "\\$&");
-            var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-                results = regex.exec(url);
-            if (!results) return null;
-            if (!results[2]) return '';
-            return decodeURIComponent(results[2].replace(/\+/g, " "));
-        }
-
-
-        if(getParameterByName('readonly')){
-            $(this).find('select').prop('disabled', true);
-            $(this).find('input[type="submit"]').hide();
-        }
-
+        });
 
         $('form').bind('submit', function () {
             $(this).find('select.attendance_student').prop('disabled', false);
