@@ -16,6 +16,10 @@ from collections import OrderedDict
 from django.utils import timezone
 from dateutil.relativedelta import relativedelta
 from django.shortcuts import HttpResponseRedirect
+from django.http import JsonResponse
+import json
+import ast
+import datetime
 
 
 def go_home(request):
@@ -62,14 +66,14 @@ def attendance_dates(request, school_id, shift):
     five_days_back = date.today() - timedelta(5)
     next_day = date.today() + timedelta(1)
     dates_range = list(get_dates_range(five_days_back, next_day, timedelta(days=1)))
-    
+
     cursor = connection.cursor()
     cursor.execute(
     '''SELECT i,
     COUNT (*) AS num_att,
     %s AS school_id
     FROM
-    (select i::date from generate_series(Date(Now() -  Interval '2 day'), 
+    (select i::date from generate_series(Date(Now() -  Interval '2 day'),
       Date(Now()), '1 day'::interval) i) AS A
     LEFT JOIN (SELECT X.*, Y.pkss_school_id
     FROM attendance_attendance AS X
@@ -98,7 +102,7 @@ def attendance_dates(request, school_id, shift):
             'l1': l1, 
             'sch': sch,
             'shift': shift,
-            } 
+            }
     return render(request, 'attendance_dates.html', context)
 
 
@@ -124,27 +128,28 @@ def add_attendance2(request, school_id, date, shift, readonly=False):
             s = School.objects.filter(teacher__id = request.user.teacher.id) #JQ: added
             classes_list = Class.objects.filter(school__id=school.pk).filter(school_id__in = s).filter(shift = shift) #JQ: added
 
-        formsets = {}
-
-        for clas in classes_list:
-            students_list = Student.objects.filter(pkss_school__id=school.pk, pkss_class=clas).filter(currently_enrolled=True)
-            students_list_initial = [{
-                                 'student': student,
-                                 'attendance_date': date,
-                             }
-                             for student in students_list
-                             ]
-
-            attendance_formset = modelformset_factory(Attendance, form=AttendanceForm,
-                                                      extra=len(students_list),
-                                                      max_num=len(students_list)
-                                                      )
-
-            formsets[clas] = attendance_formset(initial=students_list_initial,
-                                                queryset=Attendance.objects.filter(attendance_date=date, student__in=students_list),
-                                                prefix=clas)
-
         date = datetime.datetime.strptime(date, "%Y-%m-%d").date()
+        student_classes_attendance= dict()
+        for cl in classes_list:
+            students = Student.objects.filter(pkss_school__id=school.pk, pkss_class=cl, currently_enrolled=True)
+            students_list = list(students.values())
+            attended_students = list(Attendance.objects.filter(attendance_date=date, student__in=students).values())
+
+            attended_students_dict = dict()
+            for item in attended_students:
+                 attended_students_dict[item["student_id"]] = {"attendance_date": item["attendance_date"],
+                                                               "notes": item["notes"],
+                                                               "attendance_id": item["id"],
+                                                               "status": item["status"]
+                                                               }
+            for student in students_list:
+                if student["id"] in attended_students_dict:
+                    student["attendance_date"] = attended_students_dict[student["id"]]["attendance_date"]
+                    student["notes"] = attended_students_dict[student["id"]]["notes"]
+                    student["attendance_id"] = attended_students_dict[student["id"]]["attendance_id"]
+                    student["status"] = attended_students_dict[student["id"]]["status"]
+
+            student_classes_attendance[cl] = students_list
 
         if request.method == 'POST':
             #s = School.objects.filter(teacher__id = request.user.teacher.id) #JQ: added
@@ -154,32 +159,64 @@ def add_attendance2(request, school_id, date, shift, readonly=False):
             else:
                 s = School.objects.filter(teacher__id = request.user.teacher.id) #JQ: added
                 classes_list = Class.objects.filter(school__id=school.pk).filter(school_id__in = s).filter(shift = shift) #JQ: added
-            
-            formsets = {}
-            formsets_valid = True
-            for clas in classes_list:
-                students_list = Student.objects.filter(pkss_school__id=school.pk, pkss_class=clas).filter(currently_enrolled=True)
-                attendance_formset = modelformset_factory(Attendance, form=AttendanceForm,
-                                                          extra=len(students_list),
-                                                          max_num=len(students_list)
-                                                          )
+            msg = 'Attendance submitted successfully for %s on %s for %s classes.' % (school.school_name, date.strftime("%b %d, %Y"), shift)
+            messages.success(request, msg)
+            return redirect(reverse('attendance_dates', kwargs={'school_id': school.pk, 'shift': shift}))
+        context = {
+                   'date': date,
+                   'school': school,
+                   'school_id': school_id,
+                   'shift': shift,
+                   'student_classes_attendance': student_classes_attendance
+                   }
+        return render(request, 'group_attendance.html', context)
 
-                formsets[clas] = attendance_formset(request.POST, prefix=clas)
-                if formsets[clas].is_valid():
-                    #formsets[clas].save()
-                    for ins in formsets[clas].save(commit=False):
-                        ins.att_taker = request.user.username
-                        ins.save()
-                else:
-                    formsets_valid = False
 
-            if formsets_valid:
-                msg = 'Attendance submitted successfully for %s on %s for %s classes.' % (school.school_name, date.strftime("%b %d, %Y"), shift)
-                messages.success(request, msg)
-                return redirect(reverse('attendance_dates', kwargs={'school_id': school.pk, 'shift': shift}))
+@login_required
+def ajax_save_student_attendance(request):
+    response_data = dict()
 
-        return render(request, 'group_attendance.html', {'formsets': formsets, 'date': date, 'school': school, 'shift':shift})   
+    if request.POST:
+        data = request.POST
+        user = request.user
+        school_id = data.get("school_id")
+        shift = data.get("shift")
+        attendance_date = datetime.datetime.strptime(data.get("attendance_date"), "%b. %d, %Y")
+        attendance_students_data = data.getlist(u"attendance_students_data")
+        if attendance_students_data:
+            attendance_students_data = ast.literal_eval(attendance_students_data[0])
 
+            #re-use of the code from formset view to define access level
+            if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager':
+                classes_list = Class.objects.filter(school__id=school_id).filter(shift = shift) #JQ: added
+            else:
+                s = School.objects.filter(teacher__id = request.user.teacher.id) #JQ: added
+                classes_list = Class.objects.filter(school__id=school_id).filter(school_id__in = s).filter(shift = shift) #JQ: added
+            available_classes_ids=[item.id for item in classes_list]
+
+            new_attendances_list = list()
+            for attendance_info in attendance_students_data:
+                if attendance_info["class_id"] in available_classes_ids:
+                    # print attendance_info
+                    status = attendance_info[u"status"]
+                    notes = attendance_info[u"notes"]
+                    student_id = attendance_info[u"student_id"]
+                    if attendance_info[u"attendance_id"]:
+                        attendance = Attendance.objects.get(id=attendance_info[u"attendance_id"])
+                        attendance.status = status
+                        attendance.notes = notes
+                        attendance.att_taker = user
+                        attendance.save(force_update=True)
+                    else:
+                        attendance = Attendance(status=status, notes=notes,
+                                                               attendance_date=attendance_date,
+                                                               student_id=student_id,
+                                                               att_taker=user
+                                                )
+                        new_attendances_list.append(attendance)
+            Attendance.objects.bulk_create(new_attendances_list)
+
+    return JsonResponse(response_data)
 
 
 @login_required

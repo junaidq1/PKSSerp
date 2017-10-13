@@ -41,7 +41,10 @@ urlpatterns = [
     url(r'^attendance_dates/(?P<school_id>\d+)/(?P<shift>\w+)$', att.attendance_dates, name='attendance_dates'),
     #url(r'^attendance2/(?P<school_id>\d+)/(?P<date>\d{4}-\d{2}-\d{2})/$', att.add_attendance2, name='add_attendance2'), old
     url(r'^attendance2/(?P<school_id>\d+)/(?P<date>\d{4}-\d{2}-\d{2})/(?P<shift>\w+)$', att.add_attendance2, name='add_attendance2'),
-    url(r'^att/(?P<school_id>\d+)/(?P<date>\d{4}-\d{2}-\d{2})$', att.view_attendance_deets, name='view_att_deets'), 
+    url(r'^att/(?P<school_id>\d+)/(?P<date>\d{4}-\d{2}-\d{2})$', att.view_attendance_deets, name='view_att_deets'),
+
+    url(r'^ajax_save_student_attendance$', att.ajax_save_student_attendance, name='ajax_save_student_attendance'),
+
     #teacher attendance
     url(r'^affiliated_schools_tattendance/$', tatt.tattendance_affiliated_schools, name='taffiliated_schools'),
     url(r'^tattendance_dates/(?P<school_id>\d+)/$', tatt.tattendance_dates, name='tattendance_dates'),
