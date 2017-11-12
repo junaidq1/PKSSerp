@@ -45,6 +45,11 @@
     <script src="https://code.highcharts.com/highcharts-more.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     
+    <!-- these 2 below are for jquery DataTables -->
+    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.13/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.13/js/jquery.dataTables.js"></script>
+
+    
 
     {% include 'barchart.html' %}
     {% include 'linechart.html' %}
@@ -54,10 +59,7 @@
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
 
-    {% block scr %}
-
-    {% endblock scr %}
-    
+  
 
     {% if form %}
       {{ form.media }}
@@ -76,6 +78,14 @@
     <!-- <script src="{% static 'js/bootstrap.min.js' %}"></script>  -->
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
     <link href="{% static 'css/base.css' %}" rel="stylesheet"/>
+
+    <!-- this is for jquery colorize -->
+    <script src="{% static 'js/jquery-colorize.js' %}"></script>
+
+    {% block scr %}
+
+    {% endblock scr %}
+    
   </head>
 
 

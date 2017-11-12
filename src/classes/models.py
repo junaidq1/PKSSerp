@@ -43,6 +43,7 @@ class Class(models.Model):
 
 	class Meta:
 		unique_together = ("school", "class_name", "section")
+		ordering = ['school_class_section'] #test if this works
 
 #this is signal receiver that updates the school_class_section field
 def create_school_class_section_field(sender, instance, **kwargs):

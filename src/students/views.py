@@ -14,6 +14,16 @@ from attendance.forms import AddAttCalDateForm, AddUnexpectedHolidayForm
 from datetime import datetime, timedelta
 from django.contrib import messages
 from dateutil.relativedelta import relativedelta
+# data stuff below
+import numpy as np
+import pandas as pd 
+import matplotlib
+from django_pandas.io import read_frame
+#matplotlib.use('Agg')
+#import matplotlib.pyplot as plt
+#from pylab import savefig
+#import seaborn as sns 
+
 
 
 @login_required 
@@ -55,13 +65,18 @@ def student_profile_details(request, pk=None):
 		return render(request, "student_profile_details.html", context) 
 
 
-#edit an existing student record
+#edit an existing student record 
 @login_required
 def edit_student_record(request, pk=None):
 	if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'principal' or request.user.useraccess.access_level == 'teacher' or request.user.useraccess.access_level == 'coordinator':
 		std = get_object_or_404(Student, pk=pk)
 		#form = StudentForm(request.POST or None, request.FILES or None, instance=std)
 		form = StudentForm(request.POST or None, instance=std)
+		#the two lines below limit class assignment / selection based on principal/teachers access schools
+		if request.user.useraccess.access_level == 'teacher' or request.user.useraccess.access_level == 'principal':
+			valid_schools = School.objects.filter(teacher__id = request.user.teacher.id)
+			form.fields["pkss_class"].queryset = Class.objects.filter(school_id__in = valid_schools)
+		#form.fields["pkss_class"].queryset = Class.objects.filter(school_id= std.pkss_school)
 		if form.is_valid():
 			try:
 				instance = form.save(commit=False)
@@ -107,6 +122,10 @@ def unenroll_student(request, pk=None):
 def add_a_student(request):
 	if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'principal' or request.user.useraccess.access_level == 'coordinator':
 		form = StudentForm(request.POST or None, request.FILES or None)
+		#the two lines below limit class assignment / selection based on principal/teachers access schools
+		if request.user.useraccess.access_level == 'teacher' or request.user.useraccess.access_level == 'principal':
+			valid_schools = School.objects.filter(teacher__id = request.user.teacher.id)
+			form.fields["pkss_class"].queryset = Class.objects.filter(school_id__in = valid_schools)
 		if form.is_valid():
 			try:
 				instance = form.save(commit=False)
@@ -407,3 +426,63 @@ def view_student_enrollments_and_leaving(request):
 
 		return render(request, "net_enrollments.html", context) 
 
+
+#view master list of enrolled students
+@login_required
+def enrolled_students_master(request):
+	qs = Student.objects.filter(currently_enrolled=True)
+	df = read_frame(qs, fieldnames=['registration_number','date_joined','date_of_birth', 'gender', \
+		'pkss_school__school_name', 'pkss_class__class_name', 'pkss_class__shift', 'pkss_school__pk',\
+		'pkss_class__school_class_section'])
+	df = df.rename(columns = {'pkss_school__school_name':'school_name','pkss_class__class_name':'class_name', \
+		'pkss_class__shift':'shift', 'pkss_class__school_class_section':'school_class_section' })
+	df['date_of_birth'] =  pd.to_datetime(df['date_of_birth'])
+	df['date_joined'] =  pd.to_datetime(df['date_joined'])
+	df['age'] = (datetime.today() - df['date_of_birth']).dt.days / 365
+	df['tenure'] = (datetime.today() - df['date_joined']).dt.days / 365
+	df2 = df.groupby('school_name')
+	df2 = df2.apply(lambda x: pd.Series(dict(
+		active_students = len(x['registration_number']),
+		boys=(x['gender'] == 'male').sum(),
+		girls=(x['gender'] == 'female').sum(),
+		morning=(x['shift'] == 'morning').sum(),
+		afternoon=(x['shift'] == 'evening').sum(),
+		pg=(x['class_name'] == 'Play Group').sum(),
+		nursery=(x['class_name'] == 'Nursery').sum(),
+		class_1=(x['class_name'] == 'Class 1').sum(),
+		class_2=(x['class_name'] == 'Class 2').sum(),
+		class_3=(x['class_name'] == 'Class 3').sum(),
+		class_4=(x['class_name'] == 'Class 4').sum(),
+		class_5=(x['class_name'] == 'Class 5').sum(),
+		avg_age = np.mean(x['age']),
+		avg_tenure = np.mean(x['tenure']),
+		sch_pk = np.max(x['pkss_school__pk']),
+		sections = x['school_class_section'].nunique() ))) 
+	df2_sum = pd.DataFrame(df2.sum()).T #transpose the total field
+	df2_sum['avg_age']= np.mean(df['age']) #weighted avg across all schools
+	df2_sum['avg_tenure']= np.mean(df['tenure']) #weighted avg across all schools
+	df2_sum.rename(index={0:'Total'}, inplace=True)
+	df3= pd.concat( [df2,df2_sum] )
+	df3.index.name = 'schools'  #change index
+	#calculate percentages below
+	df3['perc_of_total'] = df3['active_students'] / sum(df2['active_students']) *100
+	df3['perc_boys'] = df3['boys'] / df3['active_students'] *100
+	df3['perc_girls'] = df3['girls'] / df3['active_students'] *100
+	df3['perc_morning'] = df3['morning'] / df3['active_students'] *100
+	df3['perc_afternoon'] = df3['afternoon'] / df3['active_students'] *100
+	df3['perc_pg'] = df3['pg'] / df3['active_students'] *100
+	df3['perc_nursery'] = df3['nursery'] / df3['active_students'] *100
+	df3['perc_class_1'] = df3['class_1'] / df3['active_students'] *100
+	df3['perc_class_2'] = df3['class_2'] / df3['active_students'] *100
+	df3['perc_class_3'] = df3['class_3'] / df3['active_students'] *100
+	df3['perc_class_4'] = df3['class_4'] / df3['active_students'] *100
+	df3['perc_class_5'] = df3['class_5'] / df3['active_students'] *100
+	#df3['sch_pk'] = df3['sch_pk'].round(decimals=0)
+	df3 = df3.reset_index()
+
+	df3 = df3.to_dict(orient='records') #WORKS   #this solved the problem
+	context ={
+        'data': df3,
+	}
+	return render(request, 'student_master_list.html', context)
+ 

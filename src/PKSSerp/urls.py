@@ -1,4 +1,4 @@
-"""PKSSerp URL Configuration 
+"""PKSSerp URL Configuration  
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/1.10/topics/http/urls/
@@ -45,7 +45,7 @@ urlpatterns = [
 
     url(r'^ajax_save_student_attendance$', att.ajax_save_student_attendance, name='ajax_save_student_attendance'),
 
-    #teacher attendance
+    #teacher attendance 
     url(r'^affiliated_schools_tattendance/$', tatt.tattendance_affiliated_schools, name='taffiliated_schools'),
     url(r'^tattendance_dates/(?P<school_id>\d+)/$', tatt.tattendance_dates, name='tattendance_dates'),
     url(r'^tattendance/(?P<school_id>\d+)/(?P<date>\d{4}-\d{2}-\d{2})/$', tatt.add_tattendance, name='add_tattendance'),
@@ -66,10 +66,16 @@ urlpatterns = [
     url(r'^attendance_by_school_month/$', att.attendance_by_school_month, name='attendance_by_school_month'),
     #new daily attendance dates (8-8-17)
     url(r'^daily_attendance_details/(?P<school_id>\d+)/(?P<date>\d{4}-\d{2}-\d{2})/$', att.view_daily_attendance_deets, name='view_daily_deets'),
+    #new daily attendance by month (8-8-17)
+    url(r'^daily_attendance_by_year_month/(?P<date>\d{4}-\d{2}-\d{2})/$', att.daily_attendance_by_year_month, name='month_day_deets'), 
+    url(r'^(?P<date>\d{4}-\d{2}-\d{2})/charts/attheatmap.png$', att.daily_attendance_chart, name='att_chart_heatmap'), #daily att heatmap chart
+    url(r'^(?P<date>\d{4}-\d{2}-\d{2})/charts/attheatmap2.png$', att.daily_attendance_chart2, name='att_chart_heatmap2'), #daily att boxplot chart
+    url(r'^daily_attendance_by_year_month_table/(?P<date>\d{4}-\d{2}-\d{2})/$', att.daily_attendance_by_year_month_table, name='month_day_deets_table'), #table only
 
     url(r'^login/', LoginView.as_view(), name='login'),
     url(r'^logout/$', LogoutView.as_view(), name='logout'),
     #student details
+    url(r'^enrolled_students_master/$', st.enrolled_students_master, name='student_master'), #NEW
     url(r'^search_students/$', st.search_students, name='search_student'),
     url(r'^student_profile/(?P<pk>\d+)/$', st.student_profile_details, name='std_profile'),
     url(r'^edit_student_profile/(?P<pk>\d+)/$', st.edit_student_record, name='edit_std_profile'),
@@ -83,7 +89,7 @@ urlpatterns = [
     url(r'^add_unexpected_holiday/$', st.add_unexpected_holiday, name='add_unexp_holiday'), #add unexp holiday
     url(r'^unexpected_holidays/$', st.view_unexpected_holidays_tot, name='unexp_holiday_rept'), #add unexp holiday
     url(r'^unexpected_holidays_deepdive/(?P<pk>\d+)/$', st.unexpected_holidays_deepdive, name='unexp_holiday_deepdive'),
-    #school profile
+    #school profile 
     url(r'^school_list/$', sch.view_list_of_schools, name='school_list'), #list of schools
     url(r'^school_list/(?P<pk>\d+)/$', sch.school_profile_deepdive, name='school_profile_deets'),
     url(r'^list_of_students/(?P<pk>\d+)/$', sch.student_list_school, name='student_list_school'),
@@ -97,6 +103,12 @@ urlpatterns = [
     url(r'^donations_crosstab/$', don.donation_crosstab, name='donations_xtab'), #donation crosstab
     #enrollment report
     url(r'^net_enrollment_report/$', st.view_student_enrollments_and_leaving, name='net_enrollment'), 
+    #tests
+    url(r'^three_days/$', att.three_day_report, name='three_day_att'),
+    url(r'^aa/$', att.aa, name='aa'), 
+    url(r'^aa2/$', att.aa2, name='aa2'), #testing django-dataframes
+    #url(r'^charts/simple.png$', att.simple, name='something123'),
+    
 ]
 
 

@@ -1,0 +1,74 @@
+{% load staticfiles %}
+
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="{% static 'js/jquery-colorize.js' %}"></script>
+    </head>
+ 
+
+<body>
+<div class='container'>
+
+
+ 	<div class='row'>
+		<div class='col-sm-4'> 
+			
+		
+	 		<h4> <b style="color:#939393"> 3-Day PKSS Attendance Report </b></h4>
+	 		<br>
+	 		<TABLE class="table"> 
+	 		<!-- <caption>Total students by class</caption> -->
+			      <THEAD>        
+			        <TR>
+			          <TH style="text-align:center" width="40">School</TH> 
+			          <TH style="text-align:center" width="65">Shift</TH> 
+			          <TH style="text-align:center">{{date_today|date:"D - M d"}}</TH> 
+			          <TH style="text-align:center">{{date_today_minus1|date:"D - M d"}}</TH>
+			          <TH style="text-align:center">{{date_today_minus2|date:"D - M d"}}</TH> 
+			        </TR>
+			      </THEAD>
+
+
+			      <TBODY>
+			        {% for obj in att %}
+			        <TR>
+			          <TD class="vert-hor-align"><b style="color:#a8a8a8">{{obj.school_name}}</b> </TD>
+			          <TD class="vert-hor-align"><i style="color:#a8a8a8">{{obj.shift}}</i> </TD>
+
+			          <TD class="vert-hor-align">
+						{% if obj.attendance_today > 0 %} <b>{{obj.attendance_today|floatformat:"0"}}%</b>  
+						{% else %} <i style="color:#ff9999">Missing</i> {% endif %}
+			          </TD>
+			          <TD class="vert-hor-align">
+						{% if obj.attendance_minus1 > 0 %} <b>{{obj.attendance_minus1|floatformat:"0"}}%</b>  
+						{% else %} <i style="color:#ff9999">Missing</i> {% endif %}
+			          </TD>
+			          <TD class="vert-hor-align">
+						{% if obj.attendance_minus2 > 0 %} <b>{{obj.attendance_minus2|floatformat:"0"}}%</b>  
+						{% else %} <i style="color:#ff9999">Missing</i> {% endif %}
+			          </TD>
+			        {% endfor %}
+			        </TR>
+			      </TBODY>
+			       
+
+
+
+			    </TABLE>
+
+ 		</div> 		
+	</div>
+</div>
+
+
+
+
+</body>
+
+</html>
+ 
+

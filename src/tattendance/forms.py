@@ -1,7 +1,7 @@
 from django import forms
 from .models import TeacherAttendance
 from crispy_forms.helper import FormHelper
-from datetimewidget.widgets import DateWidget
+from datetimewidget.widgets import DateWidget 
 
 class TeacherAttendanceForm(forms.ModelForm):
 
@@ -10,6 +10,10 @@ class TeacherAttendanceForm(forms.ModelForm):
         class Meta:
             model = TeacherAttendance
             fields = ("teacher", "attendance_date", "school", "status", "notes")
+            widgets = {
+            'status': forms.RadioSelect()
+            #'student': forms.TextInput()
+            } 
 
         def __init__(self, *args, **kwargs):
             super(TeacherAttendanceForm, self).__init__(*args, **kwargs)

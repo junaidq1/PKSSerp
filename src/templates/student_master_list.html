@@ -1,0 +1,110 @@
+
+{% extends "base.html" %}
+{% load staticfiles %}
+
+
+ 
+{% block content %}
+
+ 
+<div class='container'>
+<br>
+    <div class='row'>
+
+
+<div class='col-sm-12'>
+<br><br>
+<h3> Profile of Currently Enrolled Students by School</h3>
+
+<br><br>
+
+<TABLE class="table" id="theTable"> 
+<!-- <caption>Total students by class</caption> -->
+      <THEAD>        
+        <TR>
+          <TH style="text-align:center" width="65">School</TH> 
+          <TH style="text-align:center" width="70">Act. Students</TH>
+          <TH style="text-align:center" width="70">% total enrol. </TH>
+          <TH style="text-align:center">Boys</TH>
+          <TH style="text-align:center">Girls</TH>
+          <TH style="text-align:center">Boys %</TH>
+          <TH style="text-align:center">Girls %</TH>
+          <TH style="text-align:center" width="100">Morning</TH>
+          <TH style="text-align:center" width="100">Afternoon</TH>
+          <TH style="text-align:center" width="35">PG</TH>
+          <TH style="text-align:center" width="35">Nursery</TH>
+          <TH style="text-align:center" width="35">Cl 1</TH>
+          <TH style="text-align:center" width="35">Cl 2</TH>
+          <TH style="text-align:center" width="35">Cl 3</TH>
+          <TH style="text-align:center" width="35">Cl 4</TH>
+          <TH style="text-align:center" width="35">Cl 5</TH>
+          <TH style="text-align:center">Avg. Age</TH>
+          <TH style="text-align:center">Avg. Tenure</TH>
+          <TH style="text-align:center"># sections</TH>
+        </TR>
+      </THEAD> 
+     
+      <TBODY>
+     {% for obj in data %}  
+        <TR>
+          <TD class="vert-hor-align"><a href="{% url 'school_profile_deets' obj.sch_pk|floatformat:'0' %}"> <b>{{obj.schools}}</b> </a></TD>
+          <TD class="vert-hor-align">{{obj.active_students|floatformat:"0"}}</TD>
+          <TD class="vert-hor-align">{{obj.perc_of_total|floatformat:"0"}}% </TD>
+          <TD class="vert-hor-align">{{obj.boys|floatformat:"0"}}</TD>
+          <TD class="vert-hor-align">{{obj.girls|floatformat:"0"}}</TD>
+          <TD class="vert-hor-align">{{obj.perc_boys|floatformat:"0"}}%</TD>
+          <TD class="vert-hor-align">{{obj.perc_girls|floatformat:"0"}}%</TD>
+          <TD class="vert-hor-align">{{obj.morning|floatformat:"0"}} <i style="color:#a8a8a8">| {{obj.perc_morning|floatformat:"0"}}% </i></TD>
+          <TD class="vert-hor-align">{{obj.afternoon|floatformat:"0"}} <i style="color:#a8a8a8">| {{obj.perc_afternoon|floatformat:"0"}}% </i></TD>
+          <TD class="vert-hor-align">{{obj.perc_pg|floatformat:"0"}}%</TD>
+          <TD class="vert-hor-align">{{obj.perc_nursery|floatformat:"0"}}%</TD>
+          <TD class="vert-hor-align">{{obj.perc_class_1|floatformat:"0"}}%</TD>
+          <TD class="vert-hor-align">{{obj.perc_class_2|floatformat:"0"}}%</TD>
+          <TD class="vert-hor-align">{{obj.perc_class_3|floatformat:"0"}}%</TD>
+          <TD class="vert-hor-align">{{obj.perc_class_4|floatformat:"0"}}%</TD>
+          <TD class="vert-hor-align">{{obj.perc_class_5|floatformat:"0"}}%</TD>
+          <TD class="vert-hor-align">{{obj.avg_age|floatformat:"1"}} yrs</TD>
+          <TD class="vert-hor-align">{{obj.avg_tenure|floatformat:"1"}} yrs</TD>
+          <TD class="vert-hor-align">{{obj.sections|floatformat:"0"}}</TD>
+      </TR>
+      {% endfor %}  
+      </TBODY>
+ </TABLE>
+
+ 
+
+   
+<br><br><br>
+
+<a href='{% url "user_homepage" %}' class="btn btn-primary" role="button">
+  Back to Home</a><br>
+<br><br>
+
+</div>
+</div>
+</div>
+ 
+{% endblock %}
+  
+
+
+{% block extra_script %}
+
+    <script type="text/javascript">
+    $(document).ready(function() {
+
+      // Table Heat Map
+      $("#theTable tbody td").not(":nth-child(1),:nth-child(2),:nth-child(3),:nth-child(4),:nth-child(5)\
+        ,:nth-child(6),:nth-child(7),:nth-child(8),:nth-child(9),:nth-child(17),:nth-child(18),:nth-child(19)").colorize({ 
+            min: 0,
+            max: 60,
+            center:18,
+            theme: "new-red"
+            //theme: "new-red"
+            });
+
+        }
+      );     
+    </script>
+
+{% endblock extra_script %}

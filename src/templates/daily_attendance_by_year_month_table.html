@@ -1,0 +1,138 @@
+
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+
+ 
+{% block content %}
+
+ 
+<div class='container'>
+<br>
+    <div class='row'>
+
+
+<div class='col-sm-8'>
+
+<h3> Attendance for all schools by day in {{ date_d |date:"M Y" }} </h3>
+
+
+<br>
+<TABLE class="table" id="theTable"> 
+<!-- <caption>Total students by class</caption> -->
+      <THEAD>        
+        <TR>
+          <TH style="text-align:center" width="65">School</TH> 
+          <TH style="text-align:center">1</TH>
+          <TH style="text-align:center">2</TH>
+          <TH style="text-align:center">3</TH>
+          <TH style="text-align:center">4</TH>
+          <TH style="text-align:center">5</TH>
+          <TH style="text-align:center">6</TH> 
+          <TH style="text-align:center">7</TH>
+          <TH style="text-align:center">8</TH>
+          <TH style="text-align:center">9</TH>
+          <TH style="text-align:center">10</TH>
+          <TH style="text-align:center">11</TH>
+          <TH style="text-align:center">12</TH>
+          <TH style="text-align:center">13</TH>
+          <TH style="text-align:center">14</TH>
+          <TH style="text-align:center">15</TH>
+          <TH style="text-align:center">16</TH>
+          <TH style="text-align:center">17</TH>
+          <TH style="text-align:center">18</TH>
+          <TH style="text-align:center">19</TH>
+          <TH style="text-align:center">20</TH>
+          <TH style="text-align:center">21</TH>
+          <TH style="text-align:center">22</TH>
+          <TH style="text-align:center">23</TH>
+          <TH style="text-align:center">24</TH>
+          <TH style="text-align:center">25</TH>
+          <TH style="text-align:center">26</TH>
+          <TH style="text-align:center">27</TH>
+          <TH style="text-align:center">28</TH>
+          <TH style="text-align:center">29</TH>
+          <TH style="text-align:center">30</TH>
+          <TH style="text-align:center">31</TH>
+        </TR>
+      </THEAD> 
+     
+      <TBODY>
+     {% for obj in attendance %}  
+        <TR>
+          <TD class="vert-hor-align"><a href="{% url 'school_attendance_det_view' obj.sch_pk date %}"> <b>{{obj.sch_name}}</b> </a></TD>
+          <TD class="vert-hor-align">{{obj.1|floatformat:"0"}}</TD>
+          <TD class="vert-hor-align">{{obj.2|floatformat:"0"}}</TD>
+          <TD class="vert-hor-align">{{obj.3|floatformat:"0"}}</TD>
+          <TD class="vert-hor-align">{{obj.4|floatformat:"0"}}</TD>
+          <TD class="vert-hor-align">{{obj.5|floatformat:"0"}}</TD>
+          <TD class="vert-hor-align">{{obj.6|floatformat:"0"}}</TD>
+          <TD class="vert-hor-align">{{obj.7|floatformat:"0"}}</TD>
+          <TD class="vert-hor-align">{{obj.8|floatformat:"0"}}</TD>
+          <TD class="vert-hor-align">{{obj.9|floatformat:"0"}}</TD>
+          <TD class="vert-hor-align">{{obj.10|floatformat:"0"}}</TD>
+          <TD class="vert-hor-align">{{obj.11|floatformat:"0"}}</TD>
+          <TD class="vert-hor-align">{{obj.12|floatformat:"0"}}</TD>
+          <TD class="vert-hor-align">{{obj.13|floatformat:"0"}}</TD>
+          <TD class="vert-hor-align">{{obj.14|floatformat:"0"}}</TD>
+          <TD class="vert-hor-align">{{obj.15|floatformat:"0"}}</TD>
+          <TD class="vert-hor-align">{{obj.16|floatformat:"0"}}</TD>
+          <TD class="vert-hor-align">{{obj.17|floatformat:"0"}}</TD>
+          <TD class="vert-hor-align">{{obj.18|floatformat:"0"}}</TD>
+          <TD class="vert-hor-align">{{obj.19|floatformat:"0"}}</TD>
+          <TD class="vert-hor-align">{{obj.20|floatformat:"0"}}</TD>
+          <TD class="vert-hor-align">{{obj.21|floatformat:"0"}}</TD>
+          <TD class="vert-hor-align">{{obj.22|floatformat:"0"}}</TD>
+          <TD class="vert-hor-align">{{obj.23|floatformat:"0"}}</TD>
+          <TD class="vert-hor-align">{{obj.24|floatformat:"0"}}</TD>
+          <TD class="vert-hor-align">{{obj.25|floatformat:"0"}}</TD>
+          <TD class="vert-hor-align">{{obj.26|floatformat:"0"}}</TD>
+          <TD class="vert-hor-align">{{obj.27|floatformat:"0"}}</TD>
+          <TD class="vert-hor-align">{{obj.28|floatformat:"0"}}</TD>
+          <TD class="vert-hor-align">{{obj.29|floatformat:"0"}}</TD>
+          <TD class="vert-hor-align">{{obj.30|floatformat:"0"}}</TD>
+          <TD class="vert-hor-align">{{obj.31|floatformat:"0"}}</TD>
+        </TR>
+      {% endfor %}  
+      </TBODY>
+ </TABLE>
+<br>
+<br>Click on school name for monthly details<br>
+   
+<br><br><br>
+<a href='{% url "attendance_summary" %}' class="btn btn-primary" role="button">
+  Back to Summary</a><br>
+<br><br>
+
+</div>
+</div>
+</div>
+
+{% endblock %}
+ 
+
+<!-- {% block extra_script %}
+
+
+
+{% endblock extra_script %}
+ -->
+<!-- 
+    <script type="text/javascript">
+    $(document).ready(function() {
+
+      // Table Heat Map
+      $("#theTable tbody td").not(":nth-child(1)").colorize({ 
+            min: 20,
+            max: 140,
+            // center:40,
+            theme: "blue-white-red"
+            //theme: "default"
+            });
+
+        }
+      );    
+    </script> -->
+
+

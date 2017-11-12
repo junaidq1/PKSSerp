@@ -2,7 +2,7 @@
 {% extends "base.html" %}
 {% load staticfiles %}
 {% load crispy_forms_tags %}
-
+{% load index %}
 
  
 {% block content %}
@@ -18,8 +18,10 @@
 
 <div class='col-sm-10'>
 
+ 
 <h4> Attendance Summary {% if 'date' not in request.GET %} (Last 12 Months) {% endif %} </h4>
 <br>
+
 
 {% for date, schools_list in last_12_months_attendance.items %}
 
@@ -40,7 +42,7 @@
             </tr>
         </thead>
 
-        {% for school in schools_list %}
+        {% for school in schools_list %} 
 
             <tbody> 
                 <tr>
@@ -54,18 +56,83 @@
                     <td>{{ school.end_of_month_enrollment_boys }}</td>
                     <td>{{ school.end_of_month_enrollment_girls }}</td>
                 </tr>
-            </tbody>
-
         {% endfor %}
+                <tr>
+                    <td>Total </td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        {% with overall|index:forloop.counter0 as obj %}
+                            {{ obj.overall_att_perc|floatformat:"0" }}%
+                        {% endwith %}
+                    </td>
+                    <td> 
+                        {% with overall|index:forloop.counter0 as obj %}
+                            {{ obj.boys_att|floatformat:"0" }}%
+                        {% endwith %}
+                    </td>
+                    <td> 
+                        {% with overall|index:forloop.counter0 as obj %}
+                            {{ obj.girls_att|floatformat:"0" }}%
+                        {% endwith %}
+                    </td>
+                    <td> 
+                        {% with overall|index:forloop.counter0 as obj %}
+                            {{ obj.enrl|floatformat:"0" }}
+                        {% endwith %}
+                    </td>
+                    <td>
+                        {% with overall|index:forloop.counter0 as obj %}
+                            {{ obj.boys_enrl|floatformat:"0" }} 
+                            <i style="color:#a8a8a8">| ({{ obj.boys_enrl_perc|floatformat:"0" }}%) </i>
+                        {% endwith %}
+                    </td>
+                    <td>
+                        {% with overall|index:forloop.counter0 as obj %}
+                            {{ obj.girls_enrl|floatformat:"0" }}
+                            <i style="color:#a8a8a8">| ({{ obj.girls_enrl_perc|floatformat:"0" }}%) </i>
+                        {% endwith %}
+                    </td>
+                </tr>
+           
+            </tbody>
+      
+        
 
     </table>
 
-    <br/><br/>
+    {% if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager'   or request.user.useraccess.access_level == 'coordinator' %}
 
-{% endfor %}
+    <div align="center"> <a href="{% url 'month_day_deets' date %}" >View {{ date|date:"M"}} attendance by day</a></div>
+    {% endif %}
 
+ {% endfor %} 
+<br><br><br>
 </div>
 </div>
+
+
 </div>
 
 {% endblock %}
+
+
+{% block extra_script %}
+
+    <script type="text/javascript">
+    $(document).ready(function() {
+
+
+      // Table Heat Map
+      $("TABLE TBODY TD").not(":nth-child(1),:nth-child(2),:nth-child(3),:nth-child(7),:nth-child(8),:nth-child(9)").colorize({ 
+            // min: 20,
+            // max: 90,
+            // center:40,
+            theme: "blue-white-red"
+            //theme: "default"
+            });
+        }
+      );    
+    </script>
+
+{% endblock extra_script %}

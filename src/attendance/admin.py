@@ -6,21 +6,22 @@ from .models import Attendance, AttendanceCalendar, NonScheduledHolidays
 
 class AttendanceModelAdmin(admin.ModelAdmin):
 
-	list_display = ['pk', 'get_school', 'get_class', 'attendance_date','student', 'datestamp', 'status', 'notes', 'att_taker']
+	list_display = ['pk', 'get_school','get_class', 'attendance_date','student', 'datestamp', 'status', 'notes', 'att_taker']
 	list_display_links = ['pk', 'student','attendance_date', 'datestamp', 'status', 'notes','att_taker']
 	search_fields = ['attendance_date', 'datestamp', 'status']
-	list_filter = ['attendance_date', 'datestamp', 'status', 'att_taker']
+	list_filter = ['attendance_date', 'datestamp', 'status', 'att_taker', 'student__pkss_school', 'student__pkss_class__shift']
 	
 	class Meta:
 		model = Attendance
-
+	
 	def get_school(self, obj): #to pull in foreign key
 		return obj.student.pkss_school
 	get_school.short_description = 'School Name'  #Renames column header
-	
+
 	def get_class(self, obj): #to pull in foreign key
 		return obj.student.pkss_class
-	get_school.short_description = 'Class'  #Renames column header
+	get_class.short_description = 'Class'  #Renames column header
+
 
 admin.site.register(Attendance, AttendanceModelAdmin) 
 

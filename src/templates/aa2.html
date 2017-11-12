@@ -1,0 +1,120 @@
+{% extends "base.html" %}  
+{% load staticfiles %}
+ 
+{% block content %}
+<div class="container">
+        <div class="row">
+		<br/>
+        <br/>
+        Look at the image below
+
+          <div class="col-sm-5">
+            <!-- <img src="{% static 'img/gdp_logo.png' %}" class="img-responsive"/> -->
+  <!--           <img src="{% static 'img/gdp_logo.png' %}">
+            <hr/>
+          	<img src="https://static01.nyt.com/images/2017/06/13/well/mfrl_beach/mfrl_beach-superJumbo.gif" data-caption="" "> -->
+          	
+<!--           	Orig queryset: <br /><br />
+          	{{alldata}}
+          	<hr/> -->
+          	record transform: <br /><br />
+          	{{df3}}
+          	<hr/>
+
+
+<!-- 
+          	Using to_dict(on pandas df): <br /><br />
+          	{{alldata2}}
+        	<hr>
+        	newdata: <br /><br />
+          	{{newdata}}
+        	<hr>
+ -->
+  <!--       	{% for c in alldata2.school_name.values %}
+        	<li> {{c}}</li>
+        	{% endfor %}
+			<hr>
+ -->
+
+<!-- 			<TABLE class="table"> 
+				<tr>PK School</tr> 
+				  
+				{% for obj in df3 %}
+				<tr>
+					<td>{{obj.school_name}}</td>
+				</tr>
+				{% endfor %}
+				
+			</TABLE> -->
+
+			<TABLE class="table"> 
+	 		<!-- <caption>Total students by class</caption> -->
+			      <THEAD>        
+			        <TR>
+			          <TH style="text-align:center" width="65">PK</TH> 
+			          <TH style="text-align:center" width="65">School Name</TH> 
+			          <TH style="text-align:center" width="65">City</TH> 
+			        </TR>
+			      </THEAD> 
+	 			
+				  <TBODY>
+			     {% for obj in df3 %}  
+			        <TR>
+			          <TD class="vert-hor-align">{{obj.pk}}</TD>
+			          <TD class="vert-hor-align"><b style="color:#a8a8a8">{{obj.school_name}}</b> </TD>
+			          <TD class="vert-hor-align">{{obj.city}}</TD>
+			        </TR>
+			      {% endfor %}  
+			      </TBODY>
+			 </TABLE>
+          </div>
+			 	
+        </div>
+ </div>
+
+{% endblock %}
+	
+
+
+<!--  this works but creates a horizontal table (I need a vertical table) 
+       <TABLE class="table"> 
+
+			 	{% for k1, k2 in alldata2.items %}
+			 	<tr> 
+			 	{% for v in k2.values %}
+			 	<TD>{{v}}</TD>
+			 	{% endfor %}   
+			 	</TR>
+			    {% endfor %} 
+			</TABLE> -->
+
+<!-- 		This creates a horizontal table but the column orders can be random
+			<TABLE class="table"> 
+				<tr>
+				{% for header in newdata.headers %}
+				<th>{{ header }}</th>
+				{% endfor %}
+				</tr>
+				  
+				{% for value in newdata.rows %}
+				<tr> 
+					{% for v in value %} 
+						<td>{{ v }}</td>
+					{% endfor %}
+				</tr>
+				{% endfor %}
+				
+			</TABLE> -->
+
+
+		<!-- Simple dictionary unpacking - works
+			{% for k1, k2 in alldata2.items %}  
+ 			<ul> {{k1}}</ul>
+ 				{% for v in k2.values %}
+ 				<li> {{v}}</li>
+ 				
+ 			     {% endfor %}
+ 			{% endfor %}
+ 			<hr> -->
+
+

@@ -1,0 +1,125 @@
+
+{% extends "base.html" %}
+{% load staticfiles %}
+
+
+{% block content %}
+
+<div class='container'>
+<br>
+<br>
+ 	<div class='row'>
+		<div class='col-sm-4'> 
+			
+	 		<h4> <b style="color:#939393"> 3-Day PKSS Attendance Report </b></h4>
+	 		<br>
+	 		<TABLE class="table"> 
+	 		<!-- <caption>Total students by class</caption> -->
+			      <THEAD>        
+			        <TR>
+			          <TH style="text-align:center" width="65">School</TH> 
+			          <TH style="text-align:center" width="65">Shift</TH> 
+			          <TH style="text-align:center">{{date_today|date:"D - M d"}}</TH> 
+			          <TH style="text-align:center">{{date_today_minus1|date:"D - M d"}}</TH>
+			          <TH style="text-align:center">{{date_today_minus2|date:"D - M d"}}</TH> 
+			        </TR>
+			      </THEAD> 
+			      
+<!-- 			      <TBODY>
+			      {% for obj in att %}  
+			        <TR>
+			          <TD class="vert-hor-align"><b style="color:#a8a8a8">{{obj.school_name}}</b> </TD>
+
+			          <TD class="vert-hor-align">
+						{% if obj.attendance_today > 0 %} <b>{{obj.attendance_today|floatformat:"0"}}%</b>  
+						{% else %} <i style="color:#ff9999">Missing</i> {% endif %}
+			          </TD>
+			          <TD class="vert-hor-align">
+						{% if obj.attendance_minus1 > 0 %} <b>{{obj.attendance_minus1|floatformat:"0"}}%</b>  
+						{% else %} <i style="color:#ff9999">Missing</i> {% endif %}
+			          </TD>
+			          <TD class="vert-hor-align">
+						{% if obj.attendance_minus2 > 0 %} <b>{{obj.attendance_minus2|floatformat:"0"}}%</b>  
+						{% else %} <i style="color:#ff9999">Missing</i> {% endif %}
+			          </TD>
+			        {% endfor %}
+			        </TR>
+			        
+			      </TBODY> 
+	 -->
+	 			{% for obj in att %}  
+				      <TBODY>
+			     
+			        <TR>
+			          <TD class="vert-hor-align"><b style="color:#a8a8a8">{{obj.school_name}}</b> </TD>
+			          <TD class="vert-hor-align"><i style="color:#a8a8a8">{{obj.shift}}</i> </TD>
+
+			          <TD class="vert-hor-align">
+			          {% if obj.attendance_today > 0 %}
+						{{obj.attendance_today|floatformat:"0"}}%
+					  {% else %} Missing {% endif %}
+			          </TD>
+			          <TD class="vert-hor-align">
+					  {% if obj.attendance_minus1 > 0 %}
+						{{obj.attendance_minus1|floatformat:"0"}}%
+					  {% else %} Missing {% endif %}
+			          </TD>
+			          <TD class="vert-hor-align">
+			          {% if obj.attendance_minus2 > 0 %}
+						{{obj.attendance_minus2|floatformat:"0"}}%
+					  {% else %} Missing {% endif %}
+			          </TD>
+			        
+			        </TR>
+			      </TBODY>
+			      {% endfor %}  
+			      
+			        
+
+<!-- 			only for testing			      
+			    </TABLE>
+
+			   <br>
+			   <hr/>
+			    <TABLE>
+				 <thead>
+				 <tr><td>One</td><td>Two</td><td>Three</td><td>Four</td></tr>
+				 </thead>
+				 <TBODY>
+				        <TR><TD>-100</TD><TD>Missing</TD><TD>35</TD><TD>115</TD></tr>
+				        <TR><TD>100</TD><TD>0</TD><TD>12</TD><TD>90</TD></tr>
+				        <TR><TD>75</TD><TD>12</TD><TD>40</TD><TD>22</TD></tr>
+				        <TR><TD>75</TD><TD>-5</TD><TD>40</TD><TD>-10</TD></tr>
+				  </TBODY>
+				  </TABLE>
+ --> 
+
+
+ 		</div> 		
+	</div>
+</div>
+
+
+{% endblock %}
+
+  
+
+{% block extra_script %}
+
+	<script type="text/javascript">
+	$(document).ready(function() {
+
+	  // Table Heat Map
+	  $("TABLE TBODY TD").not(":nth-child(1),:nth-child(2)").colorize({
+	  	//min: 30,
+        //max: 90,
+        //theme: "blue-white-red"
+	  });
+
+
+		}
+	  );
+	
+	</script>
+
+{% endblock extra_script %}

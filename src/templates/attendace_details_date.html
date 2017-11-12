@@ -23,7 +23,7 @@
     Avg. Total Teacher shifts (last 1 month): <z style="color:#85BC22"> {{num_teacher_shifts}} </z> -->
     <br>
 
-    <TABLE class="table">
+    <TABLE id="jstable" class="display">
       <THEAD>        
         <TR> 
         <!-- #class, student, status, date, datestamp, att taker - filter school and date -->
@@ -66,3 +66,22 @@
 </div>
 
 {% endblock %}
+
+
+{% block scr %}
+ 
+   <script> 
+      $(document).ready( function () {
+          $("#jstable").DataTable({
+          paging: false,
+          //scrollY: 585
+      });
+      } );
+    </script>   
+
+
+
+{% endblock scr %}
+
+
+

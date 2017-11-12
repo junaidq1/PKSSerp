@@ -1,0 +1,37 @@
+
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+
+ 
+{% block content %}
+
+ 
+<div class='container'>
+<br>
+    <div class='row'>
+    <div class='col-sm-12'>
+
+<h3> Attendance for all schools by day in {{ date_d |date:"M Y" }} </h3>
+
+<a href="{% url 'month_day_deets_table' date %}" >View data as table</a>
+
+<img src="{% url 'att_chart_heatmap' date %}" class="img-responsive"/> 
+
+<img src="{% url 'att_chart_heatmap2' date %}" class="img-responsive"/> 
+
+<a href="{% url 'month_day_deets_table' date %}" >View data as table</a>
+   
+<br><br>
+
+<a href='{% url "attendance_summary" %}' class="btn btn-primary btn-large" role="button">
+	Back to summary</a><br>
+<br>
+<br>
+
+</div>
+</div>
+</div>
+
+{% endblock %}

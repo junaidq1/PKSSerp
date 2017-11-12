@@ -5,11 +5,19 @@ h4 {
 h5 {
   color: #777777;
 }
-
+ 
 h1{
     margin: 0;
 }
  
+.table2{
+    border-collapse: collapse;
+    border: 1px solid white;
+}
+.table2 td{
+    border: 1px solid white;
+    padding: 10px 20px;
+} 
 
 .table tbody>tr>td.vert-align{
     vertical-align: middle;

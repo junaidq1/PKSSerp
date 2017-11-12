@@ -45,3 +45,7 @@ h1{
     }
 
 
+.radio-attendance input[type="radio"] {
+    width: 1.2em;
+    height: 1.2em;
+ }

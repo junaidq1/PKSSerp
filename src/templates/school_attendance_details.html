@@ -8,8 +8,10 @@
 {% block content %}
 
 <div class='container'>
-<br>
+
+
     <div class='row'>
+
 
 <br>
 
@@ -53,33 +55,45 @@
 
             <thead>
                 <th></th>
-                <th>Average present daily</th>
-                <th>% Attendance</th>
-                <th>% Attendance Last Month</th>
+                <th style="text-align:center">Average present daily</th>
+                <th style="text-align:center">% Attendance</th>
+                <th style="text-align:center"> % Attendance Last Month</th>
                 
             </thead>
 
             <tbody>
                 <tr>
                     <td>Overall</td>
-                    <td>{{ attendance.avg_overall_present|floatformat:"1" }}</td>
-                    <td>{{ attendance.overall_attendance|floatformat:"-1" }}%</td>
-                    <td>{{ attendance.previous_overall_attendance|floatformat:"-1" }}%</td>
+                    <td style="text-align:center">{{ attendance.avg_overall_present|floatformat:"0" }}</td>
+                    <td style="text-align:center">{{ attendance.overall_attendance|floatformat:"-1" }}%</td>
+                    <td style="text-align:center">{{ attendance.previous_overall_attendance|floatformat:"-1" }}%</td>
                     
                 </tr>
 
                 <tr>
                     <td>Boys</td>
-                    <td>{{ attendance.avg_boys_present|floatformat:"1" }} </td>
-                    <td>{{ attendance.boys_attendance|floatformat:"-1" }}%</td>
-                    <td>{{ attendance.previous_boys_attendance|floatformat:"-1"}}%</td>
+                    <td style="text-align:center">{{ attendance.avg_boys_present|floatformat:"0" }} </td>
+                    <td style="text-align:center">{{ attendance.boys_attendance|floatformat:"-1" }}%</td>
+                    <td style="text-align:center">{{ attendance.previous_boys_attendance|floatformat:"-1"}}%</td>
                 </tr>
 
                 <tr>
                     <td>Girls </td>
-                    <td>{{ attendance.avg_girls_present|floatformat:"1" }}</td>
-                    <td>{{ attendance.girls_attendance|floatformat:"-1" }}% </td>
-                    <td>{{ attendance.previous_girls_attendance|floatformat:"-1" }}%</td>
+                    <td style="text-align:center">{{ attendance.avg_girls_present|floatformat:"0" }}</td>
+                    <td style="text-align:center">{{ attendance.girls_attendance|floatformat:"-1" }}% </td>
+                    <td style="text-align:center">{{ attendance.previous_girls_attendance|floatformat:"-1" }}%</td>
+                </tr>
+                <tr>
+                    <td>Morning </td>
+                    <td style="text-align:center">{{ attendance.avg_morning_present|floatformat:"0" }}</td>
+                    <td style="text-align:center">{{ attendance.morning_attendance|floatformat:"-1" }}% </td>
+                    <td style="text-align:center">{{ attendance.previous_morning_attendance|floatformat:"-1" }}%</td>
+                </tr>
+                <tr>
+                    <td>Evening </td>
+                    <td style="text-align:center">{{ attendance.avg_evening_present|floatformat:"0" }}</td>
+                    <td style="text-align:center">{{ attendance.evening_attendance|floatformat:"-1" }}% </td>
+                    <td style="text-align:center">{{ attendance.previous_evening_attendance|floatformat:"-1" }}%</td>
                 </tr>
             </tbody>
 
@@ -87,20 +101,29 @@
 
     <br/><br/>
 
-    <table class="table">
+    <table class="table" id='theTable2'>
 
         <caption>Attendance by Class</caption>
 
+            <thead>
+                <th >Class</th>
+                <th style="text-align:center">Avg. Daily Enroll Count</th>
+                <th style="text-align:center" width="250" >% Attendance</th>
+                <th style="text-align:center">% Attendance (Last Month)</th>
+                
+            </thead>
+            
             <tbody>
                 {% for class in attendance.class_attendance %}
                 <tr>
                     <td>{{ class.student__pkss_class__class_name }}</td>
-                    <td>{{ class.attendance|floatformat:"-1" }}%</td>
+                    <td style="text-align:center">{{ class.avg_daily|floatformat:"0"}}</td>
+                    <td style="text-align:center">{{ class.attendance|floatformat:"-1" }}%</td>
 
-                    <td>
+                    <td style="text-align:center">
                         {% for class_previous in attendance.class_attendance_previous %}
                             {% ifequal class_previous.student__pkss_class__class_name class.student__pkss_class__class_name %}
-                                Last Month: {{ class_previous.attendance|floatformat:"-1" }}%
+                                 {{ class_previous.attendance|floatformat:"-1" }}%
                             {% endifequal %}
                         {% endfor %}
                     </td>
@@ -113,14 +136,14 @@
 
     <br/><br/>
 
-    <table class="table">
+    <table class="table" id='theTable'>
 
         <caption>Attendance by Date</caption>
 
-            <thead>
+            <thead> 
                 <tr>
                     <td>Date</td>
-                    <td>Overall Attendance</td>
+                    <td>Overall Att.</td>
                     <td>Present</td>
                     <td>Absent</td>
                     <td>Total</td>
@@ -131,11 +154,11 @@
                 </tr>
             </thead>
 
-            <tbody>
+            <TBODY>
                 {% for date, att in attendance.by_date_attendance.items %}
                 <tr>
                     <!-- <td><a href="{% url 'view_daily_deets' attendance.school.pk date %}?readonly=1">{{ date }}</a></td> -->
-                    <td><a href="{% url 'view_daily_deets' attendance.school.pk date %}">{{ date }}</a></td>
+                    <td><a href="{% url 'view_daily_deets' attendance.school.pk date %}">{{ date|date:"M d - D" }}</a></td>
                     <td>{{ att.overall_attendance|floatformat:"-1" }}%</td>
                     <td>{{ att.present }}</td>
                     <td>{{ att.absent }}</td>
@@ -147,7 +170,7 @@
                 </tr>
 
                 {% endfor %}
-            </tbody>
+            </TBODY>
 
     </table>
 
@@ -156,8 +179,43 @@
     <p>Attendance details not found</p>
 
 {% endif %}
+
+<br><br>
+
 </div>
 </div>
 </div>
 
 {% endblock %}
+  
+ 
+ 
+{% block extra_script %}
+
+    <script type="text/javascript">
+    $(document).ready(function() {
+
+      // Table Heat Map
+      $("#theTable tbody td").not(":nth-child(1),:nth-child(3),:nth-child(4),:nth-child(5)").colorize({ 
+            min: 0,
+            max: 120,
+            // center:40,
+            theme: "blue-white-red"
+            //theme: "default"
+            });
+
+       $("#theTable2 tbody td").not(":nth-child(1),:nth-child(2)").colorize({ 
+            min: 10,
+            max: 110,
+            // center:40,
+            theme: "blue-white-red"
+            //theme: "default"
+            });
+      
+
+        }
+      );    
+    </script>
+
+{% endblock extra_script %}
+

@@ -8,7 +8,7 @@ from students.models import Student
 from schools.models import School
 from classes.models import Class
 from teachers.models import Teacher
-from django.contrib import messages
+from django.contrib import messages 
 from django.db import connection #for custom sql
 from django.db.models import *
 from django.shortcuts import HttpResponseRedirect

@@ -14,6 +14,7 @@ class AttendanceForm(forms.ModelForm):
 		fields = ("student", "attendance_date", "status", "notes")
 		widgets = {
 			'status': forms.RadioSelect()
+			#'student': forms.TextInput()
 		} 
 		# # 	#'status': forms.RadioSelect() SelectMultiple()
 		#  	'status': forms.RadioSelect() 
