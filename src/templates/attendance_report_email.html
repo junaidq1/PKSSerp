@@ -18,7 +18,7 @@
 		<div class='col-sm-4'> 
 			
 		
-	 		<h4> <b style="color:#939393"> 3-Day PKSS Attendance Report </b></h4>
+	 		<h4> <b style="color:#939393">3-Day Student Attendance Report</b></h4>
 	 		<br>
 	 		<TABLE class="table"> 
 	 		<!-- <caption>Total students by class</caption> -->
@@ -54,12 +54,53 @@
 			        {% endfor %}
 			        </TR>
 			      </TBODY>
-			       
+			</TABLE>
 
-
-
-			    </TABLE>
-
+ 		</div>
+ 	</div>	
+ 		
+ 	<div class='row'>	
+ 		<div class='col-sm-4'> 
+			<br>
+	 		<h4> <b style="color:#939393"> 3-Day Teacher Attendance Report </b></h4>
+	 		
+	 		<TABLE class="table"> 
+	 		<!-- <caption>Total students by class</caption> -->
+			      <THEAD>        
+			        <TR>
+			          <TH style="text-align:center" width="65">School</TH> 
+			          
+			          <TH style="text-align:center" width="85">{{date_today|date:"D - M d"}}</TH> 
+			          <TH style="text-align:center" width="85">{{date_today_minus1|date:"D - M d"}}</TH>
+			          <TH style="text-align:center" width="85">{{date_today_minus2|date:"D - M d"}}</TH> 
+			        </TR>
+			      </THEAD> 
+			      
+	 			{% for obj2 in teacher_att %}  
+				  <TBODY>
+			     
+			        <TR>
+			          <TD class="vert-hor-align"><b style="color:#a8a8a8">{{obj2.school_name}}</b> </TD>
+			          <TD class="vert-hor-align">
+			          {% if obj2.total_today > 0 %}
+						{{obj2.present_today}} / {{obj2.total_today}}
+					  {% else %} <i style="color:#ff9999">Missing</i> {% endif %}
+			          </TD>
+			          <TD class="vert-hor-align">
+					  {% if obj2.total_minus1 > 0 %}
+						{{obj2.present_minus1}} / {{obj2.total_minus1}}
+					  {% else %} <i style="color:#ff9999">Missing</i>{% endif %}
+			          </TD>
+			          <TD class="vert-hor-align">
+			          {% if obj2.total_minus2 > 0 %}
+						{{obj2.present_minus2}} / {{obj2.total_minus2}}
+					  {% else %} <i style="color:#ff9999">Missing</i> {% endif %}
+			          </TD>
+			        
+			        </TR>
+			      </TBODY>
+			      {% endfor %} 
+			</TABLE> 
  		</div> 		
 	</div>
 </div>

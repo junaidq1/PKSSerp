@@ -32,13 +32,14 @@ class Student(models.Model):
 	#pkss_class_original = models.ForeignKey('classes.Class', related_name = 'pkss_class_original')
 	pkss_class_original = models.CharField(max_length=255, null=False, blank=False, default='aa')
 	enrollment_notes = models.TextField(max_length=2500, null=True, blank=True)
-	FEE_CHOICES = (
-		(0, 0),
-		(25, 15),
-		(50, 50),
-		(100, 100),
-	)
-	fee_percent_rate_fixed = models.IntegerField(choices=FEE_CHOICES, null=False, blank=False, default=100)
+	# FEE_CHOICES = (
+	# 	(0, 0),
+	# 	(25, 15),
+	# 	(50, 50),
+	# 	(100, 100),
+	# )
+	#fee_percent_rate_fixed = models.IntegerField(choices=FEE_CHOICES, null=False, blank=False, default=100)
+	fee_percent_rate_fixed = models.IntegerField(null=False, blank=False, default=100)
 	currently_enrolled = models.BooleanField(default=True)
 	date_left = models.DateField(auto_now=False, auto_now_add=False, null=True, blank=True)
 	REASON_LEFT_CHOICES = (

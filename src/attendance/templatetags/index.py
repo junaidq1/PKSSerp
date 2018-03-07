@@ -5,6 +5,10 @@ register = template.Library()
 def index(List, i):
     return List[int(i)]
 
-# @register.filter 
+# @register.filter
 # def get_overall_att(Queryset):
 #     return Queryset.enrl
+
+@register.filter
+def subtract(value, arg):
+    return value - arg

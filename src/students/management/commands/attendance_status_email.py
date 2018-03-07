@@ -70,21 +70,43 @@ class Command(BaseCommand):
 
 		att = dictfetchall(cursor) #raw sql query list of dates 
 
+		cursor.execute(
+		'''SELECT 
+		q1.school_name, 
+		q1.pkss_school_id, 
+		SUM( CASE WHEN  status = 'present' AND (Extract(day from q1.attendance_date) = Extract(day from Now()) ) THEN 1 ELSE 0 END) AS present_today,
+		SUM( CASE WHEN (Extract(day from q1.attendance_date) = Extract(day from Now()) ) THEN 1 ELSE 0 END)  AS total_today
+		,
+		SUM( CASE WHEN  status = 'present' AND (Extract(day from q1.attendance_date) = Extract(day from Now() -  Interval '1 day')) THEN 1 ELSE 0 END) AS present_minus1,
+		SUM( CASE WHEN (Extract(day from q1.attendance_date) = Extract(day from Now() -  Interval '1 day')) THEN 1 ELSE 0 END)  AS total_minus1
+		,
+		SUM( CASE WHEN  status = 'present' AND (Extract(day from q1.attendance_date) = Extract(day from Now() -  Interval '2 day')) THEN 1 ELSE 0 END) AS present_minus2,
+		SUM( CASE WHEN (Extract(day from q1.attendance_date) = Extract(day from Now() -  Interval '2 day')) THEN 1 ELSE 0 END)  AS total_minus2
+		FROM
+			(SELECT A.*, C.id AS pkss_school_id, C.school_name
+			FROM tattendance_teacherattendance AS A
+			INNER JOIN schools_school AS C on A.school_id = C.id
+			WHERE attendance_date > Date(Now() -  Interval '5 day') ) as q1
+		GROUP BY school_name, q1.pkss_school_id
+		ORDER BY school_name ;''',)
+
+		teacher_att = dictfetchall(cursor) 
+
 		template_html = 'attendance_report_email.html'
 		subject = 'PKSS Daily Attendance Report | %s' %(date_today) 
 		contact_message = ''
 		html_content = render_to_string(template_html, {
 		'att': att,
+		'teacher_att': teacher_att,
 		'date_today': date_today,
 		'date_today_minus1': date_today_minus1,
 		'date_today_minus2': date_today_minus2,
 		})
 
 		from_email = settings.EMAIL_ADDR
-		to_email = ['sabiranq@gmail.com','junaidq1@gmail.com', 
-		'israr.khan@jaqtrust.org', 'farah.kashif@jaqtrust.org',
-		'husn.wahab@jaqtrust.org', 'ghazanfar.ali@jaqtrust.org']
-		#to_email = ['junaidq1@gmail.com']
+		to_email = ['sabiranq@gmail.com', 'israr.khan@jaqtrust.org', 'farah.kashif@jaqtrust.org',
+		'ghazanfar.ali@jaqtrust.org', 'tayyaba.khalid@jaqtrust.org', 'junaidq1@gmail.com']
+		# to_email = ['junaidq1@gmail.com']
 		send_mail(subject, 
 				contact_message, 
 				from_email, 

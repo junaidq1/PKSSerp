@@ -108,6 +108,8 @@ urlpatterns = [
     url(r'^aa/$', att.aa, name='aa'), 
     url(r'^aa2/$', att.aa2, name='aa2'), #testing django-dataframes
     #url(r'^charts/simple.png$', att.simple, name='something123'),
+    url(r'^aa3/$', att.chart_data_json, name='chart_data_json'), #chart data json
+    url(r'^aa4/$', att.chartview2, name='highcharts_test'), #testing highcharts api data
     
 ]
 

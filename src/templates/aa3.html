@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+
+
+{% block content %} 
+
+<div class='row'> 
+<div class='col-sm-10'> 
+<br>
+<br>
+<br>
+
+
+  <div class="panel panel-default">
+        <div id="chart_panel" class="panel-body" 
+            style="width:700px;height:600px"></div>
+    </div>
+
+
+</div>
+</div>
+
+
+{% endblock %}
+
+
+{% block scr %}
+
+<script type="text/javascript">
+$(document).ready(function() {
+
+    // Glucose Average by Day chart
+     var options = {
+        chart: {
+            renderTo: 'chart_panel',
+            type: 'line',
+        },
+        legend: {enabled: true},
+        title: {text: 'Attendance trends by School'},
+        xAxis: {title: {text: null}, labels: {rotation: -45}},
+        yAxis: {title: {text: null}},
+        series: [{}],
+    };
+
+    var chartDataUrl = "{% url 'chart_data_json' %}" ;
+    //var seriesCounter = 0;
+    //var names =  ['PK1', 'PK2', 'PK3', 'PK4', 'PK5', 'PK6', 'PK7', 'PK8'];
+    
+
+
+
+    $.getJSON(chartDataUrl,
+        function(data) {
+            options.xAxis.categories = data['chart_data']['year_month'];
+            options.series[0].name = 'PK1';
+            options.series[0].data = data['chart_data']['PK1'];
+
+            //chart.series[0].setData(series1, false);
+            //options.addSeries({data: series2}, false);
+            var chart = new Highcharts.Chart(options);
+            
+            chart.addSeries({name:'Pk2', data: data['chart_data']['PK2']}, false);
+            chart.addSeries({name:'Pk3', data: data['chart_data']['PK3']}, false);
+            chart.addSeries({name:'Pk4', data: data['chart_data']['PK4']}, false);
+            chart.addSeries({name:'Pk5', data: data['chart_data']['PK5']}, false);
+            chart.addSeries({name:'Pk6', data: data['chart_data']['PK6']}, false);
+            chart.addSeries({name:'Pk7', data: data['chart_data']['PK7']}, false);
+            chart.addSeries({name:'Pk8', data: data['chart_data']['PK8']}, false);
+            chart.redraw();
+            
+    });
+
+    // $.getJSON(chartDataUrl, 
+    //     function(data) {
+    // var newseries = {
+    //     "name": "",
+    //     data: []
+    // };
+
+    // $.each(data, function(i,item){
+    //     newseries.name = item.name;
+    //     newseries.data = item.data;
+    //     options.series.push(newseries);    
+    // });
+
+    //        // Create the chart
+    // var chart = new Highcharts.Chart(options);
+    // } ); 
+
+    // options.series = chartDataUrl
+    // var chart = new Highcharts.Chart(options);
+
+} );  
+</script>
+
+
+
+{% endblock scr %}

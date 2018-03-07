@@ -2,9 +2,8 @@
 {% extends "base.html" %}
 {% load staticfiles %}
 {% load crispy_forms_tags %}
+{% load index %}
 
-
- 
 {% block content %}
 
 <div class='container'>
@@ -111,6 +110,7 @@
                 <th style="text-align:center" width="250" >% Attendance</th>
                 <th style="text-align:center">% Attendance (Last Month)</th>
                 
+                
             </thead>
             
             <tbody>
@@ -127,7 +127,8 @@
                             {% endifequal %}
                         {% endfor %}
                     </td>
-                </tr>
+                    
+                </tr> 
 
                 {% endfor %}
             </tbody>
@@ -204,7 +205,7 @@
             //theme: "default"
             });
 
-       $("#theTable2 tbody td").not(":nth-child(1),:nth-child(2)").colorize({ 
+       $("#theTable2 tbody td").not(":nth-child(1),:nth-child(2),:nth-child(5)").colorize({ 
             min: 10,
             max: 110,
             // center:40,

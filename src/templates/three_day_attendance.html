@@ -11,10 +11,10 @@
  	<div class='row'>
 		<div class='col-sm-4'> 
 			
-	 		<h4> <b style="color:#939393"> 3-Day PKSS Attendance Report </b></h4>
+	 		<h4> <b style="color:#939393"> 3-Day Student Attendance Report </b></h4>
 	 		<br>
-	 		<TABLE class="table"> 
-	 		<!-- <caption>Total students by class</caption> -->
+	 		<TABLE class="table" id='theTable'> 
+	 		<!-- <caption>Student attendance</caption> -->
 			      <THEAD>        
 			        <TR>
 			          <TH style="text-align:center" width="65">School</TH> 
@@ -73,7 +73,7 @@
 			        </TR>
 			      </TBODY>
 			      {% endfor %}  
-			      
+			</TABLE>      
 			        
 
 <!-- 			only for testing			      
@@ -93,9 +93,54 @@
 				  </TBODY>
 				  </TABLE>
  --> 
+ 
+ 		</div> 
 
-
- 		</div> 		
+	 		<div class='col-sm-1'>
+	 			
+	 		</div> 
+ 		<div class='col-sm-4'> 
+			
+	 		<h4> <b style="color:#939393"> 3-Day PKSS Teacher Attendance Report </b></h4>
+	 		<br>
+	 		<TABLE class="table"> 
+	 		<!-- <caption>Total students by class</caption> -->
+			      <THEAD>        
+			        <TR>
+			          <TH style="text-align:center" width="65">School</TH> 
+			          
+			          <TH style="text-align:center">{{date_today|date:"D - M d"}}</TH> 
+			          <TH style="text-align:center">{{date_today_minus1|date:"D - M d"}}</TH>
+			          <TH style="text-align:center">{{date_today_minus2|date:"D - M d"}}</TH> 
+			        </TR>
+			      </THEAD> 
+			      
+	 			{% for obj in teacher_att %}  
+				  <TBODY>
+			     
+			        <TR>
+			          <TD class="vert-hor-align"><b style="color:#a8a8a8">{{obj.school_name}}</b> </TD>
+			          <TD class="vert-hor-align">
+			          {% if obj.total_today > 0 %}
+						{{obj.present_today}} / {{obj.total_today}}
+					  {% else %} Missing {% endif %}
+			          </TD>
+			          <TD class="vert-hor-align">
+					  {% if obj.total_minus1 > 0 %}
+						{{obj.present_minus1}} / {{obj.total_minus1}}
+					  {% else %} Missing {% endif %}
+			          </TD>
+			          <TD class="vert-hor-align">
+			          {% if obj.total_minus2 > 0 %}
+						{{obj.present_minus2}} / {{obj.total_minus2}}
+					  {% else %} Missing {% endif %}
+			          </TD>
+			        
+			        </TR>
+			      </TBODY>
+			      {% endfor %} 
+			</TABLE> 
+ 		</div> 			
 	</div>
 </div>
 
@@ -103,14 +148,14 @@
 {% endblock %}
 
   
-
+ 
 {% block extra_script %}
 
 	<script type="text/javascript">
 	$(document).ready(function() {
 
 	  // Table Heat Map
-	  $("TABLE TBODY TD").not(":nth-child(1),:nth-child(2)").colorize({
+	  $("#theTable tbody td").not(":nth-child(1),:nth-child(2)").colorize({
 	  	//min: 30,
         //max: 90,
         //theme: "blue-white-red"

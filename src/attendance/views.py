@@ -17,7 +17,6 @@ from django.utils import timezone
 from dateutil.relativedelta import relativedelta
 from django.shortcuts import HttpResponseRedirect, HttpResponse
 from django.http import JsonResponse
-import json
 import ast
 import datetime
 from django.conf import settings
@@ -32,12 +31,13 @@ import matplotlib.pyplot as plt
 from pylab import savefig
 import seaborn as sns 
 import json
-#testing matplotlib
+#testing matplotlib 
 import random
 
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
 from matplotlib.dates import DateFormatter
+from .chartdata import ChartData #import the new ChartData object
 
 def go_home(request):
     if request.user.is_authenticated():
@@ -325,15 +325,16 @@ def attendance_summary(request):
                 school.end_of_month_enrollment = school_end_of_month_enrollment.count()
                 school.end_of_month_enrollment_boys = school_end_of_month_enrollment.filter(student__gender='male').count()
                 school.end_of_month_enrollment_girls = school_end_of_month_enrollment.filter(student__gender='female').count()
+                school.avg_daily_attendance = round(school.overall_present / school.days_attendance_entered, 2) if (school.overall_present + school.overall_absent) != 0 else 0 #JQ added later based on ammas request 
 
-            # append schools monthly attendance to dict
+            # append schools monthly attendance to dict 
             last_12_months_attendance.update({date: schools_in_month})
 
         # sort attendance by month desc
         last_12_months_attendance = OrderedDict(sorted(last_12_months_attendance.items(), key=lambda t: t[0], reverse=True))
         
         cursor = connection.cursor()
-        #complex query to calculate overall attendance, att by gender and enrollment
+        #JQ: complex query to calculate overall attendance, att by gender and enrollment
         cursor.execute(
         '''SELECT 
         yr, mth, days_att_entered, present, present_plus_absent
@@ -343,6 +344,7 @@ def attendance_summary(request):
         , enrl, boys_enrl, girls_enrl
         , boys_enrl/CAST(enrl AS FLOAT)*100 AS boys_enrl_perc
         , girls_enrl/CAST(enrl AS FLOAT)*100 AS girls_enrl_perc
+        , present / CAST(days_att_entered AS FLOAT) AS avg_daily_attendance
         FROM
             (SELECT 
             Extract(year from q1.attendance_date) AS yr
@@ -371,7 +373,7 @@ def attendance_summary(request):
 
         return render(request, 'attendance_summary.html', {'last_12_months_attendance': last_12_months_attendance, 'overall' : overall})
 
-@login_required
+@login_required 
 def school_attendance_details(request, school_id, date):
     if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'teacher' or request.user.useraccess.access_level == 'principal' or request.user.useraccess.access_level == 'coordinator' or request.user.useraccess.access_level == 'accountant':
         date = datetime.datetime.strptime(date, "%Y-%m-%d").date()
@@ -523,6 +525,8 @@ def school_attendance_details(request, school_id, date):
 
         for clas in attendance_by_class_previous:
             clas['attendance'] = round(clas['present'] / (clas['present'] + clas['absent']), 2) * 100
+
+        #for clas in attendance_by_class
 
         monthly_attendance['class_attendance'] = attendance_by_class
         monthly_attendance['class_attendance_previous'] = attendance_by_class_previous
@@ -773,8 +777,31 @@ def three_day_report(request):
 
     att = dictfetchall(cursor) #raw sql query list of dates
 
+    cursor.execute(
+    '''SELECT 
+    q1.school_name, 
+    q1.pkss_school_id, 
+    SUM( CASE WHEN  status = 'present' AND (Extract(day from q1.attendance_date) = Extract(day from Now()) ) THEN 1 ELSE 0 END) AS present_today,
+    SUM( CASE WHEN (Extract(day from q1.attendance_date) = Extract(day from Now()) ) THEN 1 ELSE 0 END)  AS total_today
+    ,
+    SUM( CASE WHEN  status = 'present' AND (Extract(day from q1.attendance_date) = Extract(day from Now() -  Interval '1 day')) THEN 1 ELSE 0 END) AS present_minus1,
+    SUM( CASE WHEN (Extract(day from q1.attendance_date) = Extract(day from Now() -  Interval '1 day')) THEN 1 ELSE 0 END)  AS total_minus1
+    ,
+    SUM( CASE WHEN  status = 'present' AND (Extract(day from q1.attendance_date) = Extract(day from Now() -  Interval '2 day')) THEN 1 ELSE 0 END) AS present_minus2,
+    SUM( CASE WHEN (Extract(day from q1.attendance_date) = Extract(day from Now() -  Interval '2 day')) THEN 1 ELSE 0 END)  AS total_minus2
+    FROM
+        (SELECT A.*, C.id AS pkss_school_id, C.school_name
+        FROM tattendance_teacherattendance AS A
+        INNER JOIN schools_school AS C on A.school_id = C.id
+        WHERE attendance_date > Date(Now() -  Interval '5 day') ) as q1
+    GROUP BY school_name, q1.pkss_school_id
+    ORDER BY school_name ;''',)
+
+    teacher_att = dictfetchall(cursor) 
+
     context = {
             'att': att,
+            'teacher_att': teacher_att,
             'date_today': date_today,
             'date_today_minus1': date_today_minus1,
             'date_today_minus2': date_today_minus2,
@@ -813,7 +840,7 @@ def daily_attendance_by_year_month(request, date):
     }
     return render(request, 'daily_attendance_by_year_month.html', context)
  
-#this is the view that plots the daily attendance heatmap
+#this is the view that plots the daily attendance heatmap 
 @login_required
 def daily_attendance_chart(request, date):
     date_d = datetime.datetime.strptime(date, "%Y-%m-%d").date() #convert date string to date object
@@ -941,3 +968,15 @@ def daily_attendance_by_year_month_table(request, date):
     }
     return render(request, 'daily_attendance_by_year_month_table.html', context)
 
+
+
+#chart function to get the data from the chartdata.py object for the highcharts plot
+def chart_data_json(request):
+    data = {}
+    data['chart_data'] = ChartData.get_monthly_school_att()
+    return HttpResponse(json.dumps(data), content_type='application/json')
+
+
+#this view tests highcharts
+def chartview2(request):
+    return render(request, 'aa3.html', {})

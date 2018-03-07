@@ -66,6 +66,11 @@
     </table>
     <br>
     <br>
+    <div class="panel panel-default">
+        <div id="chart_panel" class="panel-body" 
+            style="width:700px;height:600px"></div>
+    </div>
+    <br><br>
 
     <a href='{% url "user_homepage" %}' class="btn btn-secondary btn-lg" role="button">
             Go Home</a> 
@@ -79,6 +84,49 @@
 </div>
 
 {% endblock %}
+
+
+{% block scr %}
+
+<script type="text/javascript">
+$(document).ready(function() {
+
+    // Glucose Average by Day chart
+     var options = {
+        chart: {
+            renderTo: 'chart_panel',
+            type: 'line',
+        },
+        legend: {enabled: true},
+        credits: {enabled: false},
+        title: {text: 'Attendance trends by School'},
+        xAxis: {title: {text: null}, labels: {rotation: -45}},
+        yAxis: {title: {text: null}},
+        series: [{}],
+    };
+
+    var chartDataUrl = "{% url 'chart_data_json' %}" ;
+    $.getJSON(chartDataUrl,
+        function(data) {
+            options.xAxis.categories = data['chart_data']['year_month'];
+            options.series[0].name = 'PK1';
+            options.series[0].data = data['chart_data']['PK1'];
+
+            var chart = new Highcharts.Chart(options);
+            
+            chart.addSeries({name:'Pk2', data: data['chart_data']['PK2']}, false);
+            chart.addSeries({name:'Pk3', data: data['chart_data']['PK3']}, false);
+            chart.addSeries({name:'Pk4', data: data['chart_data']['PK4']}, false);
+            chart.addSeries({name:'Pk5', data: data['chart_data']['PK5']}, false);
+            chart.addSeries({name:'Pk6', data: data['chart_data']['PK6']}, false);
+            chart.addSeries({name:'Pk7', data: data['chart_data']['PK7']}, false);
+            chart.addSeries({name:'Pk8', data: data['chart_data']['PK8']}, false);
+            chart.redraw();     
+    });
+});  
+</script>
+
+{% endblock scr %}
 
 
 {% block extra_script %}

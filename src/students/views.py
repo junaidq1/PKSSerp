@@ -4,6 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.db.models import Count, Sum, Avg, Max, Min,Q
 from schools.models import School
 from classes.models import Class
+from attendance.models import Attendance
 from django.db import connection  #for custom SQL 
 # Create your views here.
 from .models import Student, StudentHistory
@@ -19,6 +20,7 @@ import numpy as np
 import pandas as pd 
 import matplotlib
 from django_pandas.io import read_frame
+import json
 #matplotlib.use('Agg')
 #import matplotlib.pyplot as plt
 #from pylab import savefig
@@ -58,9 +60,37 @@ def student_profile_details(request, pk=None):
 		std = get_object_or_404(Student, pk=pk) #student object
 		s_hist = StudentHistory.objects.filter(student_name_id = std.pk)
 		#sch = School.objects.get(id = std.pkss_school_id) #school of object
+		#steps below are to get to student attendance by month
+		qs = Attendance.objects.filter(student_id = pk)
+		df = read_frame(qs, fieldnames=[ 'attendance_date', 'status', 'student_id__id','student_id__first_name', \
+			'student_id__last_name'])
+		df = df.rename(columns = {'student_id__id':'student_id','student_id__first_name':'first_name', \
+			'student_id__last_name':'last_name'})
+		df['attendance_date'] =  pd.to_datetime(df['attendance_date']) #converts att date to datetime object
+		df['attendance_year'] = df['attendance_date'].dt.year
+		df['attendance_month'] = df['attendance_date'].dt.month
+		df['year_month'] = df['attendance_year'].astype(str) + '_' + df['attendance_month'].astype(str)
+		df2 = df.groupby(['first_name','year_month', 'attendance_year', 'attendance_month'])
+		df2 = df2.apply(lambda x: pd.Series(dict(
+			present=(x['status'] == 'present').sum(),
+			total= len(x['status'])))) 
+		df2 = df2.reset_index()
+		df2['percent'] = df2['present'] / df2['total'] *100 #calculate attendance
+		df2 = df2.round({'percent': 1})
+		df2 = df2.sort_values(by=['attendance_year', 'attendance_month'], ascending=[False, False]) #sort desc order yr/month
+		df2 = df2[0:11] #keep first 12 months only
+		
+		chartdata = df2.sort_values(by=['attendance_year', 'attendance_month'], ascending=[True, True]) #sort desc order yr/month
+		chartdata = chartdata[['year_month','percent']]
+		df2 = df2.to_dict(orient='records') 
+		chartdata = chartdata.to_dict(orient="list")
+		chartdata = json.dumps(chartdata)
+
 		context = {
 		"std": std,  #update this
 		"s_hist": s_hist,
+		"student_attendance":df2,
+		"chartdata":chartdata,
 		}
 		return render(request, "student_profile_details.html", context) 
 

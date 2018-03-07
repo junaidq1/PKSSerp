@@ -33,7 +33,9 @@
                 <th>School</th>
                 <th>Days Attendance Entered</th>
                 <th>Working Days</th>
+                <th>Avg. Daily Attendance</th>
                 <th>Overall Attendance</th>
+                
                 <th>Boys Attendance</th>
                 <th>Girls Attendance</th>
                 <th>End of Month Enrollment</th>
@@ -49,6 +51,7 @@
                     <td><a href="{% url 'school_attendance_det_view' school.pk date %}">{{ school.school_name }}</a> </td>
                     <td>{{ school.days_attendance_entered }}</td>
                     <td>{{ school.working_days }}</td>
+                    <td>{{ school.avg_daily_attendance|floatformat:"0"}} </td>
                     <td>{{ school.overall_attendance|floatformat:"-1" }}%</td>
                     <td>{{ school.boys_attendance|floatformat:"-1" }}%</td>
                     <td>{{ school.girls_attendance|floatformat:"-1" }}%</td>
@@ -62,6 +65,11 @@
                     <td></td>
                     <td></td>
                     <td>
+                        {% with overall|index:forloop.counter0 as obj %}
+                            {{ obj.avg_daily_attendance|floatformat:"0" }}
+                        {% endwith %}
+                    </td>
+                     <td>
                         {% with overall|index:forloop.counter0 as obj %}
                             {{ obj.overall_att_perc|floatformat:"0" }}%
                         {% endwith %}
@@ -124,7 +132,7 @@
 
 
       // Table Heat Map
-      $("TABLE TBODY TD").not(":nth-child(1),:nth-child(2),:nth-child(3),:nth-child(7),:nth-child(8),:nth-child(9)").colorize({ 
+      $("TABLE TBODY TD").not(":nth-child(1),:nth-child(2),:nth-child(3),:nth-child(4),:nth-child(8),:nth-child(9),:nth-child(10)").colorize({ 
             // min: 20,
             // max: 90,
             // center:40,
