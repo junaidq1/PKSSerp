@@ -107,6 +107,7 @@
             <thead>
                 <th >Class</th>
                 <th style="text-align:center">Avg. Daily Enroll Count</th>
+                <th style="text-align:center">Avg. Daily Attendance</th>  <!-- new -->
                 <th style="text-align:center" width="250" >% Attendance</th>
                 <th style="text-align:center">% Attendance (Last Month)</th>
                 
@@ -117,7 +118,10 @@
                 {% for class in attendance.class_attendance %}
                 <tr>
                     <td>{{ class.student__pkss_class__class_name }}</td>
-                    <td style="text-align:center">{{ class.avg_daily|floatformat:"0"}}</td>
+                    <td style="text-align:center">{{ class.avg_daily_enrl|floatformat:"0"}}</td>
+                    <!-- add here -->
+                    <td style="text-align:center">{{ class.avg_present_daily|floatformat:"0"}}</td>
+
                     <td style="text-align:center">{{ class.attendance|floatformat:"-1" }}%</td>
 
                     <td style="text-align:center">
@@ -205,7 +209,7 @@
             //theme: "default"
             });
 
-       $("#theTable2 tbody td").not(":nth-child(1),:nth-child(2),:nth-child(5)").colorize({ 
+       $("#theTable2 tbody td").not(":nth-child(1),:nth-child(2),:nth-child(3)").colorize({ 
             min: 10,
             max: 110,
             // center:40,

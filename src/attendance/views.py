@@ -80,7 +80,7 @@ def dictfetchall(cursor):
 @login_required()
 #def attendance_dates(request, school_id):
 def attendance_dates(request, school_id, shift):    
-    five_days_back = date.today() - timedelta(5)
+    five_days_back = date.today() - timedelta(10) #changing temp from 5
     next_day = date.today() + timedelta(1)
     dates_range = list(get_dates_range(five_days_back, next_day, timedelta(days=1)))
 
@@ -90,7 +90,7 @@ def attendance_dates(request, school_id, shift):
     COUNT (*) AS num_att,
     %s AS school_id
     FROM
-    (select i::date from generate_series(Date(Now() -  Interval '2 day'),
+    (select i::date from generate_series(Date(Now() -  Interval '2 day'), --revert back to 2
       Date(Now()), '1 day'::interval) i) AS A
     LEFT JOIN (SELECT X.*, Y.pkss_school_id
     FROM attendance_attendance AS X
@@ -130,7 +130,7 @@ def add_attendance2(request, school_id, date, shift, readonly=False):
         #the code below is to ensure that people dont game the system (enter att for old dates) via url. Note: check does not apply to superuser
         if request.user.useraccess.access_level != 'super':
             date_d = datetime.datetime.strptime(date, "%Y-%m-%d").date() #convert date string to date object
-            three_days_back = date_d.today() - timedelta(3) #create a cutoff for 3 days ago 
+            three_days_back = date_d.today() - timedelta(3) #create a cutoff for 3 days ago   #JQ:revert back to 3
             if date_d < three_days_back: #check to see if the url date is within the 3 day cutoff
                 return HttpResponseRedirect(reverse('user_homepage')) #send user back home if its not
 
@@ -191,7 +191,7 @@ def ajax_save_student_attendance(request):
         user = request.user
         school_id = data.get("school_id")
         shift = data.get("shift")
-        attendance_date = datetime.datetime.strptime(data.get("attendance_date"), "%b. %d, %Y")
+        attendance_date = datetime.datetime.strptime(data.get("attendance_date"), "%B %d, %Y")
         attendance_students_data = data.getlist(u"attendance_students_data")
         if attendance_students_data:
             attendance_students_data = ast.literal_eval(attendance_students_data[0])
@@ -509,11 +509,12 @@ def school_attendance_details(request, school_id, date):
                 total_status_count=Count('status'),
                 days_att_entered=Count('attendance_date', distinct=True),
             )
-            #days_attendance_entered=Count('student__attendance__attendance_date', distinct=True),
+            #days_attendance_entered=Count('student__attendance__attendance_date', distinct=True), 
 
         for clas in attendance_by_class:
+            clas['avg_present_daily'] = round( clas['present'] / (clas['days_att_entered'] ), 2)
             clas['attendance'] = round(clas['present'] / (clas['present'] + clas['absent']), 2) * 100
-            clas['avg_daily'] = round( clas['total_status_count'] / (clas['days_att_entered'] ), 2)
+            clas['avg_daily_enrl'] = round( clas['total_status_count'] / (clas['days_att_entered'] ), 2)
 
         # calculate attendance percentage group by class for school in previous month
         attendance_by_class_previous = previous_month_attendance\

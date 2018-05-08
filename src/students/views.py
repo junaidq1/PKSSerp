@@ -75,17 +75,23 @@ def student_profile_details(request, pk=None):
 			present=(x['status'] == 'present').sum(),
 			total= len(x['status'])))) 
 		df2 = df2.reset_index()
-		df2['percent'] = df2['present'] / df2['total'] *100 #calculate attendance
-		df2 = df2.round({'percent': 1})
-		df2 = df2.sort_values(by=['attendance_year', 'attendance_month'], ascending=[False, False]) #sort desc order yr/month
-		df2 = df2[0:11] #keep first 12 months only
-		
-		chartdata = df2.sort_values(by=['attendance_year', 'attendance_month'], ascending=[True, True]) #sort desc order yr/month
-		chartdata = chartdata[['year_month','percent']]
-		df2 = df2.to_dict(orient='records') 
-		chartdata = chartdata.to_dict(orient="list")
-		chartdata = json.dumps(chartdata)
-
+		try :
+			df2['percent'] = df2['present'] / df2['total'] *100 #calculate attendance
+			df2 = df2.round({'percent': 1})
+			df2 = df2.sort_values(by=['attendance_year', 'attendance_month'], ascending=[False, False]) #sort desc order yr/month
+			df2 = df2[0:11] #keep first 12 months only
+	
+			chartdata = df2.sort_values(by=['attendance_year', 'attendance_month'], ascending=[True, True]) #sort desc order yr/month
+			chartdata = chartdata[['year_month','percent']]
+			df2 = df2.to_dict(orient='records') 
+			chartdata = chartdata.to_dict(orient="list")
+			chartdata = json.dumps(chartdata)
+			
+		except :
+			df2 = {}
+			chartdata = {}
+			chartdata = json.dumps(chartdata)
+			
 		context = {
 		"std": std,  #update this
 		"s_hist": s_hist,
