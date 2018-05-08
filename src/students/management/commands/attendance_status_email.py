@@ -105,7 +105,7 @@ class Command(BaseCommand):
 
 		from_email = settings.EMAIL_ADDR
 		to_email = ['sabiranq@gmail.com', 'farah.kashif@jaqtrust.org','ghazanfar.ali@jaqtrust.org', 
-		'sadia.zahoor@jaqtrust.org', 'arsalan.hussain@jaqtrust.org','junaidq1@gmail.com']
+		'arsalan.hussain@jaqtrust.org','junaidq1@gmail.com']
 		# to_email = ['junaidq1@gmail.com']
 		send_mail(subject, 
 				contact_message, 
