@@ -1,11 +1,11 @@
-from django.shortcuts import render, redirect, reverse
+from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from datetime import date, timedelta
 from django.forms import modelformset_factory
 from .models import TeacherAttendance
 from .forms import TeacherAttendanceForm
 from students.models import Student
-from schools.models import School
+from schools.models import School, SHIFT_CHOICES, SchoolShift
 from classes.models import Class
 from teachers.models import Teacher
 from django.contrib import messages 
@@ -31,9 +31,11 @@ def tattendance_affiliated_schools(request):
             schools = School.objects.filter(teacher__id = request.user.teacher.id)
         #test = request.user.teacher.pkss_school.all().values_list('id', flat=True) 
         test = 0
+        shifts = SHIFT_CHOICES
         context = {
             'affiliated_schools': schools, 
-            'test': test, 
+            'test': test,
+            'shifts': shifts
             } 
         return render(request, 'tattendance_affiliated schools.html', context)
 
@@ -53,24 +55,25 @@ def get_dates_range(start, end, delta):
         curr += delta
 
 @login_required()
-def tattendance_dates(request, school_id):
+def tattendance_dates(request, school_id, shift):
     if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'principal' or request.user.useraccess.access_level == 'coordinator' or request.user.useraccess.access_level == 'accountant':
         #five_days_back = date.today() - timedelta(2)
         #next_day = date.today() + timedelta(1)
         #dates_range = list(get_dates_range(five_days_back, next_day, timedelta(days=1)))
+        school_shift = get_object_or_404(SchoolShift, school_id=school_id, shift=shift)
         cursor = connection.cursor()
         cursor.execute(
         '''SELECT i,
         COUNT (*) AS num_att,
-        %s AS school_id
+        %s AS school_shift_id
         FROM
-        (select i::date from generate_series(Date(Now() -  Interval '3 day'), 
+        (select i::date from generate_series(Date(Now() -  Interval '3 day'),
         Date(Now()), '1 day'::interval) i) AS A
         LEFT JOIN (SELECT X.*
         FROM tattendance_teacherattendance AS X
-        WHERE school_id = %s) AS B ON A.i = B.attendance_date
-        GROUP BY i 
-        ORDER BY i DESC;''', [school_id, school_id])
+        WHERE school_shift_id = %s) AS B ON A.i = B.attendance_date
+        GROUP BY i
+        ORDER BY i DESC;''', [school_shift.id, school_shift.id])
         l1 = dictfetchall(cursor) #raw sql query get list of attedances entered by date
         
         #logic: only submit the request if superuser or a principal with access to a specific school
@@ -90,14 +93,16 @@ def tattendance_dates(request, school_id):
             'l1': l1, 
     		'school_id': school_id, 
     		'sch': sch,
+            'shift': shift
         } 
         return render(request, 'tattendance_dates.html', context)
 
 
 @login_required()
-def add_tattendance(request, school_id, date, readonly=False):
+def add_tattendance(request, school_id, date, shift, readonly=False):
     if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'principal' or request.user.useraccess.access_level == 'coordinator':        
-        
+
+        school_shift = get_object_or_404(SchoolShift, school_id=school_id, shift=shift)
         #the code below is to ensure that people dont game the system (enter att for old dates) via url. Note: check does not apply to superuser
         if request.user.useraccess.access_level != 'super':
             date_d = datetime.strptime(date, "%Y-%m-%d").date() #convert date string to date object
@@ -108,24 +113,18 @@ def add_tattendance(request, school_id, date, readonly=False):
         #main code
         # superusers, managers and coordinators then no additional filtering neccessary
         if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'coordinator':
-            school = School.objects.get(pk=school_id) #pull up the school
-            teacher_list = Teacher.objects.filter(pkss_school = school_id).filter(currently_active=True) #pull up all the teachers in the school
+            teacher_list = Teacher.objects.filter(pkss_school_shift=school_shift, currently_active=True) #pull up all the teachers in the school
         if request.user.useraccess.access_level == 'principal': #if principal, ensure that they are allowed to see this school
             authorized_schools = School.objects.filter(teacher__id = request.user.teacher.id) #get the list of schools that princ is affiliated with
             if authorized_schools.filter(id=school_id).exists(): #if the requested school is in set, proceed
-                school = School.objects.get(pk=school_id)
-                teacher_list = Teacher.objects.filter(pkss_school = school_id).filter(currently_active=True) #pull up all the teachers in the school
+                teacher_list = Teacher.objects.filter(pkss_school_shift=school_shift, currently_active=True) #pull up all the teachers in the school
             else: #if requested school is not one the principal is affiliated with then errors
-                school ={}
-                teacher_list ={}
                 return HttpResponseRedirect( reverse('user_homepage'))
 
-        #school = School.objects.get(pk=school_id) 
-        #teacher_list = Teacher.objects.filter(pkss_school = school_id).filter(currently_active=True) #filter teachers for just those associated with the school
         teacher_list_initial = [{
                                 'teacher': teacher,
                                 'attendance_date': date,
-                                'school': school
+                                'school_shift': school_shift,
                                 }
                                 for teacher in teacher_list]
 
@@ -135,14 +134,14 @@ def add_tattendance(request, school_id, date, readonly=False):
                                                    )
 
         formsets = tattendance_formset(initial=teacher_list_initial,
-                                       queryset=TeacherAttendance.objects.filter(school=school, attendance_date=date, teacher__in=teacher_list)
+                                       queryset=TeacherAttendance.objects.filter(school_shift=school_shift, attendance_date=date, teacher__in=teacher_list)
                                        )
 
         #date = datetime.datetime.strptime(date, "%Y-%m-%d").date()
         date = datetime.strptime(date, "%Y-%m-%d").date()
 
         if request.method == 'POST':
-            teacher_list = Teacher.objects.filter(pkss_school = school_id).filter(currently_active=True) #filter teachers for just those associated with the school
+            teacher_list = Teacher.objects.filter(pkss_school_shift = school_shift).filter(currently_active=True) #filter teachers for just those associated with the school
             tattendance_formset = modelformset_factory(TeacherAttendance, form=TeacherAttendanceForm,
                                                        extra=len(teacher_list),
                                                        max_num=len(teacher_list))
@@ -154,17 +153,17 @@ def add_tattendance(request, school_id, date, readonly=False):
                     ins.att_taker = request.user.username
                     ins.save()
 
-                msg = 'Teacher Attendance submitted successfully for %s on %s' % (school.school_name, date.strftime("%b %d, %Y"))
+                msg = 'Teacher Attendance submitted successfully for %s on %s' % (school_shift, date.strftime("%b %d, %Y"))
                 messages.success(request, msg)
-                return redirect(reverse('tattendance_dates', kwargs={'school_id': school.pk}))
+                return redirect(reverse('tattendance_dates', kwargs={'school_id': school_shift.school.pk, 'shift': shift}))
             else:
-                print json.dumps(formsets.errors, indent=4)
+                print (json.dumps(formsets.errors, indent=4))
 
 
         context = {
         'formset': formsets,
         'date': date,
-        'school': school,
+        'school': school_shift.school,
         'teacher_list': teacher_list
         }
 

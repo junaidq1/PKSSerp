@@ -23,20 +23,16 @@ from django.conf import settings
 from django.core.mail import send_mail
 from django_pandas.io import read_frame
 # data stuff below
-import numpy as np
 import pandas as pd 
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-from pylab import savefig
 import seaborn as sns 
 import json
 #testing matplotlib 
 import random
 
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-from matplotlib.figure import Figure
-from matplotlib.dates import DateFormatter
 from .chartdata import ChartData #import the new ChartData object
 
 def go_home(request):

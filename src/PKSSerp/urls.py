@@ -47,8 +47,8 @@ urlpatterns = [
 
     #teacher attendance 
     url(r'^affiliated_schools_tattendance/$', tatt.tattendance_affiliated_schools, name='taffiliated_schools'),
-    url(r'^tattendance_dates/(?P<school_id>\d+)/$', tatt.tattendance_dates, name='tattendance_dates'),
-    url(r'^tattendance/(?P<school_id>\d+)/(?P<date>\d{4}-\d{2}-\d{2})/$', tatt.add_tattendance, name='add_tattendance'),
+    url(r'^tattendance_dates/(?P<school_id>\d+)/(?P<shift>\w+)/$', tatt.tattendance_dates, name='tattendance_dates'),
+    url(r'^tattendance/(?P<school_id>\d+)/(?P<date>\d{4}-\d{2}-\d{2})/(?P<shift>\w+)/$', tatt.add_tattendance, name='add_tattendance'),
     url(r'^teacher_att_report/$', tatt.teacher_attendance_summary, name='teacher_att_report'), #teacher_attendance_report
     url(r'^teacher_report_daily_details/(?P<date_month>\d+)/(?P<date_year>\d+)/(?P<school_id>\d+)/$', tatt.teacher_report_daily_details, name='teacher_report_details'), #teacher_attendance_report
     #teacher

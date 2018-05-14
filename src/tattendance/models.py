@@ -1,13 +1,16 @@
 from __future__ import unicode_literals
 
 from django.db import models 
+from schools.models import SchoolShift
 
 
 # Create your models here.
 class TeacherAttendance(models.Model):
 	teacher = models.ForeignKey('teachers.Teacher')
 	attendance_date = models.DateField(auto_now=False, auto_now_add=False)
-	school = models.ForeignKey('schools.School')
+	school = models.ForeignKey('schools.School', blank=True, null=True, default=None)
+	school_shift = models.ForeignKey(SchoolShift, blank=True, null=True, default=None)
+	time_came_in = models.TimeField(blank=True, null=True)
 	# SHIFT_CHOICES = (
 	# 	('morning', 'morning'),
 	# 	('evening', 'evening'),

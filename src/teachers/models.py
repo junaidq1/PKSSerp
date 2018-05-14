@@ -2,12 +2,10 @@ from __future__ import unicode_literals
 from django.db.models.signals import post_save
 from django.db import models
 from django.conf import settings
-from schools.models import School
+from schools.models import School, SchoolShift
 
 
-# Create your models here. 
- 
-   
+# Create your models here.
 class Teacher(models.Model):
         LEVEL_CHOICES = (
             ('principal', 'principal'),
@@ -27,6 +25,7 @@ class Teacher(models.Model):
         gender =  models.CharField(max_length=12, choices=GENDER_CHOICES, null=False, blank=False)
         #pkss_school = models.ForeignKey('schools.School')
         pkss_school = models.ManyToManyField(School, blank=True)
+        pkss_school_shift = models.ManyToManyField(SchoolShift, blank=True)
         date_joined = models.DateField(auto_now=False, auto_now_add=False)
         starting_salary = models.IntegerField(null=True, blank=True)
         current_salary = models.IntegerField(null=True, blank=True)
