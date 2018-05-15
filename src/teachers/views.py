@@ -47,8 +47,8 @@ def list_of_teachers(request):
             teach = Teacher.objects.order_by("first_name")  #filter for active later
         # principals can only see profile views of the teachers in their school
         if request.user.useraccess.access_level == 'principal':
-            school_ids = School.objects.filter(teacher__id = request.user.teacher.id) #get the list of schools that princ is affiliated with
-            teach = Teacher.objects.filter(pkss_school__in = school_ids).order_by("first_name") #filter teacher model for just the teachers associated with the principals school
+            schools = request.user.teacher.get_affilated_schools() #get the list of schools that princ is affiliated with
+            teach = Teacher.objects.filter(pkss_school_shift__school__in = schools).order_by("first_name") #filter teacher model for just the teachers associated with the principals school
         num_teachers = len(teach)
         num_active_teachers = len(Teacher.objects.filter(currently_active=True))
         context = {
@@ -68,8 +68,8 @@ def teacher_profile_details(request, pk=None):
         teach = {}
         if request.user.useraccess.access_level == 'principal':
             #create a list of all teachers
-            school_ids = School.objects.filter(teacher__id = request.user.teacher.id) #get the list of schools that princ is affiliated with
-            teachers = Teacher.objects.filter(pkss_school__in = school_ids) #filter teacher model for just the teachers associated with the principals school
+            schools = request.user.teacher.get_affilated_schools() #get the list of schools that princ is affiliated with
+            teachers = Teacher.objects.filter(pkss_school_shift__school__in = schools) #filter teacher model for just the teachers associated with the principals school
             #if t1 in teachers:
             if teachers.filter(id=pk).exists():
                 teach = get_object_or_404(Teacher, pk=pk) #only allow this if present in principals subset 
@@ -86,6 +86,8 @@ def teacher_profile_details(request, pk=None):
 @login_required
 def edit_teacher_record(request, pk=None):
     if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'principal' or request.user.useraccess.access_level == 'coordinator' or request.user.useraccess.access_level == 'coordinator' or request.user.useraccess.access_level == 'accountant':
+        #AT: there is no checking here if a principal has access to the teacher
+
         tch = get_object_or_404(Teacher, pk=pk)
         #form = StudentForm(request.POST or None, request.FILES or None, instance=std)
         form = EditTeacherForm(request.POST or None, instance=tch)
@@ -111,6 +113,8 @@ def edit_teacher_record(request, pk=None):
 @login_required
 def deactivate_teacher(request, pk=None):
     if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'principal' or request.user.useraccess.access_level == 'coordinator' or request.user.useraccess.access_level == 'coordinator' or request.user.useraccess.access_level == 'accountant':
+        #AT: there is no checking here if a principal has access to the teacher
+
         tch = get_object_or_404(Teacher, pk=pk)
         #form = StudentForm(request.POST or None, request.FILES or None, instance=std)
         form = TeacherDeactivateForm(request.POST or None, request.FILES or None, instance=tch)
@@ -134,6 +138,8 @@ def deactivate_teacher(request, pk=None):
 @login_required
 def add_a_teacher(request):
     if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'principal' or request.user.useraccess.access_level == 'coordinator' or request.user.useraccess.access_level == 'coordinator' or request.user.useraccess.access_level == 'accountant':
+        #AT: there is no checking here if a principal has access to the school where a teacher will be added
+
         #form = StudentForm(request.POST or None, request.FILES or None, instance=std)
         form = AddTeacherForm(request.POST or None)
         if form.is_valid():

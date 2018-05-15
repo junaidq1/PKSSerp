@@ -41,8 +41,8 @@ def search_students(request):
 							)
 			#if princ or teacher, filter queryset for just their school students
 			if request.user.useraccess.access_level == 'principal' or request.user.useraccess.access_level == 'teacher':
-				schools =School.objects.filter(teacher__id = request.user.teacher.id) #get schools assoc with user
-				queryset_list = queryset_list.filter(pkss_school__in = schools) #filter for just that schools subset
+				schools = request.user.teacher.get_affilated_schools() #get schools assoc with user
+				queryset_list = queryset_list.filter(pkss_school_shift__school__in = schools) #filter for just that schools subset
 				#schools = School.objects.filter(teacher__id = request.user.teacher.id) #get schools associc with princ or teacher
 		num_students = len(queryset_list)	
 		context = {
@@ -110,7 +110,7 @@ def edit_student_record(request, pk=None):
 		form = StudentForm(request.POST or None, instance=std)
 		#the two lines below limit class assignment / selection based on principal/teachers access schools
 		if request.user.useraccess.access_level == 'teacher' or request.user.useraccess.access_level == 'principal':
-			valid_schools = School.objects.filter(teacher__id = request.user.teacher.id)
+			valid_schools = request.user.teacher.get_affilated_schools()
 			form.fields["pkss_class"].queryset = Class.objects.filter(school_id__in = valid_schools)
 		#form.fields["pkss_class"].queryset = Class.objects.filter(school_id= std.pkss_school)
 		if form.is_valid():
@@ -160,7 +160,7 @@ def add_a_student(request):
 		form = StudentForm(request.POST or None, request.FILES or None)
 		#the two lines below limit class assignment / selection based on principal/teachers access schools
 		if request.user.useraccess.access_level == 'teacher' or request.user.useraccess.access_level == 'principal':
-			valid_schools = School.objects.filter(teacher__id = request.user.teacher.id)
+			valid_schools = request.user.teacher.get_affilated_schools()
 			form.fields["pkss_class"].queryset = Class.objects.filter(school_id__in = valid_schools)
 		if form.is_valid():
 			try:
@@ -439,7 +439,7 @@ def view_student_enrollments_and_leaving(request):
 
 			#for princip and teachers - filter to just their schools
 			if request.user.useraccess.access_level == 'principal' or request.user.useraccess.access_level == 'teacher':
-				schools =School.objects.filter(teacher__id = request.user.teacher.id)
+				schools = request.user.teacher.get_affilated_schools()
 				stds_joined = stds_joined.filter(pkss_school__in = schools) #filter for just that schools subset
 				stds_left = stds_left.filter(pkss_school__in = schools) #filter for just that schools subset
 			tot_students_active = Student.objects.filter( Q(pkss_school__school_name__icontains=pk_sch)).filter(currently_enrolled =True)

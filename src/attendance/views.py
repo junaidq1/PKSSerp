@@ -56,7 +56,7 @@ def affiliated_schools(request):
         schools = School.objects.all()
         cls = Class.objects.all()
     elif request.user.teacher.level == 'teacher' or request.user.teacher.level == 'principal':
-        schools = School.objects.filter(teacher__id = request.user.teacher.id)
+        schools = request.user.teacher.get_affilated_schools()
         cls = Class.objects.filter(school_id__in = schools)
     context = {
             'affiliated_schools': schools, 
@@ -102,7 +102,7 @@ def attendance_dates(request, school_id, shift):
     if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'coordinator':
         sch = School.objects.get(pk=school_id)
     #elif request.user.teacher.level == 'principal' and school_id in test:
-    elif (request.user.teacher.level == 'principal' or request.user.teacher.level == 'teacher') and request.user.teacher.pkss_school.filter(id=school_id).exists(): 
+    elif (request.user.teacher.level == 'principal' or request.user.teacher.level == 'teacher') and request.user.teacher.has_relation_to_school(school_id):
         sch = School.objects.get(pk=school_id)
     else:
         sch = {}
@@ -281,7 +281,7 @@ def attendance_summary(request):
 
 
             if request.user.useraccess.access_level == 'teacher' or request.user.useraccess.access_level == 'principal':
-                schools_in_month = School.objects.filter(teacher__id = request.user.teacher.id)
+                schools_in_month = request.user.teacher.get_affilated_schools()
                 #this ensures that teachers and principals can only see their own schools
             else:
                 schools_in_month = School.objects.all()
@@ -380,7 +380,7 @@ def school_attendance_details(request, school_id, date):
         if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'coordinator':
             school = School.objects.get(pk=school_id)
         #elif request.user.teacher.level == 'principal' and school_id in test:
-        elif (request.user.teacher.level == 'principal' or request.user.teacher.level == 'teacher') and request.user.teacher.pkss_school.filter(id=school_id).exists(): 
+        elif (request.user.teacher.level == 'principal' or request.user.teacher.level == 'teacher') and request.user.teacher.has_relation_to_school(school_id):
             school = School.objects.get(pk=school_id)
         else:
             school={}
@@ -619,7 +619,7 @@ def attendance_by_school_month(request):
         for date in attendance['months']: 
 
             if request.user.useraccess.access_level == 'teacher' or request.user.useraccess.access_level == 'principal':
-                schools_in_month = School.objects.filter(teacher__id = request.user.teacher.id)
+                schools_in_month = request.user.teacher.get_affilated_schools()
                 #this ensures that teachers and principals can only see their own schools
             else:
                 schools_in_month = School.objects.all()

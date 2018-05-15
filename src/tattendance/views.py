@@ -28,7 +28,7 @@ def tattendance_affiliated_schools(request):
         if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'coordinator' or request.user.useraccess.access_level == 'accountant':
             schools = School.objects.all()
         elif request.user.teacher.level == 'principal':
-            schools = School.objects.filter(teacher__id = request.user.teacher.id)
+            schools = request.user.teacher.get_affilated_schools()
         #test = request.user.teacher.pkss_school.all().values_list('id', flat=True) 
         test = 0
         shifts = SHIFT_CHOICES
@@ -80,7 +80,7 @@ def tattendance_dates(request, school_id, shift):
         if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'coordinator' or request.user.useraccess.access_level == 'accountant':
             sch = School.objects.get(pk=school_id)
         #elif request.user.teacher.level == 'principal' and school_id in test:
-        elif request.user.teacher.level == 'principal' and request.user.teacher.pkss_school.filter(id=school_id).exists(): 
+        elif request.user.teacher.has_access_to_school(school_id):
             sch = School.objects.get(pk=school_id)
         else:
             sch = {}
@@ -115,8 +115,7 @@ def add_tattendance(request, school_id, date, shift, readonly=False):
         if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'coordinator':
             teacher_list = Teacher.objects.filter(pkss_school_shift=school_shift, currently_active=True) #pull up all the teachers in the school
         if request.user.useraccess.access_level == 'principal': #if principal, ensure that they are allowed to see this school
-            authorized_schools = School.objects.filter(teacher__id = request.user.teacher.id) #get the list of schools that princ is affiliated with
-            if authorized_schools.filter(id=school_id).exists(): #if the requested school is in set, proceed
+            if request.user.teacher.has_access_to_school(school_id):#if the requested school is in set, proceed
                 teacher_list = Teacher.objects.filter(pkss_school_shift=school_shift, currently_active=True) #pull up all the teachers in the school
             else: #if requested school is not one the principal is affiliated with then errors
                 return HttpResponseRedirect( reverse('user_homepage'))
