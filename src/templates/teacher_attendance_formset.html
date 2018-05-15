@@ -39,7 +39,7 @@
 
     {% for field in form.visible_fields %}
   
-      <td style="padding: 4px">
+      <td style="padding: 4px" {% if field.label == 'attendance date' %}width="125px"{% endif %}>
        {% if field.label == "time" %}
           <div class="pos-relative time-picker-container">
               {{ field }}<i class="glyphicon glyphicon-time form-control-feedback pos-absolute time-picker-container"></i>
@@ -48,6 +48,7 @@
           {% for radio in form.status %}
                 <span class="radio-inline"> {{ radio }} </span>
           {% endfor %}
+
       {% else %}  <!-- was used crispy_form -->
            {# Include the hidden fields in the form #}
            {% if forloop.first %}
