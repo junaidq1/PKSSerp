@@ -73,7 +73,8 @@ class Teacher(models.Model):
 
     def get_affilated_schools(self):
         school_shifts = self.pkss_school_shift.all()
-        schools = [item.school for item in school_shifts.iterator()]
+        schools_ids = [item.school.id for item in school_shifts.iterator()]
+        schools = School.objects.filter(id__in=schools_ids)
         return schools
 
 
