@@ -75,7 +75,7 @@ def tattendance_dates(request, school_id, shift):
         GROUP BY i
         ORDER BY i DESC;''', [school_shift.id, school_shift.id])
         l1 = dictfetchall(cursor) #raw sql query get list of attedances entered by date
-        
+
         #logic: only submit the request if superuser or a principal with access to a specific school
         if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'coordinator' or request.user.useraccess.access_level == 'accountant':
             sch = School.objects.get(pk=school_id)

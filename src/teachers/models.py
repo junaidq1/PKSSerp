@@ -51,6 +51,7 @@ class Teacher(models.Model):
 
     def has_access_to_school(self, school_id):
         user = self.user
+        school_id = int(school_id)
         if user.useraccess.access_level == 'principal':
             school_shifts = self.pkss_school_shift.all()
             school_ids = [item.school.id for item in school_shifts.iterator()]
@@ -62,6 +63,7 @@ class Teacher(models.Model):
             return False
 
     def has_relation_to_school(self, school_id):
+        school_id = int(school_id)
         school_shifts = self.pkss_school_shift.all()
         school_ids = [item.school.id for item in school_shifts.iterator()]
         if school_id in school_ids:
