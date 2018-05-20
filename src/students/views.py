@@ -42,7 +42,7 @@ def search_students(request):
 			#if princ or teacher, filter queryset for just their school students
 			if request.user.useraccess.access_level == 'principal' or request.user.useraccess.access_level == 'teacher':
 				schools = request.user.teacher.get_affilated_schools() #get schools assoc with user
-				queryset_list = queryset_list.filter(pkss_school_shift__school__in = schools) #filter for just that schools subset
+				queryset_list = queryset_list.filter(pkss_school__in = schools) #filter for just that schools subset
 				#schools = School.objects.filter(teacher__id = request.user.teacher.id) #get schools associc with princ or teacher
 		num_students = len(queryset_list)	
 		context = {
