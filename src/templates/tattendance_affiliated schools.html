@@ -20,12 +20,14 @@
 
 	<br>
 
-    {% for obj in affiliated_schools %} 
+    {% for obj in affiliated_schools %}
     	<ul>
-            <a href="{% url 'tattendance_dates' obj.pk %}">
-            {{ obj}} 
-        	</a> 
-        	<!-- finish -->
+            {{ obj}}  &nbsp&nbsp-&nbsp&nbsp&nbsp
+            {% for shift in shifts %}
+                <a href="{% url 'tattendance_dates' obj.pk shift.0 %}">
+                    {{ shift.0|capfirst }}
+                </a>&nbsp&nbsp&nbsp
+            {% endfor %}
         </ul>
         <hr/>
     {% endfor %}

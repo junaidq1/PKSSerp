@@ -17,7 +17,7 @@ class LoginForm(forms.Form):
 class EditTeacherForm(forms.ModelForm):
 	class Meta:
 		model = Teacher 
-		fields = ["first_name", "last_name", "gender", "pkss_school",  
+		fields = ["first_name", "last_name", "gender", "pkss_school", "pkss_school_shift",
 		    "starting_salary","current_salary", "phone_number", "address","starting_qualifications",
 		    "current_qualifications", "starting_years_experience", "notes"]
 		

@@ -12,7 +12,7 @@
 <div class='container'>
 
   <div class='row'>
-<div class='col-sm-10'>
+<div class='col-sm-12'>
 
 <h3> Enter Teacher attendance for teachers in: <b style="color:#85BC22"> {{ school|title }} | {{ date}}        </b></h3>
 <br>
@@ -39,22 +39,26 @@
 
     {% for field in form.visible_fields %}
   
-      <td style="padding: 4px">
-       {% if field.label == 'Status' %} <!-- was used native Django widget -->
-       {% for radio in form.status %}
-       <span class="radio-inline"> {{ radio }} </span>
-        {% endfor %}
-      {% else %}  <!-- was used crispy_form -->
-       {# Include the hidden fields in the form #}
-       {% if forloop.first %}
-         {% for hidden in form.hidden_fields %}
-         {{ hidden|as_crispy_field }}
-         {% endfor %}
-       {% endif %}
-         {{ field.errors.as_ul }}
-         {{ field }}
+      <td style="padding: 4px" {% if field.label == 'attendance date' %}width="125px"{% endif %}>
+       {% if field.label == "time" %}
+          <div class="pos-relative time-picker-container">
+              {{ field }}<i class="glyphicon glyphicon-time form-control-feedback pos-absolute time-picker-container"></i>
+          </div>
+       {% elif field.label == 'Status' %} <!-- was used native Django widget -->
+          {% for radio in form.status %}
+                <span class="radio-inline"> {{ radio }} </span>
+          {% endfor %}
 
-      {% endif %}
+      {% else %}  <!-- was used crispy_form -->
+           {# Include the hidden fields in the form #}
+           {% if forloop.first %}
+             {% for hidden in form.hidden_fields %}
+             {{ hidden|as_crispy_field }}
+             {% endfor %}
+           {% endif %}
+             {{ field.errors.as_ul }}
+             {{ field }}
+       {% endif %}
 
       </td>
     {% endfor %}
@@ -77,10 +81,17 @@
 
 
 {% block extra_script %}
+    <link href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css">
 
+    <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.1/moment.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
     <script type="text/javascript">
 
     $(document).ready(function(){
+
+        $('.time-picker').datetimepicker({
+            format: "HH:mm"
+        });
 
         $('select').each(function(){
             if($(this).find('option:selected').text() == 'absent')

@@ -25,8 +25,12 @@
 	 		<b>Notes:</b><z style="color:#939393"> {{teach.notes}}</z><br>
 	 		<br>
 			<b>PKSS School Affiliations:</b><z style="color:#85BC22"> 
-			{% for sc in teach.pkss_school.all %} {{sc.school_name}} | {% endfor %}</z><br>
-			
+			<!--{% for sc in teach.pkss_school.all %} {{sc.school_name}} | {% endfor %}</z><br>-->
+			{% for school_shift in teach.pkss_school_shift.all %}
+				{{ school_shift.school }}
+				{% if not forloop.last %}|{% endif %}
+			{% endfor %}</z><br>
+
 			<b>Employed since:</b><z style="color:#85BC22"> {{teach.date_joined|date:"M d Y"}} | {{teach.date_joined|timesince}} ago </z>		
 	 		
 	 		<br>

@@ -31,11 +31,10 @@
     <br>
     {% endcomment %}
 
-
     {% for obj in l1 %}
     <p>
     <ul>
-        <a href="{% url 'add_tattendance' obj.school_id obj.i %}">{{ obj.i }} | 
+        <a href="{% url 'add_tattendance' school_id obj.i shift %}">{{ obj.i }} |
         Attendance entered: </a>
         {% if obj.num_att > 1 %}  <b style="color:#00b200"> Yes</b>  
 	 	{% else %}  <b style="color:#990000"> No </b>{% endif %}<br/>

@@ -5,4 +5,11 @@ python-dateutil==2.6.0
 six==1.10.0
 sqlparse==0.2.2
 django-datetime-widget==0.9.3
+numpy==1.14.3
+pandas==0.23.0rc2
+matplotlib==2.2.2
+django-pandas==0.5.1
+seaborn==0.8.1
+psycopg2==2.7.4
+
 

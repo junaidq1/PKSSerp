@@ -57,3 +57,18 @@ h1{
     width: 1.2em;
     height: 1.2em;
  }
+
+.pos-relative{
+    position: relative;
+}
+.pos-absolute{
+    position: absolute;
+}
+
+.time-picker-container .bootstrap-datetimepicker-widget{
+    text-align: center;
+}
+
+.messages .success{
+    color: #099509;
+}

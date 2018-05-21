@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import School
+from .models import School, SchoolShift
 
 
 class SchoolModelAdmin(admin.ModelAdmin):
@@ -14,3 +14,12 @@ class SchoolModelAdmin(admin.ModelAdmin):
 
 admin.site.register(School, SchoolModelAdmin) 
 
+
+class SchoolShiftAdmin(admin.ModelAdmin):
+	list_display = [field.name for field in SchoolShift._meta.fields]
+	search_fields = ['shift', 'school__school_name','school__shift', 'school__school_address','school__city','school__date_opened']
+	list_filter = ['shift', 'school__school_name', 'school__city']
+	class Meta:
+		model = SchoolShift
+
+admin.site.register(SchoolShift, SchoolShiftAdmin)
