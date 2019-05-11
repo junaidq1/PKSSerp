@@ -35,7 +35,8 @@
     {% for obj in l1 %}
     <p>
     <ul>
-        <a href="{% url 'add_attendance2' obj.school_id obj.i shift %}">{{ obj.i }} |
+        <!-- <a href="{% url 'add_attendance2' obj.school_id obj.i shift %}">{{ obj.i }} | -->
+        <a href="{% url 'add_attendance2' school_id=obj.school_id date=obj.i shift=shift %}">{{ obj.i|date:"M d, Y"}} |
         Attendance entered: </a>
         {% if obj.num_att > 1 %}  <b style="color:#00b200"> Yes</b>  
 	 	{% else %}  <b style="color:#990000"> No </b>{% endif %}<br/>

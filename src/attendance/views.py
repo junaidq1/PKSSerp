@@ -117,7 +117,7 @@ def attendance_dates(request, school_id, shift):
             'shift': shift,
             }
     return render(request, 'attendance_dates.html', context)
-
+ 
 
 @login_required()
 def add_attendance2(request, school_id, date, shift, readonly=False):
@@ -175,9 +175,9 @@ def add_attendance2(request, school_id, date, shift, readonly=False):
                    'shift': shift,
                    'student_classes_attendance': student_classes_attendance
                    }
-        return render(request, 'group_attendance.html', context)
+        return render(request, 'group_attendance.html', context) 
 
-
+ 
 @login_required
 def ajax_save_student_attendance(request):
     response_data = dict()
@@ -187,7 +187,7 @@ def ajax_save_student_attendance(request):
         user = request.user
         school_id = data.get("school_id")
         shift = data.get("shift")
-        attendance_date = datetime.datetime.strptime(data.get("attendance_date"), "%B %d, %Y")
+        attendance_date = datetime.datetime.strptime(data.get("attendance_date"), "%b %d, %Y")
         attendance_students_data = data.getlist(u"attendance_students_data")
         if attendance_students_data:
             attendance_students_data = ast.literal_eval(attendance_students_data[0])
@@ -338,33 +338,33 @@ def attendance_summary(request):
         , boys_present/CAST(boys_total AS FLOAT) *100 AS boys_att
         , girls_present/CAST(girls_total AS FLOAT)*100 AS girls_att
         , enrl, boys_enrl, girls_enrl
-        , boys_enrl/CAST(enrl AS FLOAT)*100 AS boys_enrl_perc
-        , girls_enrl/CAST(enrl AS FLOAT)*100 AS girls_enrl_perc
+        , boys_enrl / NULLIF(CAST(enrl AS FLOAT)*100, 0) AS boys_enrl_perc
+        , girls_enrl / NULLIF(CAST(enrl AS FLOAT)*100,0) AS girls_enrl_perc
         , present / CAST(days_att_entered AS FLOAT) AS avg_daily_attendance
         FROM
-            (SELECT 
-            Extract(year from q1.attendance_date) AS yr
-            ,Extract(month from q1.attendance_date) AS mth
-            ,COUNT(DISTINCT (q1.attendance_date)) AS days_att_entered
-            ,SUM( CASE WHEN  status = 'present' THEN 1 ELSE 0 END) AS present
-            ,count(*) AS present_plus_absent
-            ,SUM( CASE WHEN  status = 'present' and gender='male' THEN 1 ELSE 0 END) AS boys_present
-            ,SUM( CASE WHEN  status = 'present' and gender='female' THEN 1 ELSE 0 END) AS girls_present
-            ,SUM( CASE WHEN  gender='male' THEN 1 ELSE 0 END) AS boys_total
-            ,SUM( CASE WHEN  gender='female' THEN 1 ELSE 0 END) AS girls_total
-            ,SUM( CASE WHEN  attendance_date= last_att_day THEN 1 ELSE 0 END) AS enrl
-            ,SUM( CASE WHEN  attendance_date= last_att_day AND gender='male' THEN 1 ELSE 0 END) AS boys_enrl
-            ,SUM( CASE WHEN  attendance_date= last_att_day AND gender='female' THEN 1 ELSE 0 END) AS girls_enrl
-            FROM
-            -- this sub-query combined attendance table with student table to pull in school id and gender 
-                (SELECT A.*, B.pkss_school_id, B.gender
-                , Extract(month from attendance_date) AS mth
-                , max(attendance_date) OVER (PARTITION BY B.pkss_school_id, Extract(month from attendance_date)) as last_att_day
-                FROM attendance_attendance AS A
-                INNER JOIN students_student AS B ON A.student_id = B.id
-                WHERE attendance_date > Date(Now() -  Interval '12 month') ) as q1
-                GROUP BY Extract(year from q1.attendance_date), Extract(month from q1.attendance_date)
-                ORDER BY yr DESC, mth DESC ) AS q2;''', [])
+                (SELECT 
+                Extract(year from q1.attendance_date) AS yr
+                ,Extract(month from q1.attendance_date) AS mth
+                ,COUNT(DISTINCT (q1.attendance_date)) AS days_att_entered
+                ,SUM( CASE WHEN  status = 'present' THEN 1 ELSE 0 END) AS present
+                ,count(*) AS present_plus_absent
+                ,SUM( CASE WHEN  status = 'present' and gender='male' THEN 1 ELSE 0 END) AS boys_present
+                ,SUM( CASE WHEN  status = 'present' and gender='female' THEN 1 ELSE 0 END) AS girls_present
+                ,SUM( CASE WHEN  gender='male' THEN 1 ELSE 0 END) AS boys_total
+                ,SUM( CASE WHEN  gender='female' THEN 1 ELSE 0 END) AS girls_total
+                ,SUM( CASE WHEN  attendance_date= last_att_day THEN 1 ELSE 0 END) AS enrl
+                ,SUM( CASE WHEN  attendance_date= last_att_day AND gender='male' THEN 1 ELSE 0 END) AS boys_enrl
+                ,SUM( CASE WHEN  attendance_date= last_att_day AND gender='female' THEN 1 ELSE 0 END) AS girls_enrl
+                FROM
+                -- this sub-query combined attendance table with student table to pull in school id and gender 
+                    (SELECT A.*, B.pkss_school_id, B.gender
+                    , Extract(month from attendance_date) AS mth
+                    , max(attendance_date) OVER (PARTITION BY B.pkss_school_id, Extract(month from attendance_date)) as last_att_day
+                    FROM attendance_attendance AS A
+                    INNER JOIN students_student AS B ON A.student_id = B.id
+                    WHERE attendance_date > Date(Now() -  Interval '12 month') ) as q1
+                    GROUP BY Extract(year from q1.attendance_date), Extract(month from q1.attendance_date)
+                    ORDER BY yr DESC, mth DESC ) AS q2;''', [])
         overall = dictfetchall(cursor) #raw sql query to get attendance for all schools 
 
         return render(request, 'attendance_summary.html', {'last_12_months_attendance': last_12_months_attendance, 'overall' : overall})
@@ -777,7 +777,8 @@ def three_day_report(request):
     cursor.execute(
     '''SELECT 
     q1.school_name, 
-    q1.pkss_school_id, 
+    q1.pkss_school_id,
+    q1.shift, 
     SUM( CASE WHEN  status = 'present' AND (Extract(day from q1.attendance_date) = Extract(day from Now()) ) THEN 1 ELSE 0 END) AS present_today,
     SUM( CASE WHEN (Extract(day from q1.attendance_date) = Extract(day from Now()) ) THEN 1 ELSE 0 END)  AS total_today
     ,
@@ -787,29 +788,38 @@ def three_day_report(request):
     SUM( CASE WHEN  status = 'present' AND (Extract(day from q1.attendance_date) = Extract(day from Now() -  Interval '2 day')) THEN 1 ELSE 0 END) AS present_minus2,
     SUM( CASE WHEN (Extract(day from q1.attendance_date) = Extract(day from Now() -  Interval '2 day')) THEN 1 ELSE 0 END)  AS total_minus2
     FROM
-        (SELECT A.*, C.id AS pkss_school_id, C.school_name
-        FROM tattendance_teacherattendance AS A
-        INNER JOIN schools_school AS C on A.school_id = C.id
-        WHERE attendance_date > Date(Now() -  Interval '5 day') ) as q1
-    GROUP BY school_name, q1.pkss_school_id
-    ORDER BY school_name ;''',)
-
+        (SELECT A.*, B.shift, C.id AS pkss_school_id, C.school_name
+         FROM tattendance_teacherattendance A
+         INNER JOIN schools_schoolshift B ON A.school_shift_id  = B.id
+         INNER JOIN schools_school C ON B.school_id =C.id
+         WHERE attendance_date > Date(Now() -  Interval '5 day') ) as q1
+    GROUP BY school_name, q1.pkss_school_id, q1.shift
+    ORDER BY school_name, shift DESC;''',)
     teacher_att = dictfetchall(cursor) 
+
+    cursor.execute(
+    '''SELECT C.school_name,B.shift, D.first_name, D.last_name, A.*, B.shift, C.id AS pkss_school_id
+         FROM tattendance_teacherattendance A
+         INNER JOIN schools_schoolshift B ON A.school_shift_id  = B.id
+         INNER JOIN schools_school C ON B.school_id =C.id
+         INNER JOIN teachers_teacher D ON A.teacher_id = D.id
+         WHERE attendance_date = Now()::date AND status='absent'
+         ORDER BY school_name, shift;''',)
+    absent_teachers = dictfetchall(cursor)
+
+
 
     context = {
             'att': att,
             'teacher_att': teacher_att,
+            'absent_teachers': absent_teachers,
             'date_today': date_today,
             'date_today_minus1': date_today_minus1,
             'date_today_minus2': date_today_minus2,
             }
     return render(request, 'three_day_attendance.html', context)
 
-
-#three day report of attendance - delete after testing
-def aa(request):
-    return render(request, 'aa.html', {})
-
+  
 
 def aa2(request):
     qs = School.objects.all()

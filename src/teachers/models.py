@@ -12,6 +12,7 @@ class Teacher(models.Model):
         ('vice principal', 'vice principal'),
         ('teacher', 'teacher'),
         ('teacher aid', 'teacher aid'),
+        ('central office staff', 'central office staff'),
     )
 
     user = models.OneToOneField(settings.AUTH_USER_MODEL, null=True, blank=True)

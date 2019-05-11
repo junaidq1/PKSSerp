@@ -26,6 +26,7 @@
       <THEAD>        
         <TR>
           <TH style="text-align:center" >School</TH>
+          <TH style="text-align:center" >Shift</TH>
           <TH style="text-align:center" >First_Name</TH>
           <TH style="text-align:center" >Last_Name</TH>
           <TH style="text-align:center" >1</TH>
@@ -65,6 +66,7 @@
         {% for obj in attendance_details %}
         <TR> 
           <TD class="vert-align" width="120">{{obj.school_name}}</TD> 
+          <TD class="vert-align" width="120">{{obj.shift}}</TD> 
           <TD class="vert-align" width="120"><a href='{% url "teacher_profile" pk=obj.teacher_id %}'>			{{obj.first_name}}</a></TD> 
           <TD class="vert-align" width="120"><a href='{% url "teacher_profile" pk=obj.teacher_id %}'>			{{obj.last_name}}</a></TD>  
           <TD class="vert-hor-align">

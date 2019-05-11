@@ -85,7 +85,7 @@
 	<div class='col-xs-12 col-md-4'>
 		
 		
-		{% if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'principal' or request.user.useraccess.access_level == 'accountant'%}
+		{% if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'principal' or request.user.useraccess.access_level == 'accountant' or request.user.useraccess.access_level == 'coordinator' %}
 
 		<h3> Teacher </h3>
 		<hr/>
@@ -98,7 +98,7 @@
 
 		{% endif %} 
 
-		{% if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'principal' or request.user.useraccess.access_level == 'accountant'%}
+		{% if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'principal' or request.user.useraccess.access_level == 'accountant' or request.user.useraccess.access_level == 'coordinator'%}
 		<a href='{% url "teacher_list" %}'>
 		<p class='lead text-align-left'><p class='lead text-align-left'>  <span class="glyphicon glyphicon-search" aria-hidden="true"></span> View teacher list</p></a>	
 		

@@ -167,7 +167,7 @@ def add_tattendance(request, school_id, date, shift, readonly=False):
         }
 
         return render(request, 'teacher_attendance_formset.html', context)
-
+ 
 @login_required()
 def teacher_attendance_summary(request):
     if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'principal' or request.user.useraccess.access_level == 'coordinator' or request.user.useraccess.access_level == 'accountant':
@@ -207,9 +207,11 @@ def teacher_attendance_summary(request):
             AND (Extract(year from lookup.attendance_date) = Extract(year from Now() -  Interval '5 month')) THEN  1 ELSE 0 END) AS present_minus5m,
         SUM( CASE WHEN  (Extract(month from lookup.attendance_date) = Extract(month from Now() -  Interval '5 month')) AND 
             (Extract(year from lookup.attendance_date) = Extract(year from Now() -  Interval '5 month')) THEN  1 ELSE 0 END) AS total_minus5m
-        FROM  (SELECT B.school_name, A.school_id, A.id, A.attendance_date, A.status 
+        FROM  (SELECT C.school_name, B.shift, C.id AS school_id, A.id, A.attendance_date, A.status 
         FROM tattendance_teacherattendance as A
-        INNER JOIN schools_school AS B on A.school_id = B.id -- to bring in school name
+        INNER JOIN schools_schoolshift B ON A.school_shift_id  = B.id
+        INNER JOIN schools_school C ON B.school_id =C.id -- to bring in school name
+        --INNER JOIN schools_school AS C on A.school_id = C.id 
         WHERE attendance_date > Date(Now() -  Interval '12 month') ) AS lookup
         GROUP BY school_name, school_id ) as second_query
         ORDER BY school_name;''', [])
@@ -274,7 +276,7 @@ def teacher_report_daily_details(request, date_month, date_year, school_id):
     if request.user.useraccess.access_level == 'super' or request.user.useraccess.access_level == 'manager' or request.user.useraccess.access_level == 'principal' or request.user.useraccess.access_level == 'coordinator' or request.user.useraccess.access_level == 'accountant':
         cursor = connection.cursor()
         cursor.execute(
-        '''SELECT school_name, first_name, last_name, teacher_id,
+        '''SELECT school_name, shift, first_name, last_name, teacher_id,
             SUM(CASE WHEN  (day = 1 AND status ='present') THEN  1 ELSE 0 END) AS d1,
             SUM(CASE WHEN  (day = 2 AND status ='present') THEN  1 ELSE 0 END) AS d2,
             SUM(CASE WHEN  (day = 3 AND status ='present') THEN  1 ELSE 0 END) AS d3,
@@ -307,14 +309,15 @@ def teacher_report_daily_details(request, date_month, date_year, school_id):
             SUM(CASE WHEN  (day = 30 AND status ='present') THEN  1 ELSE 0 END) AS d30,
             SUM(CASE WHEN  (day = 31 AND status ='present') THEN  1 ELSE 0 END) AS d31
             FROM (
-            SELECT B.school_name, A.id, A.school_id, A.attendance_date, Extract(day from attendance_date) as day, A.status, teacher_id, C.first_name, C.last_name 
+            SELECT C.school_name, B.shift, A.id, C.id AS school_id, A.attendance_date, Extract(day from attendance_date) as day, A.status, teacher_id, D.first_name, D.last_name 
             FROM tattendance_teacherattendance as A
-            INNER JOIN schools_school AS B on A.school_id = B.id -- to bring in school name
-            INNER JOIN teachers_teacher AS C on A.teacher_id = C.id -- to bring in teacher name 
-            WHERE Extract(month from attendance_date) = %s AND Extract(year from attendance_date) = %s AND school_id = %s
+            INNER JOIN schools_schoolshift B ON A.school_shift_id  = B.id
+            INNER JOIN schools_school AS C on B.school_id = C.id -- to bring in school name
+            INNER JOIN teachers_teacher AS D on A.teacher_id = D.id -- to bring in teacher name 
+            WHERE Extract(month from attendance_date) = %s AND Extract(year from attendance_date) = %s AND C.id = %s
             ) AS q1  -- add in a filter for school
-            GROUP BY school_name, first_name, last_name, teacher_id
-            ORDER BY school_name, first_name;''', [date_month, date_year, school_id])
+            GROUP BY school_name, shift, first_name, last_name, teacher_id
+            ORDER BY shift DESC, first_name;''', [date_month, date_year, school_id])
         attendance_details = dictfetchall(cursor) #raw sql query to get 6 months of teacher attendance
 
         context = {

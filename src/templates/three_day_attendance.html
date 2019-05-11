@@ -99,7 +99,7 @@
 	 		<div class='col-sm-1'>
 	 			
 	 		</div> 
- 		<div class='col-sm-4'> 
+ 		<div class='col-sm-6'> 
 			
 	 		<h4> <b style="color:#939393"> 3-Day PKSS Teacher Attendance Report </b></h4>
 	 		<br>
@@ -107,7 +107,8 @@
 	 		<!-- <caption>Total students by class</caption> -->
 			      <THEAD>        
 			        <TR>
-			          <TH style="text-align:center" width="65">School</TH> 
+			          <TH style="text-align:center" width="65">School</TH>
+			          <TH style="text-align:center" width="65">Shift</TH> 
 			          
 			          <TH style="text-align:center">{{date_today|date:"D - M d"}}</TH> 
 			          <TH style="text-align:center">{{date_today_minus1|date:"D - M d"}}</TH>
@@ -120,6 +121,7 @@
 			     
 			        <TR>
 			          <TD class="vert-hor-align"><b style="color:#a8a8a8">{{obj.school_name}}</b> </TD>
+			          <TD class="vert-hor-align"><b style="color:#a8a8a8">{{obj.shift}}</b> </TD>
 			          <TD class="vert-hor-align">
 			          {% if obj.total_today > 0 %}
 						{{obj.present_today}} / {{obj.total_today}}
@@ -140,6 +142,38 @@
 			      </TBODY>
 			      {% endfor %} 
 			</TABLE> 
+			<br>
+			<br>
+			<h4> <b style="color:#939393"> List of Teachers absent on most recent date </b></h4>
+	 		<br>
+	 		<TABLE class="table"> 
+			      <THEAD>        
+			        <TR>
+			          <TH style="text-align:center" width="65">Date</TH>
+			          <TH style="text-align:center" width="65">School</TH>
+			          <TH style="text-align:center" width="65">Shift</TH>
+			          <TH style="text-align:center" width="65">Name</TH>
+			          <TH style="text-align:center" width="65">L Name</TH>
+			          <TH style="text-align:center" width="65">Reason</TH>   
+			        </TR>
+			      </THEAD> 
+			      
+	 			{% for obj in absent_teachers %}  
+				  <TBODY>
+			        <TR>
+			          <TD class="vert-hor-align"><b style="color:#a8a8a8">{{obj.attendance_date|date:"M j"}}</b> </TD>
+			          <TD class="vert-hor-align"><b style="color:#a8a8a8">{{obj.school_name}}</b> </TD>
+			          <TD class="vert-hor-align"><b style="color:#a8a8a8">{{obj.shift}}</b> </TD>
+			          <TD class="vert-hor-align">{{obj.first_name}}</TD>
+			          <TD class="vert-hor-align">{{obj.last_name}}</TD>
+			          <TD class="vert-hor-align">{{obj.notes}} </TD>	        
+			        </TR>
+			      </TBODY>
+			      {% endfor %} 
+			</TABLE>
+			<br> 
+
+
  		</div> 			
 	</div>
 </div>

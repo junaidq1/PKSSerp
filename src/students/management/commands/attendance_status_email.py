@@ -4,6 +4,7 @@ from django.core.mail import send_mail
 import datetime
 from django.db import connection #for custom sql
 from django.template.loader import render_to_string
+from access.models import SendDailyEmail
 
 # this helper function below is a custom func to convert the cursor object return to a dict
 def dictfetchall(cursor):
@@ -30,8 +31,6 @@ def dictfetchall(cursor):
 # 		#html_message=some_html_message,
 # 		fail_silently=False)
 # 		# return HttpResponseRedirect('/') 
-
-
 
 
 #new thing - lets test this
@@ -72,25 +71,38 @@ class Command(BaseCommand):
 
 		cursor.execute(
 		'''SELECT 
-		q1.school_name, 
-		q1.pkss_school_id, 
-		SUM( CASE WHEN  status = 'present' AND (Extract(day from q1.attendance_date) = Extract(day from Now()) ) THEN 1 ELSE 0 END) AS present_today,
-		SUM( CASE WHEN (Extract(day from q1.attendance_date) = Extract(day from Now()) ) THEN 1 ELSE 0 END)  AS total_today
-		,
-		SUM( CASE WHEN  status = 'present' AND (Extract(day from q1.attendance_date) = Extract(day from Now() -  Interval '1 day')) THEN 1 ELSE 0 END) AS present_minus1,
-		SUM( CASE WHEN (Extract(day from q1.attendance_date) = Extract(day from Now() -  Interval '1 day')) THEN 1 ELSE 0 END)  AS total_minus1
-		,
-		SUM( CASE WHEN  status = 'present' AND (Extract(day from q1.attendance_date) = Extract(day from Now() -  Interval '2 day')) THEN 1 ELSE 0 END) AS present_minus2,
-		SUM( CASE WHEN (Extract(day from q1.attendance_date) = Extract(day from Now() -  Interval '2 day')) THEN 1 ELSE 0 END)  AS total_minus2
-		FROM
-			(SELECT A.*, C.id AS pkss_school_id, C.school_name
-			FROM tattendance_teacherattendance AS A
-			INNER JOIN schools_school AS C on A.school_id = C.id
-			WHERE attendance_date > Date(Now() -  Interval '5 day') ) as q1
-		GROUP BY school_name, q1.pkss_school_id
-		ORDER BY school_name ;''',)
-
+		    q1.school_name, 
+		    q1.pkss_school_id,
+		    q1.shift, 
+		    SUM( CASE WHEN  status = 'present' AND (Extract(day from q1.attendance_date) = Extract(day from Now()) ) THEN 1 ELSE 0 END) AS present_today,
+		    SUM( CASE WHEN (Extract(day from q1.attendance_date) = Extract(day from Now()) ) THEN 1 ELSE 0 END)  AS total_today
+		    ,
+		    SUM( CASE WHEN  status = 'present' AND (Extract(day from q1.attendance_date) = Extract(day from Now() -  Interval '1 day')) THEN 1 ELSE 0 END) AS present_minus1,
+		    SUM( CASE WHEN (Extract(day from q1.attendance_date) = Extract(day from Now() -  Interval '1 day')) THEN 1 ELSE 0 END)  AS total_minus1
+		    ,
+		    SUM( CASE WHEN  status = 'present' AND (Extract(day from q1.attendance_date) = Extract(day from Now() -  Interval '2 day')) THEN 1 ELSE 0 END) AS present_minus2,
+		    SUM( CASE WHEN (Extract(day from q1.attendance_date) = Extract(day from Now() -  Interval '2 day')) THEN 1 ELSE 0 END)  AS total_minus2
+		    FROM
+		        (SELECT A.*, B.shift, C.id AS pkss_school_id, C.school_name
+		         FROM tattendance_teacherattendance A
+		         INNER JOIN schools_schoolshift B ON A.school_shift_id  = B.id
+		         INNER JOIN schools_school C ON B.school_id =C.id
+		         WHERE attendance_date > Date(Now() -  Interval '5 day') ) as q1
+		    GROUP BY school_name, q1.pkss_school_id, q1.shift
+		    ORDER BY school_name, shift DESC;''',)
+ 
 		teacher_att = dictfetchall(cursor) 
+
+		cursor.execute(
+    	'''SELECT C.school_name,B.shift, D.first_name, D.last_name, A.*, B.shift, C.id AS pkss_school_id
+         FROM tattendance_teacherattendance A
+         INNER JOIN schools_schoolshift B ON A.school_shift_id  = B.id
+         INNER JOIN schools_school C ON B.school_id =C.id
+         INNER JOIN teachers_teacher D ON A.teacher_id = D.id
+         WHERE attendance_date = Now()::date AND status='absent'
+         ORDER BY school_name, shift;''',)
+
+		absent_teachers = dictfetchall(cursor)
 
 		template_html = 'attendance_report_email.html'
 		subject = 'PKSS Daily Attendance Report | %s' %(date_today) 
@@ -98,14 +110,20 @@ class Command(BaseCommand):
 		html_content = render_to_string(template_html, {
 		'att': att,
 		'teacher_att': teacher_att,
+		'absent_teachers': absent_teachers,
 		'date_today': date_today,
 		'date_today_minus1': date_today_minus1,
 		'date_today_minus2': date_today_minus2,
 		})
 
 		from_email = settings.EMAIL_ADDR
-		to_email = ['sabiranq@gmail.com', 'farah.kashif@jaqtrust.org','ghazanfar.ali@jaqtrust.org', 
-		'arsalan.hussain@jaqtrust.org','junaidq1@gmail.com']
+
+		#pull 'to emails list' from db - #update this list in admin, not in code hereonwards
+		to_ = SendDailyEmail.objects.all()
+		to_email = [ x.email for x in to_]  #convert to list format
+
+		# to_email = ['sabiranq@gmail.com', 'farah.kashif@jaqtrust.org','ghazanfar.ali@jaqtrust.org', 
+		# 'arsalan.hussain@jaqtrust.org','junaidq1@gmail.com', 'mshamsher@gmail.com']
 		# to_email = ['junaidq1@gmail.com']
 		send_mail(subject, 
 				contact_message, 

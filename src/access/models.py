@@ -22,7 +22,7 @@ class UserAccess(models.Model):
 	created = models.DateTimeField(auto_now=False, auto_now_add=True)
 	updated = models.DateTimeField(auto_now=True, auto_now_add=False)
 
-
+ 
 	def __unicode__(self):
 		return self.access_level
 
@@ -39,3 +39,18 @@ def useraccess_post_save_receiver(sender, **kwargs):
 
 #post save signal to create a UserAccess instance every time a new user is built
 post_save.connect(useraccess_post_save_receiver, sender=User)
+
+
+#this model is the list of users to whom daily email reports are sent
+class SendDailyEmail(models.Model):
+	first_name = models.CharField(max_length=255)
+	last_name = models.CharField(max_length=255)
+	email = models.EmailField(max_length=255)
+	created = models.DateTimeField(auto_now=False, auto_now_add=True)
+	updated = models.DateTimeField(auto_now=True, auto_now_add=False)
+
+	def __unicode__(self):
+		return self.email
+
+	def __string__(self):
+		return self.email

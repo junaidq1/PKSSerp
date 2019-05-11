@@ -7,10 +7,10 @@ from .models import Teacher
 
 class TeacherModelAdmin(admin.ModelAdmin):
 
-	list_display = ['pk', 'get_user','first_name','last_name','level','gender','date_joined', 'updated_last', 'updated_last_by']
-	list_display_links = ['first_name','last_name','level','gender','date_joined']
+	list_display = ['pk', 'get_user','first_name','last_name','currently_active','level','gender','date_joined', 'updated_last', 'updated_last_by']
+	list_display_links = ['first_name','last_name','currently_active','level','gender','date_joined']
 	search_fields = ['first_name','last_name','level','gender','date_joined']
-	list_filter = ['first_name','last_name','level','gender','date_joined']
+	list_filter = ['currently_active','level','gender','date_joined', 'first_name','last_name']
 	
 	class Meta:
 		model = Teacher

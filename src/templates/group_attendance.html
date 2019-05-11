@@ -46,7 +46,7 @@
                        </select>
                    </td>
                    <td  style="padding: 2px">
-                       <input disabled class="form-control" name="attendance_date" value="{{ date }}">
+                       <input disabled class="form-control" name="attendance_date" value="{{ date|date:'M d, Y'}}">
                    </td>
                    <td  style="padding: 2px">
                        <div class="radio-inline">
@@ -102,7 +102,7 @@
                 data["csrfmiddlewaretoken"] = csrf_token;
                 data["school_id"] = "{{ school_id }}";
                 data["shift"] = "{{ shift }}";
-                data["attendance_date"] = "{{ date }}";
+                data["attendance_date"] = "{{ date|date:'M d, Y' }}";
                 attendance_data = [];
                 $('.student-attendance-row.changed, .student-attendance-row.attendance-to-create').each(function(){
                     class_id = $(this).data("class-id");

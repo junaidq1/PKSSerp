@@ -105,7 +105,7 @@ urlpatterns = [
     url(r'^net_enrollment_report/$', st.view_student_enrollments_and_leaving, name='net_enrollment'), 
     #tests
     url(r'^three_days/$', att.three_day_report, name='three_day_att'),
-    url(r'^aa/$', att.aa, name='aa'), 
+    #url(r'^aa/$', att.aa, name='aa'), 
     url(r'^aa2/$', att.aa2, name='aa2'), #testing django-dataframes
     #url(r'^charts/simple.png$', att.simple, name='something123'),
     url(r'^aa3/$', att.chart_data_json, name='chart_data_json'), #chart data json

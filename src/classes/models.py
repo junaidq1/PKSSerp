@@ -16,6 +16,8 @@ class Class(models.Model):
 		('Class 4', 'Class 4'),
 		('Class 5', 'Class 5'),
 		('Class 6', 'Class 6'),
+		('Class 7', 'Class 7'),
+		('Class 8', 'Class 8'),
 	)
 	class_name = models.CharField(max_length=255, choices=CLASS_CHOICES)
 	SECTION_CHOICES = (
@@ -23,6 +25,9 @@ class Class(models.Model):
 		('B', 'B'),
 		('C', 'C'),
 		('D', 'D'),
+		('E', 'E'),
+		('F', 'F'),
+		('G', 'G'),
 	)
 	section = models.CharField(max_length=255, choices=SECTION_CHOICES, default='A')
 	SHIFT_CHOICES = (
